@@ -14,10 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Base implements
-    AuthenticatableContract,
-    AuthorizableContract,
-    CanResetPasswordContract
+class User extends Base implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
     use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
     use HasFactory, Notifiable, HasAvatar;
@@ -46,11 +43,21 @@ class User extends Base implements
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    protected function casts() : array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
+    }
+
+    public function getFullNameAttribute() : string
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getFullNameExtendedAttribute() : string
+    {
+        return trim("{$this->prefix} {$this->first_name} {$this->last_name} {$this->suffix}");
     }
 }
