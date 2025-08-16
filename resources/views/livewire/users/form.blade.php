@@ -1,7 +1,13 @@
 <?php
 
+use App\Enums\UserRole;
 use App\Models\User;
+use Illuminate\Validation\Rule;
+use Livewire\Attributes\On;
 use Livewire\Volt\Component;
+use Flux\Flux;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 new class extends Component {
     public ?User  $user;
@@ -13,6 +19,7 @@ new class extends Component {
     public string $email                 = "";
     public string $password              = "";
     public string $password_confirmation = "";
+    public string $modal                 = "";
 
     public function mount(?User $user) : void
     {
@@ -22,37 +29,156 @@ new class extends Component {
         }
     }
 
+    #[On("edit-user")]
+    public function loadUser($id) : void
+    {
+        $this->user = User::findOrFail($id);
+        $this->fill($this->user);
+    }
+
+    public function save() : void
+    {
+        $validated = $this->validate();
+
+        $user_data = [
+            'prefix'     => $this->prefix,
+            'first_name' => $this->first_name,
+            'last_name'  => $this->last_name,
+            'suffix'     => $this->suffix,
+            'role'       => $this->role,
+            'email'      => $this->email,
+        ];
+
+        if (!empty($validated['password'] ?? null)) {
+            $user_data['password'] = bcrypt($validated['password']);
+        }
+
+        if ($this->user?->id) {
+
+            $this->user->update($user_data);
+            $message = "Successfully updated user";
+            $heading = "User updated";
+        } else {
+
+            $this->user = User::create($user_data);
+            $message = "Successfully created user";
+            $heading = "User created";
+        }
+
+        // toast it up
+        Flux::toast($message, heading: $heading, variant: "success", position: "top-right");
+        $this->cancel();
+        $this->dispatch("users.index:refresh");
+    }
+
+    public function cancel() : void
+    {
+        Flux::modal($this->modal)
+            ->close();
+    }
+
+    public function rules() : array
+    {
+        return [
+            'prefix'                => 'nullable|max:25',
+            'first_name'            => 'required|string|max:255',
+            'last_name'             => 'required|string|max:255',
+            'suffix'                => 'nullable|max:25',
+            'role'                  => [
+                'required',
+                Rule::in(UserRole::cases())
+            ],
+            'email'                 => 'required|email',
+            'password'              => $this->user->id ? 'nullable' : 'required'.'|string|min:1|max:255|confirmed',
+            'password_confirmation' => $this->user->id ? 'nullable' : 'required'.'|string|min:1|max:255'
+        ];
+
+    }
+
 }; ?>
 
-<flux:card class="space-y-4">
-    <div class="flex flex-row gap-4 py-4">
-        <div class="flex-none w-auto">
+<div>
+    <div class="flex gap-4 py-4">
+        <div class="w-1/6">
             <flux:input
                     label="Prefix"
                     placeholder="Dr."
                     wire:model="prefix"
             />
         </div>
-        <div class="flex-1">
+        <div class="w-auto">
             <flux:input
                     label="First Name"
                     placeholder="Jane"
                     wire:model="first_name"
             />
         </div>
-        <div class="flex-1">
+        <div class="w-auto">
             <flux:input
                     label="Last Name"
                     placeholder="Doe"
                     wire:model="last_name"
             />
         </div>
-        <div class="flex-none">
+        <div class="w-1/6">
             <flux:input
                     label="Suffix"
                     placeholder="M.D."
                     wire:model="suffix"
             />
         </div>
+
     </div>
-</flux:card>
+    <div class="flex gap-4 py-4">
+        <div class="w-1/2">
+            <flux:input
+                    label="Email"
+                    placeholder="jane@doe.com"
+                    wire:model="email"
+            />
+        </div>
+        <div class="w-1/2">
+            <flux:select
+                    label="Role"
+                    variant="listbox"
+                    placeholder="Choose Role"
+                    wire:model="role"
+            >
+                @foreach(UserRole::cases() as $user_role)
+                    <flux:select.option>{{ $user_role }}</flux:select.option>
+                @endforeach
+            </flux:select>
+        </div>
+    </div>
+
+    <div class="flex gap-4 py-4">
+        <div class="w-1/2">
+            <flux:input
+                    type="password"
+                    label="Password"
+                    placeholder="Password"
+                    wire:model="password"
+                    value=""
+            />
+        </div>
+        <div class="w-1/2">
+            <flux:input
+                    type="password"
+                    label="Confirm Password"
+                    placeholder="Confirm Password"
+                    wire:model="password_confirmation"
+                    value=""
+            />
+        </div>
+    </div>
+
+    <div class="flex items-center justify-center gap-4 py-4">
+        <flux:button
+                variant="primary"
+                color="lime"
+                wire:click="save"
+        >Save!
+        </flux:button>
+        <flux:button wire:click="cancel">Cancel</flux:button>
+    </div>
+</div>
