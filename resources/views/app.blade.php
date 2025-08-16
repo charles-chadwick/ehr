@@ -23,8 +23,10 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body>
+<body class="h-screen  bg-amber-50">
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 @yield("content")
+</div>
 @fluxScripts
 @livewireScripts
 </body>
