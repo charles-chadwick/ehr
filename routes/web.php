@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use Livewire\Volt\Volt;
 
-Route::get('/', function () {
-    return view('app');
-});
+Volt::route('users/create', 'users.form')->name('users.create');
