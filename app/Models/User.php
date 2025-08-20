@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Traits\HasAvatar;
+use App\Models\Traits\IsPerson;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -17,7 +18,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Base implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
     use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
-    use HasFactory, Notifiable, HasAvatar;
+    use HasFactory, Notifiable, HasAvatar, IsPerson;
 
     /**
      * The attributes that are mass assignable.
@@ -51,13 +52,4 @@ class User extends Base implements AuthenticatableContract, AuthorizableContract
         ];
     }
 
-    public function getFullNameAttribute() : string
-    {
-        return "{$this->first_name} {$this->last_name}";
-    }
-
-    public function getFullNameExtendedAttribute() : string
-    {
-        return trim("{$this->prefix} {$this->first_name} {$this->last_name} {$this->suffix}");
-    }
 }
