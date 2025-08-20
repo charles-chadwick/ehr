@@ -1,0 +1,31 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Patient;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
+
+class PatientFactory extends Factory
+{
+    protected $model = Patient::class;
+
+    public function definition() : array
+    {
+        return [
+            'status'        => $this->faker->word(),
+
+            'first_name'    => $this->faker->firstName(),
+            'middle_name'   => $this->faker->name(),
+            'last_name'     => $this->faker->lastName(),
+            'prefix'        => $this->faker->word(),
+            'suffix'        => $this->faker->word(),
+            'date_of_birth' => Carbon::now(),
+            'email'         => $this->faker->unique()
+                                           ->safeEmail(),
+            'password'      => bcrypt($this->faker->password()),
+            'created_at'    => Carbon::now(),
+            'updated_at'    => Carbon::now(),
+        ];
+    }
+}
