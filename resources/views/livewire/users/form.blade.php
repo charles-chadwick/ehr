@@ -192,6 +192,7 @@ new class extends Component {
                 @endforeach
             </flux:select>
         </div>
+
     </div>
 
     <div class="flex gap-4 py-4">
@@ -214,6 +215,7 @@ new class extends Component {
             />
         </div>
     </div>
+        <flux:callout.text class="text-xs text-center">Only fill out these fields if you are setting or changing the password.</flux:callout.text>
 
     <div
             id="avatar"
