@@ -10,7 +10,6 @@ new class extends Component {
     public $users;
 
 
-
     #[On("users.index:refresh")]
     public function mount() : void
     {
@@ -41,8 +40,19 @@ new class extends Component {
                     class="flex justify-between px-2 py-4"
             >
                 <div class="w-auto">
-                    <h3 class="font-semibold text-zinc-800">{{ $user->full_name_extended }}</h3>
-                    <p class="text-sm text-zinc-700">{{ $user->role }} | {{ $user->email }}</p>
+                    <div class="flex justify-between px-2 py-4">
+                        <flux:avatar
+                                class="flex-none w-16 h-16 rounded-full mr-4"
+                                src="{{ $user->avatar }}"
+                                alt="{{ $user->full_name_extended }}"
+                                title="{{ $user->full_name_extended }}"
+                                size="sm"
+                        />
+                        <div class="w-auto">
+                            <h3 class="font-semibold text-zinc-800">{{ $user->full_name_extended }}</h3>
+                            <p class="text-sm text-zinc-700">{{ $user->role }} | {{ $user->email }}</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="shrink-0">
                     <flux:dropdown
