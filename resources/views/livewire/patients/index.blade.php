@@ -45,7 +45,7 @@ new class extends Component {
     </div>
     <flux:card size="sm">
 
-        @foreach($patients as $patient)
+        @forelse($patients as $patient)
             <div
                     wire:key="{{ $patient->id }}"
                     class="flex justify-between  py-4"
@@ -104,7 +104,11 @@ new class extends Component {
                     </flux:dropdown>
                 </div>
             </div>
-        @endforeach
+        @empty
+            <div class="text-center text-zinc-700">
+                There are no patients in the system.
+            </div>
+        @endforelse
     </flux:card>
     <flux:modal name="patient-form">
         <livewire:patients.form modal="patient-form" />
