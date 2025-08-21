@@ -70,7 +70,8 @@ new class extends Component {
                         </div>
 
                         <div>
-                            <h3 class="font-semibold text-zinc-800">{{ $patient->full_name_extended }}</h3>
+                            <h3 class="font-semibold text-zinc-800">{{ $patient->full_name }}</h3>
+                            <p class="text-sm text-zinc-700">{{ $patient->gender }}</p>
                             <p class="text-sm text-zinc-700">{{ Carbon::parse($patient->date_of_birth)->format('m/d/Y') }} ({{ $patient->age }})</p>
                             <p class="text-sm text-zinc-700">{{ $patient->email }}</p>
                         </div>
