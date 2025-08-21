@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 new class extends Component {
     use HasAvatarUpload;
 
-    public ?User  $user;
+    public $user;
     public string $role                  = "";
     public string $prefix                = "";
     public string $first_name            = "";
@@ -233,11 +233,10 @@ new class extends Component {
         </div>
     </div>
 
-
     <div class="flex items-center justify-center gap-4 py-4">
         <flux:button
                 variant="primary"
-                color="lime"
+                color="emerald"
                 wire:click="save"
         >Save!
         </flux:button>

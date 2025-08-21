@@ -1,9 +1,11 @@
 <?php
 
+use App\Enums\PatientStatus;
 use App\Models\Patient;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\On;
 use Livewire\Volt\Component;
+use Carbon\Carbon;
 
 new class extends Component {
 
@@ -13,6 +15,16 @@ new class extends Component {
     public function mount() : void
     {
         $this->patients = Patient::get();
+    }
+
+    public function statusColor($status) : string
+    {
+
+        return match ($status) {
+            PatientStatus::Prospective->value => 'indigo',
+            PatientStatus::Inactive->value => 'gray',
+            PatientStatus::Active->value => 'emerald',
+        };
     }
 
     public function with() : array
@@ -25,7 +37,11 @@ new class extends Component {
     <div class="flex justify-between font-bold text-zinc-700 mb-4">
         <h3 class="font-bold text-2xl">Patients</h3>
         <flux:modal.trigger name="patient-form">
-            <flux:button variant="primary" color="emerald">Create New Patient</flux:button>
+            <flux:button
+                    variant="primary"
+                    color="emerald"
+            >Create New Patient
+            </flux:button>
         </flux:modal.trigger>
     </div>
     <flux:card size="sm">
@@ -33,20 +49,30 @@ new class extends Component {
         @foreach($patients as $patient)
             <div
                     wire:key="{{ $patient->id }}"
-                    class="flex justify-between px-2 py-4"
+                    class="flex justify-between  py-4"
             >
                 <div class="w-auto">
-                    <div class="flex justify-between px-2 py-4">
-                        <flux:avatar
-                                class="flex-none rounded-full object-cover mr-4"
-                                src="{{ $patient->avatar }}"
-                                alt="{{ $patient->full_name_extended }}"
-                                title="{{ $patient->full_name_extended }}"
-                                size="md"
-                        />
-                        <div class="w-auto">
+                    <div class="flex justify-between py-4">
+                        <div class="w-24 text-center">
+                            <flux:avatar
+                                    class="rounded-full object-cover mx-auto"
+                                    src="{{ $patient->avatar }}"
+                                    alt="{{ $patient->full_name_extended }}"
+                                    title="{{ $patient->full_name_extended }}"
+                                    size="xl"
+                            />
+                            <flux:badge
+                                    class="ml-1 mt-2 text-xs"
+                                    color="{{ $this->statusColor($patient->status) }}"
+                                    variant="outline"
+                            >
+                                {{ $patient->status }}
+                            </flux:badge>
+                        </div>
+
+                        <div>
                             <h3 class="font-semibold text-zinc-800">{{ $patient->full_name_extended }}</h3>
-                            <p class="text-sm text-zinc-700">{{ $patient->date_of_birth }} ({{ $patient->age }})</p>
+                            <p class="text-sm text-zinc-700">{{ Carbon::parse($patient->date_of_birth)->format('m/d/Y') }} ({{ $patient->age }})</p>
                             <p class="text-sm text-zinc-700">{{ $patient->email }}</p>
                         </div>
                     </div>

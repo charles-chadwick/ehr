@@ -254,7 +254,7 @@ new class extends Component {
     <div class="flex items-center justify-center gap-4 py-4">
         <flux:button
                 variant="primary"
-                color="lime"
+                color="emerald"
                 wire:click="save"
         >Save!
         </flux:button>
