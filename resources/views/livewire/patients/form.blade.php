@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\PatientStatus;
+use App\Enums\PatientGender;
 use App\Enums\UserRole;
 use App\Livewire\Traits\HasAvatarUpload;
 use App\Models\Patient;
@@ -20,10 +21,14 @@ new class extends Component {
     public string   $status                = "";
     public string   $prefix                = "";
     public string   $first_name            = "";
+    public string   $middle_name           = "";
     public string   $last_name             = "";
     public string   $suffix                = "";
+    public string   $nickname              = "";
     public string   $email                 = "";
     public string   $date_of_birth         = "";
+    public string   $gender                = "";
+    public string   $gender_identity       = "";
     public string   $password              = "";
     public string   $password_confirmation = "";
 
@@ -52,13 +57,17 @@ new class extends Component {
         $validated = $this->validate();
 
         $patient_data = [
-            'prefix'        => $this->prefix,
-            'first_name'    => $this->first_name,
-            'last_name'     => $this->last_name,
-            'suffix'        => $this->suffix,
-            'email'         => $this->email,
-            'date_of_birth' => $this->date_of_birth,
-            'status'        => $this->status
+            'status'          => $this->status,
+            'prefix'          => $this->prefix,
+            'first_name'      => $this->first_name,
+            'middle_name'     => $this->middle_name,
+            'last_name'       => $this->last_name,
+            'suffix'          => $this->suffix,
+            'nickname'        => $this->nickname,
+            'email'           => $this->email,
+            'date_of_birth'   => $this->date_of_birth,
+            'gender'          => $this->gender,
+            'gender_identity' => $this->gender_identity,
         ];
 
         if (!empty($validated['password'] ?? null)) {
@@ -105,8 +114,15 @@ new class extends Component {
         return [
             'prefix'                => 'nullable|max:25',
             'first_name'            => 'required|string|max:255',
+            'middle_name'           => 'nullable|string|max:255',
             'last_name'             => 'required|string|max:255',
             'suffix'                => 'nullable|max:25',
+            'nickname'              => 'nullable|max:255',
+            'gender'                => [
+                'required',
+                Rule::in(PatientGender::cases())
+            ],
+            'gender_identity'       => 'nullable|max:255',
             'date_of_birth'         => 'required|date',
             'status'                => [
                 'required',
@@ -124,18 +140,10 @@ new class extends Component {
             'patient' => $this->patient
         ];
     }
-
 }; ?>
 
 <div>
     <div class="flex gap-4 py-4">
-        <div class="w-1/6">
-            <flux:input
-                    label="Prefix"
-                    placeholder="Mr."
-                    wire:model="prefix"
-            />
-        </div>
         <div class="w-auto">
             <flux:input
                     label="First Name"
@@ -145,28 +153,46 @@ new class extends Component {
         </div>
         <div class="w-auto">
             <flux:input
+                    label="Middle Name"
+                    placeholder="Middle Name"
+                    wire:model="middle_name"
+            />
+        </div>
+        <div class="w-auto">
+            <flux:input
                     label="Last Name"
                     placeholder="Doe"
                     wire:model="last_name"
             />
         </div>
-        <div class="w-1/6">
+    </div>
+
+    <div class="flex gap-4 py-4">
+        <div class="w-auto">
+            <flux:input
+                    label="Prefix"
+                    placeholder="Mr., Mrs., Ms., etc."
+                    wire:model="prefix"
+            />
+        </div>
+        <div class="w-auto">
             <flux:input
                     label="Suffix"
-                    placeholder="Jr."
+                    placeholder="Jr, Sr, III, etc."
                     wire:model="suffix"
             />
         </div>
-
-    </div>
-    <div class="flex gap-4 py-4">
-        <div class="w-1/3">
+        <div class="w-auto">
             <flux:input
-                    label="Email"
-                    placeholder="john.doe@example.com"
-                    wire:model="email"
+                    label="Nickname"
+                    placeholder="Bubba, Curly, etc."
+                    wire:model="nicknames"
             />
         </div>
+    </div>
+
+    {{-- date of birth / gender / gender identity --}}
+    <div class="flex gap-4 py-4">
         <div class="w-1/3">
             <flux:date-picker
                     wire:model="date_of_birth"
@@ -177,6 +203,32 @@ new class extends Component {
                 </x-slot>
             </flux:date-picker>
         </div>
+        <div class="w-1/3">
+            <flux:select
+                    label="Gender"
+                    variant="listbox"
+                    placeholder="Choose Gender"
+                    wire:model="gender"
+            >
+                @foreach(PatientGender::cases() as $gender)
+                    <flux:select.option>{{ $gender }}</flux:select.option>
+                @endforeach
+            </flux:select>
+        </div>
+        <div class="w-1/3">
+            <flux:input
+                    label="Gender Identity"
+                    placeholder="Male, Female, Other, etc."
+                    wire:model="gender_identity"
+            />
+        </div>
+
+    </div>
+
+    {{-- email, status, avatar --}}
+    <div class="flex gap-4 py-4">
+
+        {{-- status --}}
         <div class="w-1/3">
             <flux:select
                     label="Status"
@@ -190,8 +242,17 @@ new class extends Component {
             </flux:select>
         </div>
 
+        {{-- email--}}
+        <div class="w-1/3">
+            <flux:input
+                    label="Email"
+                    placeholder="john.doe@example.com"
+                    wire:model="email"
+            />
+        </div>
     </div>
 
+    {{-- password stuff --}}
     <div class="flex gap-4 py-4">
         <div class="w-1/2">
             <flux:input
@@ -212,10 +273,12 @@ new class extends Component {
             />
         </div>
     </div>
-    <flux:callout.text class="text-xs text-center">Only fill out these fields if you are setting or changing the
-                                                   password.
+    <flux:callout.text
+            class="text-xs text-center"
+    >Only fill out these fields if you are setting or changing the password.
     </flux:callout.text>
 
+    {{-- avatar --}}
     <div
             id="avatar"
     >

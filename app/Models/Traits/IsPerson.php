@@ -12,6 +12,13 @@ trait IsPerson {
 
     public function getFullNameExtendedAttribute() : string
     {
-        return trim("{$this->prefix} {$this->first_name} {$this->last_name} {$this->suffix}");
+        $name = "{$this->prefix} {$this->first_name}";
+        if (isset($this->middle_name) && !empty($this->middle_name)) {
+            $name .= " {$this->middle_name}";
+        }
+
+        $name .= " {$this->last_name} {$this->suffix}";
+
+        return trim($name);
     }
 }
