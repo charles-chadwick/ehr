@@ -48,9 +48,10 @@ new class extends Component {
         @forelse($patients as $patient)
             <div
                     wire:key="{{ $patient->id }}"
-                    class="flex justify-between  py-4"
+                    class="flex justify-between py-4"
             >
                 <div class="w-auto">
+                    {{-- patient details --}}
                     <div class="flex justify-between py-4">
                         <div class="w-24 text-center">
                             <flux:avatar
@@ -70,12 +71,18 @@ new class extends Component {
                         </div>
 
                         <div>
-                            <h3 class="font-semibold text-zinc-800">{{ $patient->full_name }}</h3>
+                            <h3 class="font-semibold text-zinc-800">
+                                <a href="{{ route('patients.chart', $patient) }}">
+                                    {{ $patient->full_name }}
+                                </a>
+                            </h3>
                             <p class="text-sm text-zinc-700">{{ $patient->gender }}</p>
                             <p class="text-sm text-zinc-700">{{ Carbon::parse($patient->date_of_birth)->format('m/d/Y') }} ({{ $patient->age }})</p>
                             <p class="text-sm text-zinc-700">{{ $patient->email }}</p>
                         </div>
                     </div>
+                    {{-- end details --}}
+
                 </div>
                 <div class="shrink-0">
                     <flux:dropdown
@@ -85,21 +92,10 @@ new class extends Component {
                         <flux:button size="sm">...</flux:button>
                         <flux:navmenu>
                             <flux:navmenu.item
-                                    href="#"
+                                    href="{{ route('patients.chart', $patient) }}"
                                     icon="user"
                             >
-                                <flux:modal.trigger
-                                        name="patient-form"
-                                        wire:click="$dispatch('edit-patient', {id: {{ $patient->id }}})"
-                                >Account
-                                </flux:modal.trigger>
-                            </flux:navmenu.item>
-
-                            <flux:navmenu.item
-                                    href="#"
-                                    icon="trash"
-                                    variant="danger"
-                            >Delete
+                                Go to chart
                             </flux:navmenu.item>
                         </flux:navmenu>
                     </flux:dropdown>
@@ -111,7 +107,5 @@ new class extends Component {
             </div>
         @endforelse
     </flux:card>
-    <flux:modal name="patient-form">
-        <livewire:patients.form modal="patient-form" />
-    </flux:modal>
+
 </div>

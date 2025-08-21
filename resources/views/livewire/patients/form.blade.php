@@ -186,7 +186,7 @@ new class extends Component {
             <flux:input
                     label="Nickname"
                     placeholder="Bubba, Curly, etc."
-                    wire:model="nicknames"
+                    wire:model="nickname"
             />
         </div>
     </div>
