@@ -3,13 +3,13 @@
 namespace Database\Factories;
 
 use App\Enums\UserRole;
-use App\Models\User;
+use App\Models\Patient;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends Factory<User>
+ * @extends Factory<Patient>
  */
 class UserFactory extends Factory
 {

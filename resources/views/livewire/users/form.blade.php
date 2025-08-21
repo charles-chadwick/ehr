@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\UserRole;
+use App\Livewire\Traits\HasAvatarUpload;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\On;
@@ -11,6 +12,7 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Illuminate\Support\Facades\DB;
 
 new class extends Component {
+    use HasAvatarUpload;
 
     public ?User  $user;
     public string $role                  = "";
@@ -22,9 +24,6 @@ new class extends Component {
     public string $password              = "";
     public string $password_confirmation = "";
     public string $modal                 = "";
-
-    public string $avatar_path = "";
-    public string $avatar_url  = "";
 
     public function mount(?User $user) : void
     {
@@ -41,24 +40,6 @@ new class extends Component {
         $this->user = User::findOrFail($id);
         $this->fill($this->user);
         $this->avatar_url = $this->user->avatar;
-    }
-
-    #[On('file-uploaded')]
-    public function onFileUploaded(string $path, ?string $url = null) : void
-    {
-        $this->avatar_path = $path;
-        $this->avatar_url = $url ?? '';
-    }
-
-    public function removeImage() : void
-    {
-        DB::table('media')
-          ->where('model_type', User::class)
-          ->where('model_id', $this->user->id)
-          ->delete();
-        $this->avatar_url = "";
-        $this->avatar_path = "";
-
     }
 
     public function save() : void
@@ -85,7 +66,7 @@ new class extends Component {
             $heading = "User updated";
         } else {
 
-            $this->user = User::create($user_data);
+            $this->user = Patient::create($user_data);
             $message = "Successfully created user";
             $heading = "User created";
         }
@@ -215,7 +196,9 @@ new class extends Component {
             />
         </div>
     </div>
-        <flux:callout.text class="text-xs text-center">Only fill out these fields if you are setting or changing the password.</flux:callout.text>
+    <flux:callout.text class="text-xs text-center">Only fill out these fields if you are setting or changing the
+                                                   password.
+    </flux:callout.text>
 
     <div
             id="avatar"

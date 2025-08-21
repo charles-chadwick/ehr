@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\On;
@@ -9,13 +10,11 @@ new class extends Component {
 
     public $users;
 
-
     #[On("users.index:refresh")]
     public function mount() : void
     {
         $this->users = User::get();
     }
-
 
     public function with() : array
     {
