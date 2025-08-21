@@ -19,9 +19,8 @@ new class extends Component {
 
     public function statusColor($status) : string
     {
-
         return match ($status) {
-            PatientStatus::Prospective->value => 'indigo',
+            PatientStatus::Prospective->value => 'purple',
             PatientStatus::Inactive->value => 'gray',
             PatientStatus::Active->value => 'emerald',
         };
@@ -84,7 +83,6 @@ new class extends Component {
                     >
                         <flux:button size="sm">...</flux:button>
                         <flux:navmenu>
-
                             <flux:navmenu.item
                                     href="#"
                                     icon="user"

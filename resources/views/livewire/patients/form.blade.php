@@ -85,7 +85,6 @@ new class extends Component {
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 dd($e->getMessage());
                 Flux::toast("Error saving avatar", heading: "Error", variant: "error", position: "top-right");
-
             }
         }
 
