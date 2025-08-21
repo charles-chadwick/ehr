@@ -20,7 +20,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="h-screen  bg-purple-50">
+<body class="h-screen  bg-zinc-100">
 @persist('toast')
 <flux:toast />
 @endpersist
