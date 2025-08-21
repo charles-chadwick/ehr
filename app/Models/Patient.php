@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\HasAvatar;
 use App\Models\Traits\IsPerson;
+use Carbon\Carbon;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -18,10 +19,19 @@ class Patient extends Base implements AuthenticatableContract, AuthorizableContr
     use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
     use HasFactory, HasAvatar, IsPerson;
 
+    protected $guarded = ['id'];
+
     protected function casts() : array
     {
         return [
             'date_of_birth' => 'date',
         ];
+    }
+
+    public function getAgeAttribute() : string
+    {
+        $months = Carbon::now()->month - Carbon::parse($this->date_of_birth)->month;
+        return Carbon::parse($this->date_of_birth)->age.' years '.$months.' months';
+
     }
 }
