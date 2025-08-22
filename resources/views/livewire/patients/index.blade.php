@@ -21,8 +21,8 @@ new class extends Component {
     {
         return match ($status) {
             PatientStatus::Prospective->value => 'purple',
-            PatientStatus::Inactive->value => 'gray',
-            PatientStatus::Active->value => 'emerald',
+            PatientStatus::Inactive->value    => 'gray',
+            PatientStatus::Active->value      => 'emerald',
         };
     }
 
@@ -77,7 +77,8 @@ new class extends Component {
                                 </a>
                             </h3>
                             <p class="text-sm text-zinc-700">{{ $patient->gender }}</p>
-                            <p class="text-sm text-zinc-700">{{ Carbon::parse($patient->date_of_birth)->format('m/d/Y') }} ({{ $patient->age }})</p>
+                            <p class="text-sm text-zinc-700">{{ Carbon::parse($patient->date_of_birth)->format('m/d/Y') }}
+                                ({{ $patient->age }})</p>
                             <p class="text-sm text-zinc-700">{{ $patient->email }}</p>
                         </div>
                     </div>
@@ -89,7 +90,11 @@ new class extends Component {
                             position="bottom"
                             align="end"
                     >
-                        <flux:button size="sm">...</flux:button>
+                        <flux:button
+                                size="sm"
+                                icon="ellipsis-horizontal"
+                                inset="top bottom"
+                        ></flux:button>
                         <flux:navmenu>
                             <flux:navmenu.item
                                     href="{{ route('patients.chart', $patient) }}"

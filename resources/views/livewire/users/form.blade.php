@@ -2,6 +2,7 @@
 
 use App\Enums\UserRole;
 use App\Livewire\Traits\HasAvatarUpload;
+use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\On;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 new class extends Component {
     use HasAvatarUpload;
 
-    public $user;
+    public        $user;
     public string $role                  = "";
     public string $prefix                = "";
     public string $first_name            = "";
@@ -66,7 +67,7 @@ new class extends Component {
             $heading = "User updated";
         } else {
 
-            $this->user = Patient::create($user_data);
+            $this->user = User::create($user_data);
             $message = "Successfully created user";
             $heading = "User created";
         }
@@ -77,9 +78,7 @@ new class extends Component {
                            ->preservingOriginal()
                            ->toMediaCollection('avatars');
             } catch (FileDoesNotExist|FileIsTooBig $e) {
-                dd($e->getMessage());
                 Flux::toast("Error saving avatar", heading: "Error", variant: "error", position: "top-right");
-
             }
         }
 

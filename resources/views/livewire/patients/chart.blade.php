@@ -23,30 +23,9 @@ new class extends Component {
     {{-- header --}}
     <flux:card size="sm">
         <div class="flex">
-
-            {{-- avatar --}}
-            <div class="flex-none">
-                <flux:avatar
-                        class="rounded-full object-cover mx-auto w-32 h-32 mr-4"
-                        src="{{ $patient->avatar }}"
-                        alt="{{ $patient->full_name_extended }}"
-                        title="{{ $patient->full_name_extended }}"
-
-                />
+            <div class="w-full">
+            <livewire:patients.details :patient="$patient" />
             </div>
-
-            {{-- patient info --}}
-            <div class="w-full text-zinc-700">
-                <h1 class="font-bold text-zinc-800">{{ $patient->full_name_extended }}</h1>
-                @if ($patient->nickname !== "")
-                    <p class="italic text-sm">"{{ $patient->nickname }}"</p>
-                @endif
-                <p class="text-sm">{{ $patient->gender }}</p>
-                <p class="text-sm">{{ Carbon::parse($patient->date_of_birth)->format('m/d/Y') }}
-                    ({{ $patient->age }})</p>
-                <p class="text-sm">{{ $patient->email }}</p>
-            </div>
-
             {{-- patient menu --}}
             <div class="flex-none text-right">
                 <div class="mb-2">
@@ -63,7 +42,6 @@ new class extends Component {
                         Send Message
                     </flux:button>
                 </div>
-
             </div>
 
             {{-- form --}}
@@ -80,4 +58,12 @@ new class extends Component {
 
     </flux:card>
 
+    {{-- chart --}}
+    <flux:card
+            size="sm"
+            class="mt-4"
+    >
+
+        <livewire:encounters.index :patient="$patient" />
+    </flux:card>
 </div>
