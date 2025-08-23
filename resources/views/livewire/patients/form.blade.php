@@ -195,6 +195,7 @@ new class extends Component {
     <div class="flex gap-4 py-4">
         <div class="w-1/3">
             <flux:date-picker
+                    selectable-header
                     wire:model="date_of_birth"
                     label="Date of Birth"
             >
