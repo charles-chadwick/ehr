@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Pivots\AppointmentUser;
 use App\Models\Traits\HasAvatar;
 use App\Models\Traits\IsPerson;
 use Illuminate\Auth\Authenticatable;
@@ -31,7 +32,12 @@ class User extends Base implements AuthenticatableContract, AuthorizableContract
 
     public function appointments() : BelongsToMany
     {
-        return $this->belongsToMany(Appointment::class, 'appointments_users', 'user_id', 'appointment_id');
+        return $this->belongsToMany(Appointment::class, 'appointments_users')
+                    ->using(AppointmentUser::class)
+                    ->withTimestamps()
+                    ->withPivot('deleted_at')
+                    ->wherePivotNull('deleted_at');
+
     }
 
     protected function casts() : array

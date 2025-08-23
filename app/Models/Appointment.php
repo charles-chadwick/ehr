@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\AppointmentStatus;
+use App\Models\Pivots\AppointmentUser;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,8 +26,13 @@ class Appointment extends Base
 
     public function users() : BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'appointments_users', 'appointment_id', 'user_id');
+        return $this->belongsToMany(User::class, 'appointments_users')
+                    ->using(AppointmentUser::class)
+                    ->withTimestamps()
+                    ->withPivot('deleted_at')
+                    ->wherePivotNull('deleted_at');
     }
+
 
     protected function casts() : array
     {
