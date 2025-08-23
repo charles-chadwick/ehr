@@ -66,6 +66,7 @@ new class extends Component {
             name="appointment-form"
             class="min-w-1/3"
             variant="flyout"
+            @close="$dispatch('clear-fields')"
     >
         <livewire:appointments.form :patient="$patient" />
     </flux:modal>
