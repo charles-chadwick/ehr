@@ -27,20 +27,23 @@ new class extends Component {
 
     public function mount(?Appointment $appointment) : void
     {
-        $this->loadAppointment($appointment);
+        $this->date = Carbon::tomorrow()->format('Y-m-d');
+        $this->time = "08:00";
+
+        $this->appointment = $appointment;
+
+        if (isset($appointment->id) && $appointment->id != null) {
+            $this->loadAppointment($this->appointment->id);
+        }
         $this->patient = request()->patient;
     }
 
-    #[On("appointment-form:refresh")]
-    public function loadAppointment(Appointment $appointment) : void
+    #[On("edit-appointment")]
+    public function loadAppointment($id) : void
     {
-        if (isset($appointment->id) && $appointment->id !== null) {
-            $this->appointment = $appointment;
+        if ($id > 0) {
+            $this->appointment = Appointment::findOrFail($id);
             $this->fill($this->appointment);
-        } else {
-
-            $this->date_and_time = Carbon::now()
-                                         ->format('Y-m-d');
         }
     }
 
@@ -87,6 +90,8 @@ new class extends Component {
 
         Flux::toast("Successfully saved appointment", heading : "Appointment saved", variant: "success",
                                                       position: "top-right");
+
+        $this->dispatch('appointment.index:refresh');
     }
 
 }; ?>

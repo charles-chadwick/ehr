@@ -39,7 +39,6 @@ new class extends Component {
         $this->patient = $patient;
         if ($this->patient?->id) {
             $this->loadPatient($this->patient->id);
-
         }
     }
 

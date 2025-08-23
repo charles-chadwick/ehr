@@ -8,6 +8,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use LaravelIdea\Helper\App\Models\_IH_Base_C;
 use LaravelIdea\Helper\App\Models\_IH_Appointment_C;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Livewire\Volt\Component;
 use Carbon\Carbon;
 use Livewire\WithPagination;
@@ -18,6 +19,7 @@ new class extends Component {
 
     public Patient $patient;
 
+
     public function mount(Patient $patient) : void
     {
         $this->patient = $patient;
@@ -25,6 +27,7 @@ new class extends Component {
     }
 
     #[Computed]
+    #[On('appointment.index:refresh')]
     public function appointments() : array|LengthAwarePaginator|_IH_Base_C|_IH_Appointment_C
     {
         return Appointment::where('patient_id', $this->patient->id)
@@ -51,14 +54,17 @@ new class extends Component {
             >
                 <flux:modal.trigger
                         name="appointment-form"
-                        wire:click="$dispatch('edit-appointment', {id: {{ $patient->id }}})"
+                       wire:click="$dispatch('edit-appointment', {id: 0, patient: {{ $patient }}})"
                 >New Appointment
                 </flux:modal.trigger>
             </flux:button>
         </div>
     </div>
 
-    <flux:modal name="appointment-form" class="min-w-3/4">
+    <flux:modal
+            name="appointment-form"
+            class="min-w-1/3"
+    >
         <livewire:appointments.form :patient="$patient" />
     </flux:modal>
 
@@ -101,7 +107,17 @@ new class extends Component {
                         {{ $appointment->full_date_and_time }}
                     </flux:table.cell>
                     <flux:table.cell>
-                        {{ $appointment->title }}
+
+                        <a
+                                href="#"
+                                class="text-emerald-700 hover:underline"
+                        >
+                            <flux:modal.trigger
+                                    name="appointment-form"
+                                    wire:click="$dispatch('edit-appointment', {id: {{ $appointment->id }}, patient: {{ $patient }}})"
+                            >{{ $appointment->title }}
+                            </flux:modal.trigger>
+                        </a>
                     </flux:table.cell>
                     <flux:table.cell>
                         {{ $appointment->type }}

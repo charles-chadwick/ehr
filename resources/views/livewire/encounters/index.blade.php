@@ -105,7 +105,7 @@ new class extends Component {
             </flux:table.column>
         </flux:table.columns>
         <flux:table.rows>
-            @foreach ($encounters as $encounter)
+            @forelse ($encounters as $encounter)
                 <flux:table.row :key="$encounter->id">
                     <flux:table.cell>
                         {{ Carbon::parse($encounter->date_of_service)->format('m/d/Y') }}
@@ -148,7 +148,13 @@ new class extends Component {
                         </flux:dropdown>
                     </flux:table.cell>
                 </flux:table.row>
-            @endforeach
+            @empty
+                <flux:table.row>
+                    <flux:table.cell colspan="5" class="text-center">
+                        There are no encounters for this patient.
+                    </flux:table.cell>
+                </flux:table.row>
+            @endforelse
         </flux:table.rows>
     </flux:table>
 </div>
