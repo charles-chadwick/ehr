@@ -60,12 +60,13 @@ new class extends Component {
 }; ?>
 
 <div>
-    <div class="flex flex-row gap-4">
+    <div class="flex flex-row">
         <h2 class="font-bold w-full">Encounters</h2>
         <div class="flex-none">
             <flux:button
                     href="{{ route('encounters.form', ['patient' => $patient]) }}"
                     icon="plus"
+                    size="sm"
             >
                 New Encounter
             </flux:button>
@@ -120,7 +121,7 @@ new class extends Component {
                     <flux:table.cell>
                         <flux:badge
                                 size="sm"
-                                color="{{ $encounter->status == EncounterStatus::Signed ? 'emerald' : 'gray' }}"
+                                color="{{ $encounter->status == EncounterStatus::Signed->value ? 'emerald' : 'gray' }}"
                         >
                             {{ $encounter->status }}
                         </flux:badge>

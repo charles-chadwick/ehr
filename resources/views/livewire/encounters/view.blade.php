@@ -21,6 +21,7 @@ new class extends Component {
         $this->patient = $patient;
         $this->encounter = $encounter;
         $this->fill($encounter);
+        $encounter->load('signedBy');
     }
 
     public function unsign() : void
@@ -69,6 +70,12 @@ new class extends Component {
                 id="encounter"
         >
             {!! $content  !!}
+        </div>
+        <hr class="my-4 text-zinc-300" />
+        <div class="flex items-center justify-between">
+            <p class="text-sm text-zinc-500">
+                Signed by {{ $encounter->signedBy->full_name_extended }} on {{ $encounter->created_at->format('m/d/Y @ h:ia') }}
+            </p>
         </div>
     </flux:card>
 </div>

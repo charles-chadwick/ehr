@@ -24,12 +24,12 @@ new class extends Component {
     <flux:card size="sm">
         <div class="flex">
             <div class="w-full">
-            <livewire:patients.details :patient="$patient" />
+                <livewire:patients.details :patient="$patient" />
             </div>
             {{-- patient menu --}}
-            <div class="flex-none text-right">
+            <div class="flex-none">
                 <div class="mb-2">
-                    <flux:button size="sm">
+                    <flux:button size="sm" class="w-full">
                         <flux:modal.trigger
                                 name="patient-form"
                                 wire:click="$dispatch('edit-patient', {id: {{ $patient->id }}})"
@@ -38,24 +38,24 @@ new class extends Component {
                     </flux:button>
                 </div>
                 <div>
-                    <flux:button size="sm">
+                    <flux:button size="sm"  class="w-full">
                         Send Message
                     </flux:button>
                 </div>
             </div>
 
-            {{-- form --}}
-            <flux:modal
-                    name="patient-form"
-                    variant="flyout"
-            >
-                <livewire:patients.form
-                        modal="patient-form"
-                        :patient="$patient"
-                />
-            </flux:modal>
         </div>
 
+        {{-- form --}}
+        <flux:modal
+                name="patient-form"
+                variant="flyout"
+        >
+            <livewire:patients.form
+                    modal="patient-form"
+                    :patient="$patient"
+            />
+        </flux:modal>
     </flux:card>
 
     {{-- chart --}}

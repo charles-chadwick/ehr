@@ -76,8 +76,8 @@ new class extends Component {
             'title'           => $this->title,
             'type'            => $this->type,
             'status'          => $sign ? EncounterStatus::Signed : EncounterStatus::Unsigned,
-            'singed_by'       => $sign ? auth()->user() : "",
-            'signed_at'       => $sign ? Carbon::now() : "",
+            'singed_by'       => $sign ? auth()->user() : null,
+            'signed_at'       => $sign ? Carbon::now() : null,
             'patient_id'      => $this->patient->id
         ];
 
