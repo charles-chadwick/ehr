@@ -21,6 +21,7 @@ new class extends Component {
     public string      $title         = "";
     public string      $description   = "";
     public string      $status        = "";
+    public string      $unavailable   = "2025-08-22,2025-08-24";
     public Patient     $patient;
     public Appointment $appointment;
 
@@ -46,69 +47,52 @@ new class extends Component {
     public function rules() : array
     {
         return [
-            'title'         => 'required|max:255',
-            'date_and_time' => 'date',
-            'type'          => 'required',
-            'description'   => 'nullable'
+
+            'date'        => 'required|date',
+            'time'        => 'required',
+            'length'      => 'required|integer',
+            'status'      => [
+                'required',
+                Rule::in(AppointmentStatus::cases())
+            ],
+            'title'       => 'required',
+            'type'        => 'required',
+            'description' => 'nullable'
         ];
     }
 
-    public function saveWithoutSigning() : void
+    public function save() : void
     {
-        $this->save();
-
-    }
-
-    public function saveAndSign() : void
-    {
-        $this->save(true);
-
-    }
-
-    private function save($sign = false) : void
-    {
-        $this->validate();
-
+        $validated = $this->validate();
+        list($hour, $minute) = explode(':', $validated['time']);
         $data = [
-            'description'   => $this->description,
-            'date_and_time' => $this->date_and_time,
-            'title'         => $this->title,
+            'patient_id'    => $this->patient->id,
+            'date_and_time' => Carbon::parse($this->date)->addHours((int) $hour)->addMinutes((int) $minute),
+            'length'        => $this->length,
+            'status'        => $this->status,
             'type'          => $this->type,
-            'status'        => $sign ? AppointmentStatus::Signed : AppointmentStatus::Unsigned,
-            'singed_by'     => $sign ? auth()->user() : null,
-            'signed_at'     => $sign ? Carbon::now() : null,
-            'patient_id'    => $this->patient->id
+            'title'         => $this->title,
+            'description'   => $this->description,
         ];
-
 
         if (isset($this->appointment->id) && $this->appointment->id !== null) {
 
             // updating
             $this->appointment->update($data);
-            // toast it up
-            Flux::toast("Successfully saved appointment", heading : "Appointment saved", variant: "success",
-                                                          position: "top-right");
         } else {
 
             // saving
             $this->appointment = Appointment::create($data);
-            // toast it up
-            Flux::toast("Successfully saved appointment", heading : "Appointment saved", variant: "success",
-                                                          position: "top-right");
         }
 
-        if ($sign) {
-            $this->redirect(route('appointments.view', [
-                'patient'     => $this->patient,
-                'appointment' => $this->appointment
-            ]));
-        }
+        Flux::toast("Successfully saved appointment", heading : "Appointment saved", variant: "success",
+                                                      position: "top-right");
     }
 
 }; ?>
 
 <form
-
+        wire:submit.prevent="save"
 >
     <div class="flex flex-row gap-4">
         <div class="flex-1/2">
@@ -125,13 +109,25 @@ new class extends Component {
                     wire:model="type"
             />
         </div>
+        <div class="flex-1/4">
+            <flux:select
+                    label="Status"
+                    variant="listbox"
+                    placeholder="Choose Status"
+                    wire:model="status"
+            >
+                @foreach(AppointmentStatus::cases() as $appointment_status)
+                    <flux:select.option>{{ $appointment_status }}</flux:select.option>
+                @endforeach
+            </flux:select>
+        </div>
 
     </div>
     <div class="flex flex-row gap-4 mt-4">
         <div class="flex-1/2">
             <flux:date-picker
                     selectable-header
-                    unavailable="2025-08-22,2025-08-24"
+                    unavailable="{{ $unavailable }}"
                     wire:model="date"
                     label="Date"
                     value="{{ $date }}"

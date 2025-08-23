@@ -3,6 +3,7 @@
 use App\Livewire\Traits\Sortable;
 use App\Models\Appointment;
 use App\Models\Patient;
+use App\Enums\AppointmentStatus;
 use Illuminate\Pagination\LengthAwarePaginator;
 use LaravelIdea\Helper\App\Models\_IH_Base_C;
 use LaravelIdea\Helper\App\Models\_IH_Appointment_C;
@@ -97,7 +98,7 @@ new class extends Component {
             @forelse ($appointments as $appointment)
                 <flux:table.row :key="$appointment->id">
                     <flux:table.cell>
-                        {{ Carbon::parse($appointment->date_and_time)->format('m/d/Y @ h:ia') }}
+                        {{ $appointment->full_date_and_time }}
                     </flux:table.cell>
                     <flux:table.cell>
                         {{ $appointment->title }}
@@ -108,7 +109,6 @@ new class extends Component {
                     <flux:table.cell>
                         <flux:badge
                                 size="sm"
-                                color="{{ $appointment->status == AppointmentStatus::Signed->value ? 'emerald' : 'gray' }}"
                         >
                             {{ $appointment->status }}
                         </flux:badge>
