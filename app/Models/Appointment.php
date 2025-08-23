@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\AppointmentStatus;
-use App\Models\Pivots\AppointmentUser;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

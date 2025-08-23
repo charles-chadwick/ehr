@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Pivots\AppointmentUser;
 use App\Models\Traits\HasAvatar;
 use App\Models\Traits\IsPerson;
 use Illuminate\Auth\Authenticatable;
