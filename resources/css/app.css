@@ -12,7 +12,9 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
-
+a.link {
+    @apply text-emerald-700 hover:underline;
+}
 #encounter p {
     @apply mb-4;
 }

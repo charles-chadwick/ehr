@@ -111,7 +111,7 @@ new class extends Component {
 
                         <a
                                 href="#"
-                                class="text-emerald-700 hover:underline"
+                                class="link"
                         >
                             <flux:modal.trigger
                                     name="appointment-form"
