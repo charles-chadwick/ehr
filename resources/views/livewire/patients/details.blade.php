@@ -36,7 +36,7 @@ new class extends Component {
         />
     </div>
 
-    <div class="w-full text-zinc-700">
+    <flux:description class="flex-grow">
         <a href="{{ route('patients.chart', $patient) }}">
             <h1 class="font-bold text-zinc-800">{{ $patient->full_name_extended }}</h1>
         </a>
@@ -47,5 +47,5 @@ new class extends Component {
         <p class="text-sm">{{ Carbon::parse($patient->date_of_birth)->format('m/d/Y') }}
             ({{ $patient->age }})</p>
         <p class="text-sm">{{ $patient->email }}</p>
-    </div>
+    </flux:description>
 </div>

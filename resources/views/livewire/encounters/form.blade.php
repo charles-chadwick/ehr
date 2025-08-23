@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EncounterStatus;
 use App\Enums\EncounterType;
 use App\Models\Encounter;
 use App\Models\Patient;
@@ -13,25 +14,25 @@ use Flux\Flux;
 
 new class extends Component {
 
-    public string     $type            = "";
-    public string     $date_of_service = "";
-    public string     $title           = "";
-    public string     $content         = "";
-    public string     $status          = "";
-    public Patient    $patient;
-    public ?Encounter $encounter;
+    public string    $type            = "";
+    public string    $date_of_service = "";
+    public string    $title           = "";
+    public string    $content         = "";
+    public string    $status          = "";
+    public Patient   $patient;
+    public Encounter $encounter;
 
-    public function mount() : void
+    public function mount(?Encounter $encounter) : void
     {
-        $this->loadEncounter(request()->encounter);
+        $this->loadEncounter($encounter);
         $this->patient = request()->patient;
     }
 
     #[On("encounter-form:refresh")]
-    public function loadEncounter($encounter) : void
+    public function loadEncounter(Encounter $encounter) : void
     {
-        $this->encounter = $encounter;
-        if ($encounter != "") {
+        if (isset($encounter->id) && $encounter->id !== null) {
+            $this->encounter = $encounter;
             $this->fill($this->encounter);
         } else {
 
@@ -53,7 +54,19 @@ new class extends Component {
         ];
     }
 
-    public function save() : void
+    public function saveWithoutSigning() : void
+    {
+        $this->save();
+
+    }
+
+    public function saveAndSign() : void
+    {
+        $this->save(true);
+
+    }
+
+    private function save($sign = false) : void
     {
         $this->validate();
 
@@ -62,26 +75,35 @@ new class extends Component {
             'date_of_service' => $this->date_of_service,
             'title'           => $this->title,
             'type'            => $this->type,
-            'status'          => "Unsigned"
+            'status'          => $sign ? EncounterStatus::Signed : EncounterStatus::Unsigned,
+            'singed_by'       => $sign ? auth()->user() : "",
+            'signed_at'       => $sign ? Carbon::now() : "",
+            'patient_id'      => $this->patient->id
         ];
 
-        if ($this->encounter != "") {
+
+        if (isset($this->encounter->id) && $this->encounter->id !== null) {
+
             // updating
             $this->encounter->update($data);
+            // toast it up
+            Flux::toast("Successfully saved encounter", heading : "Encounter saved", variant: "success",
+                                                        position: "top-right");
         } else {
+
             // saving
-            $data['patient_id'] = $this->patient_id;
             $this->encounter = Encounter::create($data);
-            $this->encounter = $this->encounter->id;
+            // toast it up
+            Flux::toast("Successfully saved encounter", heading : "Encounter saved", variant: "success",
+                                                        position: "top-right");
+         }
+
+        if ($sign) {
+            $this->redirect(route('encounters.view', ['patient' => $this->patient, 'encounter' => $this->encounter]));
         }
 
-        // toast it up
-        Flux::toast("Successfully saved encounter", heading : "Encounter saved", variant: "success",
-                                                    position: "top-right");
-        $this->dispatch("encounter-form:refresh", $this->encounter);
+        // $encounter = $this->encounter;
     }
-
-    public function saveAndSign() : void {}
 
 }; ?>
 
@@ -91,7 +113,7 @@ new class extends Component {
     </flux:card>
     <flux:card class="mt-4">
         <form
-                wire:submit="save"
+                wire:submit="saveWithoutSigning"
         >
             <div class="flex flex-row gap-4">
                 <div class="flex-1/2">

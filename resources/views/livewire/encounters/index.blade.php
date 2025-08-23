@@ -1,7 +1,12 @@
 <?php
 
+use App\Enums\EncounterStatus;
+use App\Livewire\Traits\Sortable;
 use App\Models\Encounter;
 use App\Models\Patient;
+use Illuminate\Pagination\LengthAwarePaginator;
+use LaravelIdea\Helper\App\Models\_IH_Base_C;
+use LaravelIdea\Helper\App\Models\_IH_Encounter_C;
 use Livewire\Attributes\Computed;
 use Livewire\Volt\Component;
 use Carbon\Carbon;
@@ -9,34 +14,41 @@ use Livewire\WithPagination;
 
 new class extends Component {
 
-    use WithPagination;
-
-    public string $sort_by        = 'date_of_service';
-    public string $sort_direction = 'desc';
+    use Sortable;
 
     public Patient $patient;
 
     public function mount(Patient $patient) : void
     {
         $this->patient = $patient;
-    }
-
-    public function sort($column) : void
-    {
-        if ($this->sort_by === $column) {
-            $this->sort_direction = $this->sort_direction === 'asc' ? 'desc' : 'asc';
-        } else {
-            $this->sort_by = $column;
-            $this->sort_direction = 'asc';
-        }
+        $this->sort_by = 'date_of_service';
     }
 
     #[Computed]
-    public function encounters()
+    public function encounters() : array|LengthAwarePaginator|_IH_Base_C|_IH_Encounter_C
     {
         return Encounter::where('patient_id', $this->patient->id)
                         ->orderBy($this->sort_by, $this->sort_direction)
                         ->paginate();
+    }
+
+    public function encounterRoute(Encounter $encounter) : string
+    {
+
+        // {{  route('encounters.form', ['patient' => $patient, 'encounter' => $encounter]) }}
+        if ($encounter->status == "Unsigned") {
+            // we need to go to the signed encounter
+            return route('encounters.form', [
+                'patient'   => $this->patient,
+                'encounter' => $encounter
+            ]);
+        } else {
+            // otherwise, we will not do that
+            return route('encounters.view', [
+                'patient'   => $this->patient,
+                'encounter' => $encounter
+            ]);
+        }
     }
 
     public function with() : array
@@ -48,7 +60,18 @@ new class extends Component {
 }; ?>
 
 <div>
-    <h2 class="font-bold">Encounters</h2>
+    <div class="flex flex-row gap-4">
+        <h2 class="font-bold w-full">Encounters</h2>
+        <div class="flex-none">
+            <flux:button
+                    href="{{ route('encounters.form', ['patient' => $patient]) }}"
+                    icon="plus"
+            >
+                New Encounter
+            </flux:button>
+        </div>
+    </div>
+
     <flux:table :paginate="$this->encounters">
         <flux:table.columns>
             <flux:table.column
@@ -87,16 +110,18 @@ new class extends Component {
                         {{ Carbon::parse($encounter->date_of_service)->format('m/d/Y') }}
                     </flux:table.cell>
                     <flux:table.cell>
-                        <a href="{{ route('encounters.form', ['patient' => $patient, 'encounter' => $encounter]) }}">
+                        <a href="{{ $this->encounterRoute($encounter) }}">
                             {{ $encounter->title }}
                         </a>
-
                     </flux:table.cell>
                     <flux:table.cell>
                         {{ $encounter->type }}
                     </flux:table.cell>
                     <flux:table.cell>
-                        <flux:badge size="sm" color="{{ $encounter->status == 'Unsigned' ? 'emerald' : 'gray' }}">
+                        <flux:badge
+                                size="sm"
+                                color="{{ $encounter->status == EncounterStatus::Signed ? 'emerald' : 'gray' }}"
+                        >
                             {{ $encounter->status }}
                         </flux:badge>
                     </flux:table.cell>
@@ -113,10 +138,10 @@ new class extends Component {
                             ></flux:button>
                             <flux:navmenu>
                                 <flux:navmenu.item
-                                        href="{{ route('patients.chart', $patient) }}"
+                                        href="{{ $this->encounterRoute($encounter) }}"
                                         icon="user"
                                 >
-                                    Go to chart
+                                    Go to encounter
                                 </flux:navmenu.item>
                             </flux:navmenu>
                         </flux:dropdown>
