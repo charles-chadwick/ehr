@@ -44,50 +44,36 @@ new class extends Component {
         </flux:modal.trigger>
 
     </div>
-    <flux:modal name="patient-form">
-        <livewire:patients.form />
-    </flux:modal>
+
+    <livewire:patients.form modal="patient-form" />
+
     <flux:card size="sm">
 
         @forelse($patients as $patient)
             <div
                     wire:key="{{ $patient->id }}"
-                    class="flex justify-between py-4"
+                    class="flex justify-between px-2 py-4"
             >
                 <div class="w-auto">
-                    {{-- patient details --}}
-                    <div class="flex justify-between py-4">
-                        <div class="w-24 text-center">
-                            <flux:avatar
-                                    class="rounded-full object-cover mx-auto"
-                                    src="{{ $patient->avatar }}"
-                                    alt="{{ $patient->full_name_extended }}"
-                                    title="{{ $patient->full_name_extended }}"
-                                    size="xl"
-                            />
-                            <flux:badge
-                                    class="ml-1 mt-2 text-xs"
-                                    color="{{ $this->statusColor($patient->status) }}"
-                                    variant="outline"
-                            >
-                                {{ $patient->status }}
-                            </flux:badge>
-                        </div>
-
-                        <div>
-                            <h3 class="font-semibold text-zinc-800">
+                    <div class="flex justify-between px-2 py-4">
+                        <flux:avatar
+                                class="flex-none rounded-full object-cover mr-4"
+                                src="{{ $patient->avatar }}"
+                                alt="{{ $patient->full_name_extended }}"
+                                title="{{ $patient->full_name_extended }}"
+                                size="md"
+                        />
+                        <div class="w-auto text-sm text-zinc-700">
+                            <h3 class="font-semibold">
                                 <a href="{{ route('patients.chart', $patient) }}">
-                                    {{ $patient->full_name }}
+                                    {{ $patient->full_name_extended }}
                                 </a>
                             </h3>
-                            <p class="text-sm text-zinc-700">{{ $patient->gender }}</p>
-                            <p class="text-sm text-zinc-700">{{ Carbon::parse($patient->date_of_birth)->format('m/d/Y') }}
-                                ({{ $patient->age }})</p>
-                            <p class="text-sm text-zinc-700">{{ $patient->email }}</p>
+                            <p>#{{ $patient->id }}
+                               : {{ $patient->gender }} {{ Carbon::parse($patient->date_of_birth)->format('m/d/Y') }}
+                               ({{ $patient->age }})</p>
                         </div>
                     </div>
-                    {{-- end details --}}
-
                 </div>
                 <div class="shrink-0">
                     <flux:dropdown
@@ -96,15 +82,11 @@ new class extends Component {
                     >
                         <flux:button
                                 size="sm"
+                                variant="ghost"
                                 icon="ellipsis-horizontal"
-                                inset="top bottom"
                         ></flux:button>
                         <flux:navmenu>
-                            <flux:navmenu.item
-                                    href="{{ route('patients.chart', $patient) }}"
-                                    icon="user"
-                            >
-                                Go to chart
+                            <flux:navmenu.item href="{{ route('patients.chart', $patient) }}">Go to Chart
                             </flux:navmenu.item>
                         </flux:navmenu>
                     </flux:dropdown>

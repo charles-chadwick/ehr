@@ -1,21 +1,22 @@
 <?php
 
-use App\Enums\PatientStatus;
 use App\Enums\PatientGender;
+use App\Enums\PatientStatus;
 use App\Enums\UserRole;
 use App\Livewire\Traits\HasAvatarUpload;
 use App\Models\Patient;
+use App\Models\Traits\UsesModal;
+use Flux\Flux;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\On;
 use Livewire\Volt\Component;
-use Flux\Flux;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
-use Illuminate\Support\Facades\DB;
 
 new class extends Component {
 
-    use HasAvatarUpload;
+    use HasAvatarUpload, UsesModal;
 
     public ?Patient $patient;
     public string   $status                = "";
@@ -32,7 +33,6 @@ new class extends Component {
     public string   $password              = "";
     public string   $password_confirmation = "";
 
-    public string $modal = "";
 
     public function mount(?Patient $patient) : void
     {
@@ -98,14 +98,8 @@ new class extends Component {
 
         // toast it up
         Flux::toast($message, heading: $heading, variant: "success", position: "top-right");
-        $this->cancel();
+        $this->closeModal(['patient']);
         $this->dispatch("patients.index:refresh");
-    }
-
-    public function cancel() : void
-    {
-        Flux::modal($this->modal)
-            ->close();
     }
 
     public function rules() : array
@@ -141,7 +135,12 @@ new class extends Component {
     }
 }; ?>
 
-<div>
+<flux:modal
+        variant="flyout"
+        class="w-1/2"
+        name="{{ $modal }}"
+        wire:cancel="closeModal(['patient'])"
+>
     <div class="flex gap-4 py-4">
         <div class="w-auto">
             <flux:input
@@ -320,6 +319,6 @@ new class extends Component {
                 wire:click="save"
         >Save!
         </flux:button>
-        <flux:button wire:click="cancel">Cancel</flux:button>
+        <flux:button wire:click="closeModal(['patient'])">Cancel</flux:button>
     </div>
-</div>
+</flux:modal>
