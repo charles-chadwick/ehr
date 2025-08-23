@@ -15,6 +15,7 @@
 * Add a reminder to the doctor
 * Add users and resources
 * Add a calendar
+* ~~Fix bug where modal doesn't clear fields when closed~~ 
 
 ### Encounters ### 
 * Add search and filter
