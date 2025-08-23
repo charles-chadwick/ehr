@@ -42,7 +42,11 @@ new class extends Component {
             >Create New Patient
             </flux:button>
         </flux:modal.trigger>
+
     </div>
+    <flux:modal name="patient-form">
+        <livewire:patients.form />
+    </flux:modal>
     <flux:card size="sm">
 
         @forelse($patients as $patient)
