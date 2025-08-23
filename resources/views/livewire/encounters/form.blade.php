@@ -87,22 +87,18 @@ new class extends Component {
             // updating
             $this->encounter->update($data);
             // toast it up
-            Flux::toast("Successfully saved encounter", heading : "Encounter saved", variant: "success",
-                                                        position: "top-right");
         } else {
 
             // saving
             $this->encounter = Encounter::create($data);
             // toast it up
-            Flux::toast("Successfully saved encounter", heading : "Encounter saved", variant: "success",
-                                                        position: "top-right");
-         }
+        }
 
+        Flux::toast("Successfully saved encounter", heading : "Encounter saved", variant: "success",
+                                                    position: "top-right");
         if ($sign) {
             $this->redirect(route('encounters.view', ['patient' => $this->patient, 'encounter' => $this->encounter]));
         }
-
-        // $encounter = $this->encounter;
     }
 
 }; ?>
@@ -137,6 +133,7 @@ new class extends Component {
                 </div>
                 <div class="flex-1/4">
                     <flux:date-picker
+                            selectable-header
                             wire:model="date_of_service"
                             label="Date of Service"
                             value="{{ $date_of_service }}"
@@ -147,6 +144,7 @@ new class extends Component {
                     </flux:date-picker>
                 </div>
             </div>
+
             <div class="gap-4 mt-4">
                 <flux:editor
                         class="h-full min-h-[600px]"

@@ -1,0 +1,151 @@
+<?php
+
+use App\Livewire\Traits\Sortable;
+use App\Models\Appointment;
+use App\Models\Patient;
+use Illuminate\Pagination\LengthAwarePaginator;
+use LaravelIdea\Helper\App\Models\_IH_Base_C;
+use LaravelIdea\Helper\App\Models\_IH_Appointment_C;
+use Livewire\Attributes\Computed;
+use Livewire\Volt\Component;
+use Carbon\Carbon;
+use Livewire\WithPagination;
+
+new class extends Component {
+
+    use Sortable;
+
+    public Patient $patient;
+
+    public function mount(Patient $patient) : void
+    {
+        $this->patient = $patient;
+        $this->sort_by = 'date_and_time';
+    }
+
+    #[Computed]
+    public function appointments() : array|LengthAwarePaginator|_IH_Base_C|_IH_Appointment_C
+    {
+        return Appointment::where('patient_id', $this->patient->id)
+                          ->orderBy($this->sort_by, $this->sort_direction)
+                          ->paginate();
+    }
+
+    public function with() : array
+    {
+        return [
+            'appointments' => $this->appointments
+        ];
+    }
+}; ?>
+
+<div>
+    <div class="flex flex-row">
+        <h2 class="font-bold w-full">Appointments</h2>
+        <div class="flex-none">
+
+            <flux:button
+                    icon="plus"
+                    size="sm"
+            >
+                <flux:modal.trigger
+                        name="appointment-form"
+                        wire:click="$dispatch('edit-appointment', {id: {{ $patient->id }}})"
+                >New Appointment
+                </flux:modal.trigger>
+            </flux:button>
+        </div>
+    </div>
+
+    <flux:modal name="appointment-form" class="min-w-3/4">
+        <livewire:appointments.form :patient="$patient" />
+    </flux:modal>
+
+    <flux:table :paginate="$this->appointments">
+        <flux:table.columns>
+            <flux:table.column
+                    sortable
+                    :sorted="$sort_by === 'date_and_time'"
+                    :direction="$sort_direction"
+                    wire:click="sort('date_and_time')"
+            >Date and Time
+            </flux:table.column>
+            <flux:table.column
+                    sortable
+                    :sorted="$sort_by === 'title'"
+                    :direction="$sort_direction"
+                    wire:click="sort('title')"
+            >Title
+            </flux:table.column>
+            <flux:table.column
+                    sortable
+                    :sorted="$sort_by === 'type'"
+                    :direction="$sort_direction"
+                    wire:click="sort('type')"
+            >Type
+            </flux:table.column>
+            <flux:table.column
+                    sortable
+                    :sorted="$sort_by === 'status'"
+                    :direction="$sort_direction"
+                    wire:click="sort('status')"
+            >Status
+            </flux:table.column>
+        </flux:table.columns>
+
+        <flux:table.rows>
+            @forelse ($appointments as $appointment)
+                <flux:table.row :key="$appointment->id">
+                    <flux:table.cell>
+                        {{ Carbon::parse($appointment->date_and_time)->format('m/d/Y @ h:ia') }}
+                    </flux:table.cell>
+                    <flux:table.cell>
+                        {{ $appointment->title }}
+                    </flux:table.cell>
+                    <flux:table.cell>
+                        {{ $appointment->type }}
+                    </flux:table.cell>
+                    <flux:table.cell>
+                        <flux:badge
+                                size="sm"
+                                color="{{ $appointment->status == AppointmentStatus::Signed->value ? 'emerald' : 'gray' }}"
+                        >
+                            {{ $appointment->status }}
+                        </flux:badge>
+                    </flux:table.cell>
+                    <flux:table.cell>
+                        <flux:dropdown
+                                position="bottom"
+                                align="end"
+                        >
+                            <flux:button
+                                    size="sm"
+                                    icon="ellipsis-horizontal"
+                                    variant="ghost"
+                                    inset="top bottom"
+                            ></flux:button>
+                            <flux:navmenu>
+                                <flux:navmenu.item
+                                        href="#"
+                                        icon="user"
+                                >
+                                    Go to appointment
+                                </flux:navmenu.item>
+                            </flux:navmenu>
+                        </flux:dropdown>
+                    </flux:table.cell>
+                </flux:table.row>
+            @empty
+                <flux:table.row>
+                    <flux:table.cell
+                            colspan="5"
+                            class="text-center"
+                    >
+                        There are no appointments for this appointment.
+                    </flux:table.cell>
+                </flux:table.row>
+            @endforelse
+        </flux:table.rows>
+
+    </flux:table>
+</div>

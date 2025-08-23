@@ -58,12 +58,19 @@ new class extends Component {
         </flux:modal>
     </flux:card>
 
-    {{-- chart --}}
+    {{-- encounters --}}
     <flux:card
             size="sm"
             class="mt-4"
     >
-
         <livewire:encounters.index :patient="$patient" />
+    </flux:card>
+
+    {{-- appointments --}}
+    <flux:card
+            size="sm"
+            class="mt-4"
+    >
+        <livewire:appointments.index :patient="$patient" />
     </flux:card>
 </div>
