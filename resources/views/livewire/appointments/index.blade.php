@@ -54,7 +54,7 @@ new class extends Component {
             >
                 <flux:modal.trigger
                         name="appointment-form"
-                       wire:click="$dispatch('edit-appointment', {id: 0, patient: {{ $patient }}})"
+                        wire:click="$dispatch('edit-appointment', {id: 0, patient: {{ $patient }}})"
                 >New Appointment
                 </flux:modal.trigger>
             </flux:button>
@@ -64,6 +64,7 @@ new class extends Component {
     <flux:modal
             name="appointment-form"
             class="min-w-1/3"
+            variant="flyout"
     >
         <livewire:appointments.form :patient="$patient" />
     </flux:modal>
