@@ -30,8 +30,9 @@ class Patient extends Base implements AuthenticatableContract, AuthorizableContr
 
     public function getAgeAttribute() : string
     {
-        $months = Carbon::now()->month - Carbon::parse($this->date_of_birth)->month;
-        return Carbon::parse($this->date_of_birth)->age.' years '.$months.' months';
-
+        $now = Carbon::now();
+        $birth = Carbon::parse($this->date_of_birth);
+        $months = ($now->month < $birth->month) ? $now->month + 12 - $birth->month : $now->month - $birth->month;
+        return $birth->age.' years '.$months.' months';
     }
 }
