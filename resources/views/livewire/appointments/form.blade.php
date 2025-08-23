@@ -27,7 +27,8 @@ new class extends Component {
 
     public function mount(?Appointment $appointment) : void
     {
-        $this->date = Carbon::tomorrow()->format('Y-m-d');
+        $this->date = Carbon::tomorrow()
+                            ->format('Y-m-d');
         $this->time = "08:00";
 
         $this->appointment = $appointment;
@@ -70,7 +71,9 @@ new class extends Component {
         list($hour, $minute) = explode(':', $validated['time']);
         $data = [
             'patient_id'    => $this->patient->id,
-            'date_and_time' => Carbon::parse($this->date)->addHours((int) $hour)->addMinutes((int) $minute),
+            'date_and_time' => Carbon::parse($this->date)
+                                     ->addHours((int) $hour)
+                                     ->addMinutes((int) $minute),
             'length'        => $this->length,
             'status'        => $this->status,
             'type'          => $this->type,
@@ -168,8 +171,9 @@ new class extends Component {
     </div>
     <div class="px-2 mt-4 text-center">
         <flux:button
+                variant="primary"
+                color="emerald"
                 type="submit"
-                color="primary"
         >
             Save Appointment
         </flux:button>

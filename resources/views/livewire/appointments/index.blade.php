@@ -49,8 +49,9 @@ new class extends Component {
         <div class="flex-none">
 
             <flux:button
-                    icon="plus"
                     size="sm"
+                    variant="primary"
+                    color="emerald"
             >
                 <flux:modal.trigger
                         name="appointment-form"
@@ -108,7 +109,6 @@ new class extends Component {
                         {{ $appointment->full_date_and_time }}
                     </flux:table.cell>
                     <flux:table.cell>
-
                         <a
                                 href="#"
                                 class="link"

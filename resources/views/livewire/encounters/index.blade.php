@@ -65,8 +65,9 @@ new class extends Component {
         <div class="flex-none">
             <flux:button
                     href="{{ route('encounters.form', ['patient' => $patient]) }}"
-                    icon="plus"
                     size="sm"
+                    variant="primary"
+                    color="emerald"
             >
                 New Encounter
             </flux:button>

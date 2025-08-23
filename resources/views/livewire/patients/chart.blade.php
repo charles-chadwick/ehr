@@ -29,7 +29,12 @@ new class extends Component {
             {{-- patient menu --}}
             <div class="flex-none">
                 <div class="mb-2">
-                    <flux:button size="sm" class="w-full">
+                    <flux:button
+                            size="sm"
+                            class="w-full"
+                            variant="primary"
+                            color="emerald"
+                    >
                         <flux:modal.trigger
                                 name="patient-form"
                                 wire:click="$dispatch('edit-patient', {id: {{ $patient->id }}})"
@@ -38,7 +43,12 @@ new class extends Component {
                     </flux:button>
                 </div>
                 <div>
-                    <flux:button size="sm"  class="w-full">
+                    <flux:button
+                            size="sm"
+                            variant="primary"
+                            color="emerald"
+                            class="w-full"
+                    >
                         Send Message
                     </flux:button>
                 </div>

@@ -154,7 +154,8 @@ new class extends Component {
             <div class="px-2 mt-4 text-center">
                 <flux:button
                         type="submit"
-                        color="primary"
+                        variant="primary"
+                        color="emerald"
                 >
                     Save Encounter
                 </flux:button>
