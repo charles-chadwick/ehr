@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\EncounterStatus;
 use App\Models\Encounter;
 use App\Models\Patient;
 use Carbon\Carbon;
@@ -24,7 +25,20 @@ new class extends Component {
 
     public function unsign() : void
     {
-        $this->encounter->update(['status' => 'Unsigned']);
+        // update the status
+        $this->encounter->update(['status' => EncounterStatus::Unsigned]);
+
+        // log who unsigned it
+        activity()
+            ->on($this->encounter)
+            ->useLog('Database')
+            ->event('unsigned')
+            ->withProperties([
+                'unsigned_by' => auth()->user()->id,
+                'unsigned_at' => Carbon::now()
+            ])
+            ->log("Unsigned Note");
+
         $this->redirect(route('encounters.form', [
             'patient'   => $this->patient,
             'encounter' => $this->encounter
@@ -50,7 +64,10 @@ new class extends Component {
             <p class="text-sm">{{ Carbon::parse($date_of_service)->format('m/d/Y') }}</p>
         </flux:description>
         <hr class="my-4 text-zinc-300" />
-        <div class="prose prose-sm prose-zinc max-w-none text-zinc-800 text-sm" id="encounter">
+        <div
+                class="prose prose-sm prose-zinc max-w-none text-zinc-800 text-sm"
+                id="encounter"
+        >
             {!! $content  !!}
         </div>
     </flux:card>
