@@ -47,15 +47,9 @@ new class extends Component {
     #[On('clear-fields')]
     public function clearFields() : void
     {
-        $this->type = "";
-        $this->date = "";
-        $this->time = "";
-        $this->length = "";
-        $this->title = "";
-        $this->description = "";
-        $this->status = "";
-        $this->selected_user_ids = [];
-        $this->appointment = new Appointment();
+        $this->resetExcept(['patient', 'modal']);
+        Flux::modal($this->modal)
+            ->close();
     }
 
     #[On("edit-appointment")]

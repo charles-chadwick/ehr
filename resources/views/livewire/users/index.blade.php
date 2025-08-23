@@ -31,7 +31,6 @@ new class extends Component {
                     <flux:button>Create New User</flux:button>
                 </flux:modal.trigger>
             </div>
-
         </slot:title>
         @foreach($users as $user)
             <div
@@ -67,7 +66,7 @@ new class extends Component {
                             >
                                 <flux:modal.trigger
                                         name="user-form"
-                                        wire:click="$dispatch('edit-user', {id: {{ $user->id }}})"
+                                        wire:click="$dispatch('user.form:edit', {id: {{ $user->id }}})"
                                 >Account
                                 </flux:modal.trigger>
                             </flux:navmenu.item>
@@ -84,7 +83,5 @@ new class extends Component {
             </div>
         @endforeach
     </flux:card>
-    <flux:modal name="user-form">
-        <livewire:users.form modal="user-form" />
-    </flux:modal>
+    <livewire:users.form modal="user-form" />
 </div>

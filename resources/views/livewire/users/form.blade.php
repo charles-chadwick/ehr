@@ -3,6 +3,7 @@
 use App\Enums\UserRole;
 use App\Livewire\Traits\HasAvatarUpload;
 use App\Models\Patient;
+use App\Models\Traits\UsesModal;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\On;
@@ -11,11 +12,13 @@ use Flux\Flux;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Illuminate\Support\Facades\DB;
+use Livewire\Volt\Support\Reflection;
 
 new class extends Component {
-    use HasAvatarUpload;
 
-    public        $user;
+    use HasAvatarUpload, UsesModal;
+
+    public ?User  $user;
     public string $role                  = "";
     public string $prefix                = "";
     public string $first_name            = "";
@@ -24,29 +27,35 @@ new class extends Component {
     public string $email                 = "";
     public string $password              = "";
     public string $password_confirmation = "";
-    public string $modal                 = "";
 
+    // Mount the component
     public function mount(?User $user) : void
     {
-        $this->user = $user;
-        if ($this->user?->id) {
-            $this->loadUser($this->user->id);
+        // initialize the user
+        $this->user = $user ?? new User();
 
+        // if the user has actual data, load it
+        if ($this->user->exists) {
+            $this->loadUser($this->user->id);
         }
     }
 
-    #[On("edit-user")]
-    public function loadUser($id) : void
+    #[On("user.form:edit")]
+    public function loadUser(int $id = 0) : void
     {
-        $this->user = User::findOrFail($id);
-        $this->fill($this->user);
-        $this->avatar_url = $this->user->avatar;
+        if ($id > 0) {
+            $this->user = User::findOrFail($id);
+            $this->fill($this->user);
+            $this->avatar_url = $this->user->avatar;
+        }
     }
 
     public function save() : void
     {
+        // validation
         $validated = $this->validate();
 
+        // build the user data
         $user_data = [
             'prefix'     => $this->prefix,
             'first_name' => $this->first_name,
@@ -56,6 +65,7 @@ new class extends Component {
             'email'      => $this->email,
         ];
 
+        // check to see if our password is being set
         if (!empty($validated['password'] ?? null)) {
             $user_data['password'] = bcrypt($validated['password']);
         }
@@ -84,14 +94,8 @@ new class extends Component {
 
         // toast it up
         Flux::toast($message, heading: $heading, variant: "success", position: "top-right");
-        $this->cancel();
+        $this->closeModal(['user']);
         $this->dispatch("users.index:refresh");
-    }
-
-    public function cancel() : void
-    {
-        Flux::modal($this->modal)
-            ->close();
     }
 
     public function rules() : array
@@ -120,7 +124,12 @@ new class extends Component {
 
 }; ?>
 
-<div>
+<flux:modal
+        class="w-full max-w-1/2"
+        name="{{ $modal }}"
+        variant="flyout"
+        wire:cancel="closeModal(['user'])"
+>
     <div class="flex gap-4 py-4">
         <div class="w-1/6">
             <flux:input
@@ -239,6 +248,6 @@ new class extends Component {
                 wire:click="save"
         >Save!
         </flux:button>
-        <flux:button wire:click="cancel">Cancel</flux:button>
+        <flux:button wire:click="closeModal(['user'])">Cancel</flux:button>
     </div>
-</div>
+</flux:modal>
