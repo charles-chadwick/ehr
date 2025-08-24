@@ -19,7 +19,8 @@ class Appointment extends Base
         'length',
         'type',
         'title',
-        'description'
+        'description',
+        'status'
     ];
 
     private const DATE_FORMAT = 'm/d/Y h:ia';

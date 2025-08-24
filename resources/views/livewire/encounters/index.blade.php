@@ -61,7 +61,7 @@ new class extends Component {
 
 <div>
     <div class="flex flex-row">
-        <h2 class="font-bold w-full">Encounters</h2>
+        <h2 class="font-bold w-full">{{ __('encounters.encounters') }}</h2>
         <div class="flex-none">
             <flux:button
                     href="{{ route('encounters.form', ['patient' => $patient]) }}"
@@ -69,7 +69,7 @@ new class extends Component {
                     variant="primary"
                     color="emerald"
             >
-                New Encounter
+                {{ __('encounters.new_encounter') }}
             </flux:button>
         </div>
     </div>
@@ -81,28 +81,28 @@ new class extends Component {
                     :sorted="$sort_by === 'date_of_service'"
                     :direction="$sort_direction"
                     wire:click="sort('date_of_service')"
-            >Date of Service
+            >{{ __('encounters.date_of_service') }}
             </flux:table.column>
             <flux:table.column
                     sortable
                     :sorted="$sort_by === 'title'"
                     :direction="$sort_direction"
                     wire:click="sort('title')"
-            >Title
+            >{{ __('encounters.title') }}
             </flux:table.column>
             <flux:table.column
                     sortable
                     :sorted="$sort_by === 'type'"
                     :direction="$sort_direction"
                     wire:click="sort('type')"
-            >Type
+            >{{ __('encounters.type') }}
             </flux:table.column>
             <flux:table.column
                     sortable
                     :sorted="$sort_by === 'status'"
                     :direction="$sort_direction"
                     wire:click="sort('status')"
-            >Status
+            >{{ __('encounters.status') }}
             </flux:table.column>
         </flux:table.columns>
         <flux:table.rows>
@@ -143,7 +143,7 @@ new class extends Component {
                                         href="{{ $this->encounterRoute($encounter) }}"
                                         icon="user"
                                 >
-                                    Go to encounter
+                                    {{ __('Go to encounter') }}
                                 </flux:navmenu.item>
                             </flux:navmenu>
                         </flux:dropdown>
@@ -152,7 +152,7 @@ new class extends Component {
             @empty
                 <flux:table.row>
                     <flux:table.cell colspan="5" class="text-center">
-                        There are no encounters for this patient.
+                        {{ __('encounters.no_encounters') }}
                     </flux:table.cell>
                 </flux:table.row>
             @endforelse

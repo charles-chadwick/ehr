@@ -56,7 +56,7 @@ new class extends Component {
             <h3 class="font-bold text-zinc-800 flex-auto">{{ $title }}</h3>
             <p class="flex-none">
                 <flux:button wire:click="unsign">
-                    Unsign Note
+                    {{ __('encounters.unsign') }}
                 </flux:button>
             </p>
         </div>
@@ -74,7 +74,7 @@ new class extends Component {
         <hr class="my-4 text-zinc-300" />
         <div class="flex items-center justify-between">
             <p class="text-sm text-zinc-500">
-                Signed by {{ $encounter->signedBy->full_name_extended }} on {{ $encounter->created_at->format('m/d/Y @ h:ia') }}
+                {{ __('encounters.signed_by', ['name' => $encounter->signedBy->full_name_extended, 'date' => $encounter->signed_at]) }}
             </p>
         </div>
     </flux:card>

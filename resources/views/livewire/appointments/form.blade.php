@@ -168,27 +168,27 @@ new class extends Component {
         <div class="flex flex-row gap-4">
             <div class="flex-1/2">
                 <flux:input
-                        label="Title"
+                        label="{{ __('appointments.title') }}"
+                        placeholder="{{ __('appointments.title') }}"
                         wire:model="title"
-                        placeholder="My Appointment"
                 />
             </div>
             <div class="flex-1/4">
                 <flux:input
-                        label="Type"
-                        placeholder="Type"
+                        label="{{ __('appointments.type') }}"
+                        placeholder="{{ __('appointments.type') }}"
                         wire:model="type"
                 />
             </div>
             <div class="flex-1/4">
                 <flux:select
-                        label="Status"
+                        label="{{ __('appointments.status') }}"
+                        placeholder="{{ __('appointments.choose_status') }}"
                         variant="listbox"
-                        placeholder="Choose Status"
                         wire:model="status"
                 >
                     @foreach(AppointmentStatus::cases() as $appointment_status)
-                        <flux:select.option value="{{ $appointment_status->value }}">{{ $appointment_status->name }}</flux:select.option>
+                        <flux:select.option>{{ $appointment_status->value }}</flux:select.option>
                     @endforeach
                 </flux:select>
             </div>
@@ -201,7 +201,7 @@ new class extends Component {
                         selectable-header
                         unavailable="{{ $unavailable }}"
                         wire:model="date"
-                        label="Date"
+                        label="{{ __('appointments.date') }}"
                 >
                     <x-slot name="trigger">
                         <flux:date-picker.input />
@@ -212,15 +212,15 @@ new class extends Component {
                 <flux:input
                         type="time"
                         wire:model="time"
-                        label="Time"
+                        label="{{ __('appointments.time') }}"
                 />
             </div>
             <div class="flex-1/4">
                 <flux:input
                         type="length"
                         wire:model="length"
-                        label="Length"
-                        placeholder="Minutes"
+                        label="{{ __('appointments.length') }}"
+                        placeholder="{{ __('appointments.in_minutes') }}"
                 />
             </div>
         </div>
@@ -230,9 +230,9 @@ new class extends Component {
             <flux:select
                     variant="listbox"
                     searchable
-                    placeholder="Choose Users..."
+                    placeholder="{{ __('users.choose_users') }}"
                     wire:model.live="selected_user_ids"
-                    label="Users"
+                    label="{{ __('users.users') }}"
                     multiple
             >
                 @foreach(User::all() as $user)
@@ -267,9 +267,9 @@ new class extends Component {
                     color="emerald"
                     type="submit"
             >
-                Save Appointment
+                {{ __('ehr.save') }}
             </flux:button>
-            <flux:button wire:click="closeModal(['patient', 'appointment'])">Cancel</flux:button>
+            <flux:button wire:click="closeModal(['patient', 'appointment'])">{{ __('ehr.cancel') }}</flux:button>
         </div>
     </form>
 </flux:modal>

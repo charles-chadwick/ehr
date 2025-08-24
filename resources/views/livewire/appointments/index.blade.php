@@ -44,7 +44,7 @@ new class extends Component {
 
 <div>
     <div class="flex flex-row">
-        <h2 class="font-bold w-full">Appointments</h2>
+        <h2 class="font-bold w-full">{{ __('appointments.appointments') }}</h2>
         <div class="flex-none">
 
             <flux:button
@@ -55,7 +55,7 @@ new class extends Component {
                 <flux:modal.trigger
                         name="appointment-form"
                         wire:click="$dispatch('appointment.form:edit', {id: 0, patient: {{ $patient }}})"
-                >New Appointment
+                >{{ __('appointments.new_appointment') }}
                 </flux:modal.trigger>
             </flux:button>
         </div>
@@ -74,28 +74,28 @@ new class extends Component {
                     :sorted="$sort_by === 'date_and_time'"
                     :direction="$sort_direction"
                     wire:click="sort('date_and_time')"
-            >Date and Time
+            >{{ __('appointments.date_and_time') }}
             </flux:table.column>
             <flux:table.column
                     sortable
                     :sorted="$sort_by === 'title'"
                     :direction="$sort_direction"
                     wire:click="sort('title')"
-            >Title
+            >{{ __('appointments.title') }}
             </flux:table.column>
             <flux:table.column
                     sortable
                     :sorted="$sort_by === 'type'"
                     :direction="$sort_direction"
                     wire:click="sort('type')"
-            >Type
+            >{{ __('appointments.type') }}
             </flux:table.column>
             <flux:table.column
                     sortable
                     :sorted="$sort_by === 'status'"
                     :direction="$sort_direction"
                     wire:click="sort('status')"
-            >Status
+            >{{ __('appointments.status') }}
             </flux:table.column>
         </flux:table.columns>
 
@@ -143,7 +143,7 @@ new class extends Component {
                                         href="#"
                                         icon="user"
                                 >
-                                    Go to appointment
+                                    {{ __('appointments.go_to_appointment') }}
                                 </flux:navmenu.item>
                             </flux:navmenu>
                         </flux:dropdown>
@@ -155,7 +155,7 @@ new class extends Component {
                             colspan="5"
                             class="text-center"
                     >
-                        There are no appointments for this patient.
+                        {{ __('appointments.no_appointments') }}
                     </flux:table.cell>
                 </flux:table.row>
             @endforelse

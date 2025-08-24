@@ -39,7 +39,7 @@ new class extends Component {
                         <flux:modal.trigger
                                 name="patient-form"
                                 wire:click="$dispatch('edit-patient', {id: {{ $patient->id }}})"
-                        >Edit Patient Details
+                        >{{ __('chart.edit_patient') }}
                         </flux:modal.trigger>
                     </flux:button>
                 </div>
@@ -50,7 +50,7 @@ new class extends Component {
                             color="emerald"
                             class="w-full"
                     >
-                        Send Message
+                        {{ __('chart.send_message') }}
                     </flux:button>
                 </div>
             </div>

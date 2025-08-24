@@ -87,7 +87,8 @@ new class extends Component {
     <flux:select
             variant="listbox"
             wire:model="type"
-            label="Type"
+            label="{{ __('notes.type') }}"
+            placeholder="{{ __('notes.choose_type') }}"
     >
         @foreach(NoteType::cases() as $note_type)
             <flux:select.option>{{ $note_type->value }}</flux:select.option>
@@ -95,16 +96,15 @@ new class extends Component {
     </flux:select>
     <div class="mt-4">
         <flux:input
-                label="Title"
+                label="{{ __('notes.title') }}"
                 wire:model="title"
-                placeholder="Enter a title"
+                placeholder="{{ __('notes.enter_title') }}"
         />
     </div>
     <div class="mt-4">
         <flux:editor
-                label="Content"
+                label="{{ __('notes.content') }}"
                 wire:model="content"
-                placeholder="Enter some content"
         />
     </div>
     <div class="mt-4 text-center">
@@ -113,10 +113,10 @@ new class extends Component {
                 color="emerald"
                 wire:click="save"
         >
-            Save Note
+            {{ __('ehr.save') }}
         </flux:button>
         <flux:button wire:click="closeModal(['note', 'on'])">
-            Cancel
+            {{ __('ehr.cancel') }}
         </flux:button>
     </div>
 </flux:modal>

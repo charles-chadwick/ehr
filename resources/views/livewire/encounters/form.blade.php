@@ -76,7 +76,7 @@ new class extends Component {
             'title'           => $this->title,
             'type'            => $this->type,
             'status'          => $sign ? EncounterStatus::Signed : EncounterStatus::Unsigned,
-            'singed_by'       => $sign ? auth()->user() : null,
+            'signed_by'       => $sign ? auth()->user()->id : null,
             'signed_at'       => $sign ? Carbon::now() : null,
             'patient_id'      => $this->patient->id
         ];
@@ -114,16 +114,16 @@ new class extends Component {
             <div class="flex flex-row gap-4">
                 <div class="flex-1/2">
                     <flux:input
-                            label="Title"
+                            label="{{ __('encounters.title') }}"
                             wire:model="title"
-                            placeholder="My Encounter"
+                            placeholder="{{ __('encounters.my_encounter') }}"
                     />
                 </div>
                 <div class="flex-1/4">
                     <flux:select
-                            label="Type"
+                            label="{{ __('encounters.type') }}"
                             variant="listbox"
-                            placeholder="Choose Type"
+                            placeholder="{{ __('Choose Type') }}"
                             wire:model="type"
                     >
                         @foreach(EncounterType::cases() as $encounter_type)
@@ -135,7 +135,7 @@ new class extends Component {
                     <flux:date-picker
                             selectable-header
                             wire:model="date_of_service"
-                            label="Date of Service"
+                            label="{{ __('encounters.date_of_service') }}"
                             value="{{ $date_of_service }}"
                     >
                         <x-slot name="trigger">
@@ -157,13 +157,13 @@ new class extends Component {
                         variant="primary"
                         color="emerald"
                 >
-                    Save Encounter
+                    {{ __('ehr.save') }}
                 </flux:button>
                 <flux:button
                         color="primary"
                         wire:click="saveAndSign"
                 >
-                    Save and Sign Encounter
+                    {{ __('encounters.save_and_sign') }}
                 </flux:button>
             </div>
 

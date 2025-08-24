@@ -46,7 +46,7 @@ new class extends Component {
 
 <div>
     <div class="flex flex-row">
-        <h2 class="font-bold w-full">Notes</h2>
+        <h2 class="font-bold w-full">{{ __('notes.notes') }}</h2>
         <div class="flex-none">
             <flux:button
                     size="sm"
@@ -54,7 +54,7 @@ new class extends Component {
                     color="emerald"
             >
                 <flux:modal.trigger name="notes-form">
-                    New Note
+                    {{ __('notes.new_note') }}
                 </flux:modal.trigger>
             </flux:button>
         </div>
@@ -73,28 +73,28 @@ new class extends Component {
                     :sorted="$sort_by === 'title'"
                     :direction="$sort_direction"
                     wire:click="sort('title')"
-            >Title
+            >{{ __('notes.title') }}
             </flux:table.column>
             <flux:table.column
                     sortable
                     :sorted="$sort_by === 'type'"
                     :direction="$sort_direction"
                     wire:click="sort('type')"
-            >Type
+            >{{ __('notes.type') }}
             </flux:table.column>
             <flux:table.column
                     sortable
                     :sorted="$sort_by === 'createdBy.full_name'"
                     :direction="$sort_direction"
                     wire:click="sort('createdBy.full_name')"
-            >Created By
+            >{{ __('notes.created_by') }}
             </flux:table.column>
             <flux:table.column
                     sortable
                     :sorted="$sort_by === 'created_at'"
                     :direction="$sort_direction"
                     wire:click="sort('created_at')"
-            >Created
+            >{{ __('notes.created_at') }}
             </flux:table.column>
         </flux:table.columns>
         <flux:table.rows>
@@ -134,7 +134,8 @@ new class extends Component {
                             colspan="5"
                             class="text-center"
                     >
-                        There are no notes for this patient.
+
+                        {{ __('notes.no_notes') }}
                     </flux:table.cell>
                 </flux:table.row>
             @endforelse

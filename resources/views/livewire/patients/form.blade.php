@@ -139,29 +139,26 @@ new class extends Component {
 
 <flux:modal
         variant="flyout"
-        class="w-1/2"
+        class="w-2/3"
         name="{{ $modal }}"
         wire:cancel="closeModal(['patient'])"
 >
     <div class="flex gap-4 py-4">
         <div class="w-auto">
             <flux:input
-                    label="First Name"
-                    placeholder="John"
+                    label="{{ __('patients.first_name') }}"
                     wire:model="first_name"
             />
         </div>
         <div class="w-auto">
             <flux:input
-                    label="Middle Name"
-                    placeholder="Middle Name"
+                    label="{{ __('patients.middle_name') }}"
                     wire:model="middle_name"
             />
         </div>
         <div class="w-auto">
             <flux:input
-                    label="Last Name"
-                    placeholder="Doe"
+                    label="{{ __('patients.last_name') }}"
                     wire:model="last_name"
             />
         </div>
@@ -170,22 +167,19 @@ new class extends Component {
     <div class="flex gap-4 py-4">
         <div class="w-auto">
             <flux:input
-                    label="Prefix"
-                    placeholder="Mr., Mrs., Ms., etc."
+                    label="{{ __('patients.prefix') }}"
                     wire:model="prefix"
             />
         </div>
         <div class="w-auto">
             <flux:input
-                    label="Suffix"
-                    placeholder="Jr, Sr, III, etc."
+                    label="{{ __('patients.suffix') }}"
                     wire:model="suffix"
             />
         </div>
         <div class="w-auto">
             <flux:input
-                    label="Nickname"
-                    placeholder="Bubba, Curly, etc."
+                    label="{{ __('patients.nickname') }}"
                     wire:model="nickname"
             />
         </div>
@@ -197,7 +191,7 @@ new class extends Component {
             <flux:date-picker
                     selectable-header
                     wire:model="date_of_birth"
-                    label="Date of Birth"
+                    label="{{ __('patients.date_of_birth') }}"
             >
                 <x-slot name="trigger">
                     <flux:date-picker.input />
@@ -206,9 +200,8 @@ new class extends Component {
         </div>
         <div class="w-1/3">
             <flux:select
-                    label="Gender"
+                    label="{{ __('patients.gender') }}"
                     variant="listbox"
-                    placeholder="Choose Gender"
                     wire:model="gender"
             >
                 @foreach(PatientGender::cases() as $gender)
@@ -218,8 +211,7 @@ new class extends Component {
         </div>
         <div class="w-1/3">
             <flux:input
-                    label="Gender Identity"
-                    placeholder="Male, Female, Other, etc."
+                    label="{{ __('patients.gender_identity') }}"
                     wire:model="gender_identity"
             />
         </div>
@@ -232,22 +224,20 @@ new class extends Component {
         {{-- status --}}
         <div class="w-1/3">
             <flux:select
-                    label="Status"
+                    label="{{ __('patients.status') }}"
                     variant="listbox"
-                    placeholder="Choose Status"
                     wire:model="status"
             >
                 @foreach(PatientStatus::cases() as $patient_status)
-                    <flux:select.option>{{ $patient_status }}</flux:select.option>
+                    <flux:select.option>{{ $patient_status->name }}</flux:select.option>
                 @endforeach
             </flux:select>
         </div>
 
         {{-- email--}}
-        <div class="w-1/3">
+        <div class="w-2/3">
             <flux:input
-                    label="Email"
-                    placeholder="john.doe@example.com"
+                    label="{{ __('patients.email') }}"
                     wire:model="email"
             />
         </div>
@@ -258,8 +248,7 @@ new class extends Component {
         <div class="w-1/2">
             <flux:input
                     type="password"
-                    label="Password"
-                    placeholder="Password"
+                    label="{{ __('patients.password') }}"
                     wire:model="password"
                     value=""
             />
@@ -267,8 +256,7 @@ new class extends Component {
         <div class="w-1/2">
             <flux:input
                     type="password"
-                    label="Confirm Password"
-                    placeholder="Confirm Password"
+                    label="{{ __('patients.confirm_password') }}"
                     wire:model="password_confirmation"
                     value=""
             />
@@ -313,14 +301,13 @@ new class extends Component {
         </div>
     </div>
 
-
-    <div class="flex items-center justify-center gap-4 py-4">
+    <div class="mt-4 text-center">
         <flux:button
                 variant="primary"
                 color="emerald"
                 wire:click="save"
-        >Save!
+        >{{ __('ehr.save') }}
         </flux:button>
-        <flux:button wire:click="closeModal(['patient'])">Cancel</flux:button>
+        <flux:button wire:click="closeModal(['patient'])">{{ __('ehr.cancel') }}</flux:button>
     </div>
 </flux:modal>
