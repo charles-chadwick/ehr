@@ -27,6 +27,7 @@ class Patient extends Base implements AuthenticatableContract, AuthorizableContr
         'middle_name',
         'last_name',
         'suffix',
+        'nickname',
         'date_of_birth',
         'gender',
         'gender_identity',

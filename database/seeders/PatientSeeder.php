@@ -40,6 +40,11 @@ class PatientSeeder extends Seeder
 
             $first_name = array_shift($name);
             $last_name = array_pop($name);
+
+            if (in_array($first_name, ['Mrs', 'Ms', 'Mr'])) {
+                $first_name = array_shift($name);
+            }
+
             $email = str_replace('.@', '@', strtolower("$first_name.$last_name".rand(1, 100)."@example.com"));
 
             $created_at = fake()->dateTimeBetween($admin->created_at, '-1 year');
@@ -49,14 +54,18 @@ class PatientSeeder extends Seeder
                 default => '',
             };
 
+
             $model = Patient::factory()
                          ->create([
                              'prefix'     => $prefix,
                              'suffix'     => fake()->randomElement(['Jr.', 'Sr.', 'II', 'III', '']),
                              'first_name' => $first_name,
+                             'middle_name' => count($name) > 0 ? implode(' ', $name) : '',
                              'last_name'  => $last_name === '' ? 'N/A' : $last_name,
                              'email'      => $email,
                              'password'   => bcrypt('password'),
+                             'date_of_birth' => fake()->dateTimeBetween('-100 years', '-1 years'),
+                             'nickname'   => "",
                              'created_at' => $created_at,
                              'updated_at' => $created_at,
                          ]);
@@ -86,7 +95,7 @@ class PatientSeeder extends Seeder
             }
 
             if ($counter++ === 100) {
-                echo "Dead";
+                die('Dead');
             }
             $already_in[] = $character['name'];
             echo $character['id'].",";
