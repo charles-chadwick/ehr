@@ -19,7 +19,6 @@ new class extends Component {
 
     public Patient $patient;
 
-
     public function mount(Patient $patient) : void
     {
         $this->patient = $patient;
@@ -55,22 +54,19 @@ new class extends Component {
             >
                 <flux:modal.trigger
                         name="appointment-form"
-                        wire:click="$dispatch('edit-appointment', {id: 0, patient: {{ $patient }}})"
+                        wire:click="$dispatch('appointment.form:edit', {id: 0, patient: {{ $patient }}})"
                 >New Appointment
                 </flux:modal.trigger>
             </flux:button>
         </div>
     </div>
 
-    <flux:modal
-            name="appointment-form"
-            class="min-w-1/3"
-            variant="flyout"
-            @close="$dispatch('clear-fields')"
-    >
-        <livewire:appointments.form :patient="$patient" />
-    </flux:modal>
+    <livewire:appointments.form
+            modal="appointment-form"
+            :patient="$patient"
+    />
 
+    {{-- table --}}
     <flux:table :paginate="$this->appointments">
         <flux:table.columns>
             <flux:table.column
@@ -116,7 +112,7 @@ new class extends Component {
                         >
                             <flux:modal.trigger
                                     name="appointment-form"
-                                    wire:click="$dispatch('edit-appointment', {id: {{ $appointment->id }}, patient: {{ $patient }}})"
+                                    wire:click="$dispatch('appointment.form:edit', {id: {{ $appointment->id }}, patient: {{ $patient }}})"
                             >{{ $appointment->title }}
                             </flux:modal.trigger>
                         </a>

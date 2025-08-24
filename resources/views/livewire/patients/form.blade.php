@@ -36,19 +36,21 @@ new class extends Component {
 
     public function mount(?Patient $patient) : void
     {
-        $this->patient = $patient;
-        if ($this->patient?->id) {
+        $this->patient = $patient ?? new Patient();
+        if ($this->patient->exists) {
             $this->loadPatient($this->patient->id);
         }
     }
 
-    #[On("edit-patient")]
-    public function loadPatient($id) : void
+    #[On("patient.form:edit")]
+    public function loadPatient(int $id = 0) : void
     {
-        $this->patient = Patient::findOrFail($id);
-        $this->fill($this->patient);
-        $this->avatar_url = $this->patient->avatar;
-        $this->password = "";
+        if ($id > 0) {
+            $this->patient = Patient::findOrFail($id);
+            $this->fill($this->patient);
+            $this->avatar_url = $this->patient->avatar;
+            $this->password = ""; // IDK what this all aboot but it's needed 
+        }
     }
 
     public function save() : void

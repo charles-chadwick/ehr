@@ -2,7 +2,9 @@
 
 use App\Enums\AppointmentStatus;
 use App\Models\Appointment;
+use App\Models\AppointmentUser;
 use App\Models\Patient;
+use App\Models\Traits\UsesModal;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
@@ -11,6 +13,8 @@ use Livewire\Volt\Component;
 use Flux\Flux;
 
 new class extends Component {
+
+    use UsesModal;
 
     public string      $type              = "";
     public string      $date              = "";
@@ -44,15 +48,7 @@ new class extends Component {
         $this->patient = request()->patient;
     }
 
-    #[On('clear-fields')]
-    public function clearFields() : void
-    {
-        $this->resetExcept(['patient', 'modal']);
-        Flux::modal($this->modal)
-            ->close();
-    }
-
-    #[On("edit-appointment")]
+    #[On("appointment.form:edit")]
     public function loadAppointment(int $id = 0) : void
     {
         if ($id > 0) {
@@ -72,7 +68,6 @@ new class extends Component {
                                         ->nextWeekday()
                                         ->setHour(8)
                                         ->setMinute(0));
-
         }
     }
 
@@ -91,7 +86,6 @@ new class extends Component {
             'description'         => 'nullable',
             'selected_user_ids'   => 'array',
             'selected_user_ids.*' => 'integer|exists:users,id',
-
         ];
     }
 
@@ -117,14 +111,17 @@ new class extends Component {
         }
 
         // user stuff
-        $this->appointment->users()
-                          ->syncWithoutDetaching($this->selected_user_ids);
-
+        $appointment_users = new AppointmentUser();
+        $appointment_users->syncUsers($this->appointment->id, $this->selected_user_ids);
 
         // notify and dispatch
         Flux::toast("Successfully saved appointment", heading : "Appointment saved", variant: "success",
                                                       position: "top-right");
         $this->dispatch('appointment.index:refresh');
+        $this->closeModal([
+            'patient',
+            'appointment'
+        ]);
     }
 
 
@@ -143,113 +140,121 @@ new class extends Component {
                      ->addMinutes((int) $minute);
     }
 }; ?>
-<form
-        wire:submit.prevent="save"
+
+
+<flux:modal
+        name="appointment-form"
+        class="min-w-1/3"
+        variant="flyout"
+        wire:close="closeModal(['patient', 'appointment'])"
 >
-    {{-- title, type, and status --}}
-    <div class="flex flex-row gap-4">
-        <div class="flex-1/2">
-            <flux:input
-                    label="Title"
-                    wire:model="title"
-                    placeholder="My Appointment"
-            />
+    <form wire:submit.prevent="save">
+        {{-- title, type, and status --}}
+        <div class="flex flex-row gap-4">
+            <div class="flex-1/2">
+                <flux:input
+                        label="Title"
+                        wire:model="title"
+                        placeholder="My Appointment"
+                />
+            </div>
+            <div class="flex-1/4">
+                <flux:input
+                        label="Type"
+                        placeholder="Type"
+                        wire:model="type"
+                />
+            </div>
+            <div class="flex-1/4">
+                <flux:select
+                        label="Status"
+                        variant="listbox"
+                        placeholder="Choose Status"
+                        wire:model="status"
+                >
+                    @foreach(AppointmentStatus::cases() as $appointment_status)
+                        <flux:select.option value="{{ $appointment_status->value }}">{{ $appointment_status->name }}</flux:select.option>
+                    @endforeach
+                </flux:select>
+            </div>
         </div>
-        <div class="flex-1/4">
-            <flux:input
-                    label="Type"
-                    placeholder="Type"
-                    wire:model="type"
-            />
+
+        {{-- date and time --}}
+        <div class="flex flex-row gap-4 mt-4">
+            <div class="flex-1/2">
+                <flux:date-picker
+                        selectable-header
+                        unavailable="{{ $unavailable }}"
+                        wire:model="date"
+                        label="Date"
+                >
+                    <x-slot name="trigger">
+                        <flux:date-picker.input />
+                    </x-slot>
+                </flux:date-picker>
+            </div>
+            <div class="flex-1/4">
+                <flux:input
+                        type="time"
+                        wire:model="time"
+                        label="Time"
+                />
+            </div>
+            <div class="flex-1/4">
+                <flux:input
+                        type="length"
+                        wire:model="length"
+                        label="Length"
+                        placeholder="Minutes"
+                />
+            </div>
         </div>
-        <div class="flex-1/4">
+
+        {{-- user selection --}}
+        <div class="mt-4">
             <flux:select
-                    label="Status"
                     variant="listbox"
-                    placeholder="Choose Status"
-                    wire:model="status"
+                    searchable
+                    placeholder="Choose Users..."
+                    wire:model.live="selected_user_ids"
+                    label="Users"
+                    multiple
             >
-                @foreach(AppointmentStatus::cases() as $appointment_status)
-                    <flux:select.option value="{{ $appointment_status->value }}">{{ $appointment_status->name }}</flux:select.option>
+                @foreach(User::all() as $user)
+                    <flux:select.option value="{{ $user->id }}">{{ $user->full_name_extended }}</flux:select.option>
                 @endforeach
             </flux:select>
+            <div class="mt-2 flex flex-wrap gap-2">
+                @foreach($selected_user_ids as $user_id)
+                    @php $user = User::find($user_id) @endphp
+                    <flux:badge
+                            dismissable
+                            wire:click="removeUser({{ $user_id }})"
+                    >
+                        {{ $user->full_name_extended }}
+                    </flux:badge>
+                @endforeach
+            </div>
         </div>
-    </div>
 
-    {{-- date and time --}}
-    <div class="flex flex-row gap-4 mt-4">
-        <div class="flex-1/2">
-            <flux:date-picker
-                    selectable-header
-                    unavailable="{{ $unavailable }}"
-                    wire:model="date"
-                    label="Date"
+        {{-- description --}}
+        <div class="gap-4 mt-4">
+            <flux:editor
+                    class="h-full"
+                    wire:model="description"
+            />
+        </div>
+
+        {{-- submit button --}}
+        <div class="px-2 mt-4 text-center">
+            <flux:button
+                    variant="primary"
+                    color="emerald"
+                    type="submit"
             >
-                <x-slot name="trigger">
-                    <flux:date-picker.input />
-                </x-slot>
-            </flux:date-picker>
+                Save Appointment
+            </flux:button>
+            <flux:button wire:click="closeModal(['patient', 'appointment'])">Cancel</flux:button>
         </div>
-        <div class="flex-1/4">
-            <flux:input
-                    type="time"
-                    wire:model="time"
-                    label="Time"
-            />
-        </div>
-        <div class="flex-1/4">
-            <flux:input
-                    type="length"
-                    wire:model="length"
-                    label="Length"
-                    placeholder="Minutes"
-            />
-        </div>
-    </div>
-
-    {{-- user selection --}}
-    <div class="mt-4">
-        <flux:select
-                variant="listbox"
-                searchable
-                placeholder="Choose Users..."
-                wire:model.live="selected_user_ids"
-                label="Users"
-                multiple
-        >
-            @foreach(User::all() as $user)
-                <flux:select.option value="{{ $user->id }}">{{ $user->full_name_extended }}</flux:select.option>
-            @endforeach
-        </flux:select>
-        <div class="mt-2 flex flex-wrap gap-2">
-            @foreach($selected_user_ids as $user_id)
-                @php $user = User::find($user_id) @endphp
-                <flux:badge
-                        dismissable
-                        wire:click="removeUser({{ $user_id }})"
-                >
-                    {{ $user->full_name_extended }}
-                </flux:badge>
-            @endforeach
-        </div>
-    </div>
-
-    {{-- description --}}
-    <div class="gap-4 mt-4">
-        <flux:editor
-                class="h-full"
-                wire:model="description"
-        />
-    </div>
-
-    {{-- submit button --}}
-    <div class="px-2 mt-4 text-center">
-        <flux:button
-                variant="primary"
-                color="emerald"
-                type="submit"
-        >
-            Save Appointment
-        </flux:button>
-    </div>
-</form>
+    </form>
+</flux:modal>
