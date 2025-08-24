@@ -32,7 +32,6 @@ class Appointment extends Base
                     ->wherePivotNull('deleted_at');
     }
 
-
     protected function casts() : array
     {
         return [
@@ -44,14 +43,14 @@ class Appointment extends Base
 
     public function getEndAtAttribute() : Carbon
     {
-        $start = $this->date_and_time; // cast to Carbon by Eloquent
+        $start = $this->date_and_time;
         return $start->copy()
                      ->addMinutes((int) $this->length);
     }
 
     public function getFullDateAndTimeAttribute() : string
     {
-        $start = $this->date_and_time; // already Carbon due to cast
+        $start = $this->date_and_time;
         $end = $this->end_at;
 
         $start_formatted = $this->formatDateTime($start, self::DATE_FORMAT);
@@ -63,5 +62,16 @@ class Appointment extends Base
     private function formatDateTime(CarbonInterface $dateTime, string $format) : string
     {
         return $dateTime->format($format);
+    }
+
+    public function isAvailable(array $user_ids, string $start_date_and_time, int $length) : bool
+    {
+        $end_date_time = Carbon::parse($start_date_and_time)->addMinutes($length);
+        return !$this->where('date_and_time', '>=', $start_date_and_time)
+                          ->where('date_and_time', '<', $end_date_time)
+                          ->whereRelation('users', function ($query) use ($user_ids) {
+                              $query->whereIn('user_id', $user_ids);
+                          })
+                          ->exists();
     }
 }

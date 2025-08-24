@@ -12,20 +12,21 @@ class AppointmentUser extends Base
     {
         // get the user ids associated with this appointment
         $this->where('appointment_id', $appointment_id)
-                                            ->whereNotIn('user_id', $user_ids)
-                                            ->delete();
+             ->whereNotIn('user_id', $user_ids)
+             ->delete();
 
-        $appointment_users = collect($user_ids)->map(function($user_id) use ($appointment_id) {
-            return [
+        collect($user_ids)->map(function ($user_id) use ($appointment_id) {
+            $this->updateOrCreate([
                 'appointment_id' => $appointment_id,
-                'user_id' => $user_id,
-            ];
+                'user_id'        => $user_id,
+            ], [
+                'appointment_id' => $appointment_id,
+                'user_id'        => $user_id,
+            ]);
         });
 
-        $this->updateOrCreate([
-            'appointment_id',
-            'user_id'
-        ], $appointment_users);
 
     }
+
+    //
 }

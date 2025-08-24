@@ -7,10 +7,10 @@ use App\Models\Patient;
 use App\Models\Traits\UsesModal;
 use App\Models\User;
 use Carbon\Carbon;
+use Flux\Flux;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\On;
 use Livewire\Volt\Component;
-use Flux\Flux;
 
 new class extends Component {
 
@@ -27,6 +27,7 @@ new class extends Component {
     public Patient     $patient;
     public Appointment $appointment;
     public array       $selected_user_ids = [];
+    public string      $message           = "";
 
     public function removeUser(int $id) : void
     {
@@ -92,11 +93,12 @@ new class extends Component {
     public function save() : void
     {
         $validated = $this->validate();
-
+        $start_date_and_time = $this->getDateAndTime($validated['date'], $validated['time']);
+        $length = (int) $validated['length'];
         $data = [
             'patient_id'    => $this->patient->id,
-            'date_and_time' => $this->getDateAndTime($validated['date'], $validated['time']),
-            'length'        => (int) $validated['length'],
+            'date_and_time' => $start_date_and_time,
+            'length'        => $length,
             'status'        => $this->status,
             'type'          => $this->type,
             'title'         => $this->title,
@@ -104,6 +106,13 @@ new class extends Component {
         ];
 
         if ($this->appointment->exists) {
+
+            // check for appointment start
+            if (!$this->appointment->isAvailable($this->selected_user_ids, $start_date_and_time, $length)) {
+                $this->message = "Some of the users have conflicting appointments";
+                return;
+            }
+
             $this->appointment->update($data);
 
         } else {
@@ -148,6 +157,12 @@ new class extends Component {
         variant="flyout"
         wire:close="closeModal(['patient', 'appointment'])"
 >
+    @if($message != "")
+    <div class="bg-red-500 text-white p-4 rounded-md">
+    {{ $message }}
+    </div>
+    @endif
+
     <form wire:submit.prevent="save">
         {{-- title, type, and status --}}
         <div class="flex flex-row gap-4">
