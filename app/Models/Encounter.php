@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 class Encounter extends Base
 {
@@ -35,6 +37,12 @@ class Encounter extends Base
         return [
             'date_of_service' => 'datetime',
         ];
+    }
+
+    protected function signedAt() : Attribute {
+        return Attribute::make(
+            get: fn($value) => Carbon::parse($value)->format(config('ehr.long_date_format'))
+        );
     }
 
 }
