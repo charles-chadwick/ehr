@@ -16,10 +16,10 @@ class PatientFactory extends Factory
             'status' => $this->faker->word(),
 
             'first_name'      => $this->faker->firstName(),
-            'middle_name'     => $this->faker->name(),
+            'middle_name'     => $this->faker->firstName(),
             'last_name'       => $this->faker->lastName(),
-            'prefix'          => $this->faker->word(),
-            'suffix'          => $this->faker->word(),
+            'prefix'          => '',
+            'suffix'          => '',
             'date_of_birth'   => Carbon::now(),
             'gender'          => $this->faker->randomElement([
                 'Male',

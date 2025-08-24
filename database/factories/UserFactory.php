@@ -26,11 +26,11 @@ class UserFactory extends Factory
     public function definition() : array
     {
         return [
-            'role'              => fake()->randomElement(UserRole::class),
-            'prefix'            => fake()->word(),
-            'first_name'        => fake()->name(),
-            'last_name'         => fake()->lastName(),
-            'suffix'            => fake()->word(),
+            'role' => fake()->randomElement(UserRole::class),
+
+            'first_name' => fake()->name(),
+            'last_name'  => fake()->lastName(),
+
             'email'             => fake()
                 ->unique()
                 ->safeEmail(),

@@ -16,14 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run() : void
     {
-        User::factory()
-            ->create([
-                'first_name' => 'John',
-                'last_name'  => 'Doe',
-                'role'       => UserRole::Admin,
-                'prefix'     => 'Mr.',
-                'suffix'     => 'Jr',
-                'email'      => 'test@example.com',
-            ]);
+        // (new UserSeeder())->run();
+        (new PatientSeeder())->run();
     }
 }

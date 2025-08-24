@@ -13,7 +13,14 @@ class Appointment extends Base
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'patient_id',
+        'date_and_time',
+        'length',
+        'type',
+        'title',
+        'description'
+    ];
 
     private const DATE_FORMAT = 'm/d/Y h:ia';
     private const TIME_FORMAT = 'h:ia';

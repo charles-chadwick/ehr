@@ -11,11 +11,11 @@ class Note extends Base
     use HasFactory;
 
     protected $fillable = [
+        'notable_id',
+        'notable_type',
         'type',
         'title',
-        'content',
-        'notable_id',
-        'notable_type'
+        'content'
     ];
 
     public function casts() : array

@@ -20,7 +20,19 @@ class Patient extends Base implements AuthenticatableContract, AuthorizableContr
     use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
     use HasFactory, HasAvatar, IsPerson;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'status',
+        'prefix',
+        'first_name',
+        'middle_name',
+        'last_name',
+        'suffix',
+        'date_of_birth',
+        'gender',
+        'gender_identity',
+        'email',
+        'password'
+    ];
 
     protected function casts() : array
     {

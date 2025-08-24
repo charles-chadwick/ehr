@@ -6,7 +6,10 @@ class AppointmentUser extends Base
 {
     protected $table = 'appointments_users';
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'appointment_id',
+        'user_id',
+    ];
 
     public function syncUsers($appointment_id, $user_ids) : void
     {

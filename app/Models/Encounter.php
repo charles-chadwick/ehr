@@ -9,7 +9,16 @@ class Encounter extends Base
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'patient_id',
+        'date_of_service',
+        'type',
+        'title',
+        'status',
+        'signed_by',
+        'signed_at',
+        'content'
+    ];
 
     public function patient() : BelongsTo
     {
