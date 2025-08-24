@@ -14,6 +14,9 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(Appointment::class);
             $table->foreignIdFor(User::class);
+            $table->unsignedBigInteger('created_by')->default(1);
+            $table->unsignedBigInteger('updated_by')->default(1)->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

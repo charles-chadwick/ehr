@@ -27,6 +27,9 @@ return new class extends Migration {
                   ->default('1900-01-01');
             $table->string('email');
             $table->string('password');
+            $table->unsignedBigInteger('created_by')->default(1);
+            $table->unsignedBigInteger('updated_by')->default(1)->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

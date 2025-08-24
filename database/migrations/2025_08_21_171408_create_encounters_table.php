@@ -19,6 +19,9 @@ return new class extends Migration {
             $table->foreignIdFor(User::class, 'signed_by')->nullable();
             $table->dateTime('signed_at')->nullable();
             $table->text('content');
+            $table->unsignedBigInteger('created_by')->default(1);
+            $table->unsignedBigInteger('updated_by')->default(1)->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
