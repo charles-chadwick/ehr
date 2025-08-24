@@ -3,6 +3,7 @@
 use App\Models\Patient;
 use Livewire\Volt\Component;
 use Carbon\Carbon;
+use App\Enums\NoteType;
 
 new class extends Component {
 
@@ -81,5 +82,18 @@ new class extends Component {
             class="mt-4"
     >
         <livewire:appointments.index :patient="$patient" />
+    </flux:card>
+
+    {{-- notes --}}
+    <div class="flex flex-col gap-4"></div>
+    <flux:card
+            size="sm"
+            class="mt-4"
+    >
+
+        <livewire:notes.index
+                :on="$patient"
+                :type="NoteType::Admin"
+        />
     </flux:card>
 </div>

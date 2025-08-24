@@ -6,6 +6,8 @@
 * Add search and filter
 * Fix age to have correct months
 * Add gender identity to details
+* Add notes fields
+* Add messaging 
 
 ### Appointments ###
 * Add search and filter
