@@ -46,7 +46,7 @@ new class extends Component {
 
 <div>
     <div class="flex flex-row">
-        <h2 class="font-bold w-full">Encounters</h2>
+        <h2 class="font-bold w-full">Notes</h2>
         <div class="flex-none">
             <flux:button
                     size="sm"

@@ -155,7 +155,7 @@ new class extends Component {
                             colspan="5"
                             class="text-center"
                     >
-                        There are no appointments for this appointment.
+                        There are no appointments for this patient.
                     </flux:table.cell>
                 </flux:table.row>
             @endforelse
