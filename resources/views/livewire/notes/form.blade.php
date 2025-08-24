@@ -17,15 +17,13 @@ new class extends Component {
     public string $title;
     public string $content;
 
-    public function mount(?Note $note) : void
+    public function mount($on, ?Note $note) : void
     {
+        $this->on = $on;
         $this->note = $note ?? new Note();
         if ($this->note->exists) {
             $this->loadNote($this->note->id);
         }
-
-        $this->on = request()->on;
-
     }
 
     public function loadNote(int $id = 0) : void
@@ -44,10 +42,11 @@ new class extends Component {
         $this->validate();
 
         $note_data = [
-            'on'      => get_class($this->on),
+            'on'      => $this->on::class,
             'on_id'   => $this->on->id,
             'title'   => $this->title,
-            'content' => $this->content
+            'content' => $this->content,
+            'type'    => $this->type
         ];
 
         if ($this->note->exists) {

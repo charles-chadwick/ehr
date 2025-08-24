@@ -7,9 +7,9 @@ use Livewire\Volt\Component;
 
 new class extends Component {
 
-    public $on;
+    public          $on;
     public NoteType $type;
-    public $notes;
+    public          $notes;
 
     public function mount($on) : void
     {
@@ -46,7 +46,9 @@ new class extends Component {
             :type="$type->value"
     />
     @forelse($notes as $note)
-        I'm a note.
+        <div class="flex gap-2 justify-between"></div>
+        <p class="text-sm py-2"> {!! $note->title  !!}</p>
+
     @empty
         <p class="text-sm py-2">There are no {{ $type }} notes yet.</p>
     @endforelse
