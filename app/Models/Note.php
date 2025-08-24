@@ -10,9 +10,16 @@ class Note extends Base
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'type',
+        'title',
+        'content',
+        'notable_id',
+        'notable_type'
+    ];
 
-    public function casts() : array {
+    public function casts() : array
+    {
         return [
             'type' => NoteType::class,
         ];
