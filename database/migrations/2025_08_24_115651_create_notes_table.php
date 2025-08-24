@@ -9,8 +9,8 @@ return new class extends Migration {
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
-            $table->string('on');
-            $table->integer('on_id');
+            $table->string('notable_type');
+            $table->integer('notable_id');
             $table->string('type');
             $table->string('title')
                   ->nullable();

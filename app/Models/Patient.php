@@ -12,6 +12,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
 class Patient extends Base implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
@@ -34,5 +35,10 @@ class Patient extends Base implements AuthenticatableContract, AuthorizableContr
         $birth = Carbon::parse($this->date_of_birth);
         $months = ($now->month < $birth->month) ? $now->month + 12 - $birth->month : $now->month - $birth->month;
         return $birth->age.' years '.$months.' months';
+    }
+
+    public function notes() : MorphMany
+    {
+        return $this->morphMany(Note::class, 'notable', 'notable_type', 'notable_id');
     }
 }

@@ -20,9 +20,7 @@ new class extends Component {
     #[On("notes.index:refresh")]
     public function loadNotes() : void
     {
-        $this->notes = Note::where('on', $this->on::class)
-                           ->where('type', $this->type)
-                           ->get();
+        $this->notes = $this->on->notes;
     }
 
 }; ?>

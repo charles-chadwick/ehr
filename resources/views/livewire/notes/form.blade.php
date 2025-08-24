@@ -42,11 +42,11 @@ new class extends Component {
         $this->validate();
 
         $note_data = [
-            'on'      => $this->on::class,
-            'on_id'   => $this->on->id,
-            'title'   => $this->title,
-            'content' => $this->content,
-            'type'    => $this->type
+            'notable_type' => $this->on::class,
+            'notable_id'   => $this->on->id,
+            'title'        => $this->title,
+            'content'      => $this->content,
+            'type'         => $this->type
         ];
 
         if ($this->note->exists) {
