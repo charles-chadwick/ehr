@@ -4,9 +4,9 @@
 
 ### Patient Chart ###
 * Add search and filter
-* Fix age to have correct months
+* ~~Fix age to have correct months~~
 * Add gender identity to details
-* Add notes fields
+* ~~Add notes fields~~
 * Add messaging 
 
 ### Appointments ###
@@ -15,7 +15,7 @@
 * Block off specific days when not available
 * Add a reminder to the user
 * Add a reminder to the doctor
-* Add users and resources
+* ~~Add users and resources~~
 * Add a calendar
 * ~~Fix bug where modal doesn't clear fields when closed~~ 
 
@@ -24,4 +24,4 @@
 * Add unsigning confirmation
 
 ### Overall ### 
-* Make all <a> tags same color  
+* ~~Make all ```<a>``` tags same color~~  
