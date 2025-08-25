@@ -38,7 +38,7 @@ new class extends Component {
 
     <flux:description class="flex-grow">
         <a href="{{ route('patients.chart', $patient) }}">
-            <h1 class="font-bold text-zinc-800">{{ $patient->full_name_extended }}</h1>
+            <h1 class="font-bold text-zinc-800">{{ $patient->full_name_extended }} (#{{ $patient->id }})</h1>
         </a>
         @if ($patient->nickname !== "")
             <p class="italic text-sm">"{{ $patient->nickname }}"</p>
