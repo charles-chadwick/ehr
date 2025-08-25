@@ -3,19 +3,20 @@
 use App\Enums\PatientStatus;
 use App\Models\Patient;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+use LaravelIdea\Helper\App\Models\_IH_Base_C;
+use LaravelIdea\Helper\App\Models\_IH_Patient_C;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Volt\Component;
 use Carbon\Carbon;
+use Livewire\WithPagination;
 
 new class extends Component {
 
-    public $patients;
+    use WithPagination;
 
-    #[On("patients.index:refresh")]
-    public function mount() : void
-    {
-        $this->patients = Patient::get();
-    }
+    public function mount() : void {}
 
     public function statusColor($status) : string
     {
@@ -26,6 +27,13 @@ new class extends Component {
         };
     }
 
+    #[Computed]
+    #[On("patients.index:refresh")]
+    public function patients() : array|_IH_Patient_C|LengthAwarePaginator|_IH_Base_C
+    {
+        return Patient::paginate();
+    }
+
     public function with() : array
     {
         return ['patients' => $this->patients];
@@ -33,8 +41,10 @@ new class extends Component {
 }; ?>
 
 <div>
-    <div class="flex justify-between font-bold text-zinc-700 mb-4">
-        <h3 class="font-bold text-2xl">{{ __('patients.patients') }}</h3>
+
+    <livewire:patients.form modal="patient-form" />
+
+    <flux:card size="sm">
         <flux:modal.trigger name="patient-form">
             <flux:button
                     variant="primary"
@@ -42,12 +52,7 @@ new class extends Component {
             >{{ __('patients.create_new') }}
             </flux:button>
         </flux:modal.trigger>
-
-    </div>
-
-    <livewire:patients.form modal="patient-form" />
-
-    <flux:card size="sm">
+        <flux:pagination :paginator="$patients" class="border-t-0 pb-2" />
 
         @forelse($patients as $patient)
             <div
@@ -64,9 +69,9 @@ new class extends Component {
                                 size="md"
                         />
                         <div class="w-auto text-sm text-zinc-700">
-                            <h3 class="font-semibold">
+                            <h3 class="font-semibold ">
                                 <a href="{{ route('patients.chart', $patient) }}">
-                                    {{ $patient->full_name_extended }}
+                                    {{ $patient->full_name }} {{ $patient->suffix }}
                                 </a>
                             </h3>
                             <div class="flex">
@@ -104,6 +109,7 @@ new class extends Component {
                 There are no patients in the system.
             </div>
         @endforelse
+            <flux:pagination :paginator="$patients" />
     </flux:card>
 
 </div>
