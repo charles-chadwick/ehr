@@ -101,7 +101,7 @@ new class extends Component {
         // toast it up
         Flux::toast($message, heading: $heading, variant: "success", position: "top-right");
         $this->closeModal(['patient']);
-        $this->dispatch("patients.index:refresh");
+        $this->redirect(route('patients.chart', $this->patient));
     }
 
     public function rules() : array
