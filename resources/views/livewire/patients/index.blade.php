@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\PatientStatus;
+use App\Livewire\Traits\Sortable;
 use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -13,7 +14,8 @@ use Livewire\WithPagination;
 
 new class extends Component {
 
-    use WithPagination, \App\Livewire\Traits\Sortable;
+    use WithPagination, Sortable;
+
     public $search_term = "";
 
     public function mount() : void {}
@@ -35,13 +37,12 @@ new class extends Component {
             'first_name',
             'last_name',
         ], 'LIKE', '%'.$this->search_term)
-                      ->orderBy('last_name')
                       ->paginate();
     }
 
     public function search() : void
     {
-        if (strlen(trim($this->search_term)) > 2) {
+        if (strlen(trim($this->search_term)) > 1) {
             $this->resetPage();
             $this->patients();
         }
