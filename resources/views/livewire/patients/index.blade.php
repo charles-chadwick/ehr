@@ -2,19 +2,19 @@
 
 use App\Enums\PatientStatus;
 use App\Models\Patient;
-use Illuminate\Database\Eloquent\Collection;
+use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 use LaravelIdea\Helper\App\Models\_IH_Base_C;
 use LaravelIdea\Helper\App\Models\_IH_Patient_C;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Volt\Component;
-use Carbon\Carbon;
 use Livewire\WithPagination;
 
 new class extends Component {
 
-    use WithPagination;
+    use WithPagination, \App\Livewire\Traits\Sortable;
+    public $search_term = "";
 
     public function mount() : void {}
 
@@ -31,7 +31,20 @@ new class extends Component {
     #[On("patients.index:refresh")]
     public function patients() : array|_IH_Patient_C|LengthAwarePaginator|_IH_Base_C
     {
-        return Patient::paginate();
+        return Patient::whereAny([
+            'first_name',
+            'last_name',
+        ], 'LIKE', '%'.$this->search_term)
+                      ->orderBy('last_name')
+                      ->paginate();
+    }
+
+    public function search() : void
+    {
+        if (strlen(trim($this->search_term)) > 2) {
+            $this->resetPage();
+            $this->patients();
+        }
     }
 
     public function with() : array
@@ -45,14 +58,27 @@ new class extends Component {
     <livewire:patients.form modal="patient-form" />
 
     <flux:card size="sm">
-        <flux:modal.trigger name="patient-form">
-            <flux:button
-                    variant="primary"
-                    color="emerald"
-            >{{ __('patients.create_new') }}
-            </flux:button>
-        </flux:modal.trigger>
-        <flux:pagination :paginator="$patients" class="border-t-0 pb-2" />
+        <div class="flex justify-between px-2 py-2">
+            <div>
+                <flux:button
+                        size="sm"
+                        variant="primary"
+                        color="emerald"
+                >
+                    <flux:modal.trigger name="patient-form">{{ __('patients.create_new') }}</flux:modal.trigger>
+                </flux:button>
+            </div>
+            <div>
+                <flux:input
+                        icon="magnifying-glass"
+                        wire:model="search_term"
+                        wire:keyup="search"
+                        type="text"
+                        placeholder="{{ __('ehr.search') }}"
+                        class="w-full sm:w-auto"
+                />
+            </div>
+        </div>
 
         @forelse($patients as $patient)
             <div
@@ -106,10 +132,10 @@ new class extends Component {
             </div>
         @empty
             <div class="text-center text-zinc-700">
-                There are no patients in the system.
+                {{ __('patients.no_patients') }}
             </div>
         @endforelse
-            <flux:pagination :paginator="$patients" />
+        <flux:pagination :paginator="$patients" />
     </flux:card>
 
 </div>

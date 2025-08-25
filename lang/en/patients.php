@@ -2,6 +2,7 @@
 
 return [
     'patients'         => 'Patients',
+    'no_patients'      => 'There are no patients.',
     'create_new'       => 'Create New',
     'first_name'       => 'First Name',
     'middle_name'      => 'Middle Name',
