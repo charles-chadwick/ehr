@@ -34,12 +34,12 @@ new class extends Component {
 
 <div>
     <div class="flex justify-between font-bold text-zinc-700 mb-4">
-        <h3 class="font-bold text-2xl">Patients</h3>
+        <h3 class="font-bold text-2xl">{{ __('patients.patients') }}</h3>
         <flux:modal.trigger name="patient-form">
             <flux:button
                     variant="primary"
                     color="emerald"
-            >Create New Patient
+            >{{ __('patients.create_new') }}
             </flux:button>
         </flux:modal.trigger>
 
@@ -52,12 +52,12 @@ new class extends Component {
         @forelse($patients as $patient)
             <div
                     wire:key="{{ $patient->id }}"
-                    class="flex justify-between px-2 py-4"
+                    class="flex justify-between px-2 py-2"
             >
                 <div class="w-auto">
-                    <div class="flex justify-between px-2 py-4">
+                    <div class="flex justify-between px-2 py-2">
                         <flux:avatar
-                                class="flex-none rounded-full object-cover mr-4"
+                                class="flex-none w-16 h-16 rounded-full object-cover mr-4"
                                 src="{{ $patient->avatar }}"
                                 alt="{{ $patient->full_name_extended }}"
                                 title="{{ $patient->full_name_extended }}"
@@ -69,9 +69,16 @@ new class extends Component {
                                     {{ $patient->full_name_extended }}
                                 </a>
                             </h3>
-                            <p>#{{ $patient->id }}
-                               : {{ $patient->gender }} {{ Carbon::parse($patient->date_of_birth)->format('m/d/Y') }}
-                               ({{ $patient->age }})</p>
+                            <div class="flex">
+                                <span class="font-bold">(#{{ $patient->id }})</span>
+                                <flux:badge
+                                        size="sm"
+                                        class="ml-2"
+                                        color="{{ $this->statusColor($patient->status) }}"
+                                >{{ $patient->status }}</flux:badge>
+                            </div>
+                            <p> {{ $patient->gender }} - {{ Carbon::parse($patient->date_of_birth)->format('m/d/Y') }}
+                                                       ({{ $patient->age }})</p>
                         </div>
                     </div>
                 </div>

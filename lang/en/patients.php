@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'patients'         => 'Patients',
+    'create_new'       => 'Create New',
     'first_name'       => 'First Name',
     'middle_name'      => 'Middle Name',
     'last_name'        => 'Last Name',
