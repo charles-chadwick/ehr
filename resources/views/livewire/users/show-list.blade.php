@@ -9,10 +9,14 @@ new class extends Component {
 
 }; ?>
 
-<div>
-@foreach ($users as $user)
-    <span wire:model="{{ $user->id }}">
-        <span>{{ $user->full_name }}</span>
-    </span>
+<div class="flex flex-wrap gap-2 mt-1">
+    @foreach ($users as $user)
+        <flux:avatar
+                initials="{{ $user->full_name_extended }}"
+                tooltip="{{ $user->full_name_extended }}"
+                src="{{ $user->avatar }}"
+                size="xs"
+                class="shadow-xs border border-zinc-200"
+        />
     @endforeach
 </div>
