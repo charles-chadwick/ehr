@@ -93,8 +93,7 @@ new class extends Component {
             <flux:date-picker
                     selectable-header
                     wire:model="form.date"
-                    label="{{ __('appointments.date') }}"
-            >
+                    label="{{ __('appointments.date') }}">
                 <x-slot name="trigger">
                     <flux:date-picker.input />
                 </x-slot>
