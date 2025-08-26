@@ -20,6 +20,9 @@ class Patient extends Base implements AuthenticatableContract, AuthorizableContr
     use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
     use HasFactory, HasAvatar, IsPerson;
 
+    // Define a date format so Eloquent doesn't require a DB connection to resolve it.
+    protected $dateFormat = 'Y-m-d H:i:s';
+
     protected $fillable = [
         'status',
         'prefix',
@@ -38,6 +41,7 @@ class Patient extends Base implements AuthenticatableContract, AuthorizableContr
     protected function casts() : array
     {
         return [
+            // Keep the cast, but with dateFormat set above, it won't query the DB connection.
             'date_of_birth' => 'date',
         ];
     }
@@ -50,8 +54,4 @@ class Patient extends Base implements AuthenticatableContract, AuthorizableContr
         return $birth->age.' years '.$months.' months';
     }
 
-    public function notes() : MorphMany
-    {
-        return $this->morphMany(Note::class, 'notable', 'notable_type', 'notable_id');
-    }
 }
