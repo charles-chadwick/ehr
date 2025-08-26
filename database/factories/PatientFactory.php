@@ -2,39 +2,35 @@
 
 namespace Database\Factories;
 
-use App\Models\Patient;
+use App\Enums\PatientStatus;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
 class PatientFactory extends Factory
 {
-    protected $model = Patient::class;
-
     public function definition() : array
     {
         return [
-            'status' => $this->faker->word(),
+            'status'                                     => $this->faker->randomElement(PatientStatus::class),
 
-            'first_name'      => $this->faker->firstName(),
-            'middle_name'     => $this->faker->firstName(),
-            'last_name'       => $this->faker->lastName(),
-            'prefix'          => '',
-            'suffix'          => '',
-            'date_of_birth'   => Carbon::now(),
-            'gender'          => $this->faker->randomElement([
-                'Male',
-                'Female'
-            ]),
-            'gender_identity' => $this->faker->randomElement([
-                'Male',
-                'Female',
-                'Other'
-            ]),
-            'email'           => $this->faker->unique()
-                                             ->safeEmail(),
-            'password'        => bcrypt($this->faker->password()),
-            'created_at'      => Carbon::now(),
-            'updated_at'      => Carbon::now(),
+            'prefix'                                     => $this->faker->word(),
+            'first_name'                                 => $this->faker->firstName(),
+            'middle_name'                                => $this->faker->name(),
+            'last_name'                                  => $this->faker->lastName(),
+            'suffix'                                     => $this->faker->word(),
+            'nickname'                                   => $this->faker->word(),
+            'gender'                                     => $this->faker->word(),
+            'gender_identity'                            => $this->faker->word(),
+            'date_of_birth'                              => Carbon::now(),
+            'email'                                      => $this->faker->unique()
+                                                                        ->safeEmail(),
+            'password'                                   => bcrypt($this->faker->password()),
+            'created_at'                                 => Carbon::now(),
+            'updated_at'                                 => Carbon::now(),
+
+            'created_by' => $this->faker->numberBetween(1, 10),
+            'updated_by' => $this->faker->numberBetween(1, 10),
         ];
     }
 }
