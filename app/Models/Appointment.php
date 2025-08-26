@@ -3,13 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Appointment extends Model
+class Appointment extends Base
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+
+    protected $fillable = [
+        'patient_id',
+        'date_and_time',
+        'length',
+        'status',
+        'type',
+        'title',
+        'description',
+    ];
 
     public function patient() : BelongsTo
     {
