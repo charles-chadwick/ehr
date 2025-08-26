@@ -34,10 +34,11 @@ new class extends Component {
             <livewire:users.show-list :users="$appointment->users" />
         </div>
         <div class="flex-none text-right">
-            <p>{{ $appointment->date }}</p>
+            <p class="font-bold">{{ $appointment->date }}</p>
             <p>{{ $appointment->start_at }} to {{ $appointment->end_at }}</p>
             <p>
                 <flux:badge
+                        class="mt-1"
                         size="sm"
                         variant="primary"
                         :color="$status_color"
