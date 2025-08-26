@@ -46,14 +46,29 @@ class Appointment extends Base
                     ->wherePivotNull('deleted_at');
     }
 
-    public function getEndAtAttribute() : Carbon
+
+    public function getDateAttribute() : string
+    {
+        $start = $this->date_and_time;
+        return $start->format(config('ehr.date_format'));
+    }
+
+
+    public function getStartAtAttribute() : string
+    {
+        $start = $this->date_and_time;
+        return $start->format(config('ehr.time_format'));
+    }
+
+    public function getEndAtAttribute() : string
     {
         $start = $this->date_and_time;
         return $start->copy()
-                     ->addMinutes((int) $this->length);
+                     ->addMinutes((int) $this->length)
+            ->format(config('ehr.time_format'));
     }
 
-    public function getFullDateAndTimeAttribute() : string
+    public function getDateAndTimeRangeAttribute() : string
     {
         $start = $this->date_and_time;
         $end = $this->end_at;
