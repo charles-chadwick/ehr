@@ -31,7 +31,7 @@ new class extends Component {
         <div class="w-full">
             <h1 class="font-bold">{{ $appointment->title }}</h1>
             <p class="text-sm">{{ $appointment->type }} Appointment</p>
-
+            <livewire:users.show-list :users="$appointment->users" />
         </div>
         <div class="flex-none text-right">
             <p>{{ $appointment->date }}</p>
