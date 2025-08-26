@@ -2,6 +2,7 @@
 
 use App\Livewire\Forms\AppointmentForm;
 use App\Enums\AppointmentStatus;
+use App\Models\AppointmentUser;
 use App\Models\Patient;
 use App\Models\User;
 use Flux\Flux;
@@ -11,6 +12,7 @@ use Livewire\Volt\Component;
 new class extends Component {
 
     public AppointmentForm $form;
+    public array $selected_user_ids = [];
 
     public function mount() : void
     {
@@ -35,6 +37,9 @@ new class extends Component {
             $message = "Successfully created appointment.";
             $heading = "Success";
             $variant = "success";
+
+            $appointment_users = new AppointmentUser();
+            $appointment_users->syncUsers($appointment->id, $this->selected_user_ids);
         } else {
             // error
             $message = "Error creating appointment. Please contact administrator.";
@@ -44,18 +49,14 @@ new class extends Component {
 
         Flux::toast($message, heading: $heading, variant: $variant);
     }
-}; ?>
 
+}; ?>
 <form
         wire:submit="save"
         name="appointment-form"
         class="min-w-1/3"
         variant="flyout"
 >
-
-    @session('status')
-    {{ $status }}
-    @endsession
     {{-- title, type, and status --}}
     <div class="flex flex-row gap-4">
         <div class="flex-1/2">
@@ -122,6 +123,10 @@ new class extends Component {
                 class="h-full"
                 wire:model="form.description"
         />
+    </div>
+
+    <div class="mt-4">
+    <livewire:users.select wire:model="selected_user_ids" />
     </div>
 
     {{-- submit button --}}
