@@ -61,7 +61,7 @@ class Patient extends Base implements AuthenticatableContract, AuthorizableContr
         $now = Carbon::now();
         $birth = Carbon::parse($this->date_of_birth);
         $months = ($now->month < $birth->month) ? $now->month + 12 - $birth->month : $now->month - $birth->month;
-        return $birth->age.' years '.$months.' months';
+        return $birth->age.' years, '.$months.' months';
     }
 
 }
