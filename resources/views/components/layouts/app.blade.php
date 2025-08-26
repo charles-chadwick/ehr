@@ -24,7 +24,7 @@
     @livewireStyles
 
 </head>
-<body class="h-screen  bg-zinc-100">
+<body class="h-screen bg-zinc-100 text-zinc-700">
 @persist('toast')
 <flux:toast />
 @endpersist
