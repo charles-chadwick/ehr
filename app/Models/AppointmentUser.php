@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
-class AppointmentUser extends Base
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
+
+class AppointmentUser extends Pivot
 {
     protected $table = 'appointments_users';
 
@@ -10,6 +13,14 @@ class AppointmentUser extends Base
         'appointment_id',
         'user_id',
     ];
+
+    public function appointment() : BelongsTo {
+        return $this->belongsTo(Appointment::class);
+    }
+
+    public function user() : BelongsTo {
+        return $this->belongsTo(User::class);
+    }
 
     public function syncUsers($appointment_id, $user_ids) : void
     {
