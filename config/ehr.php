@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'date_format' => 'm/d/Y',
-    'time_format' => 'h:i A',
+    'date_format' => 'n/d/y',
+    'time_format' => 'g:i A',
 ];
