@@ -18,15 +18,20 @@
             href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600"
             rel="stylesheet"
     />
-
+    @fluxAppearance
     <!-- Styles / Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 
 </head>
-<body>
+<body class="h-screen  bg-zinc-100">
+@persist('toast')
+<flux:toast />
+@endpersist
+<div class="max-w-7xl mx-auto m-6 sm:px-6 lg:px-8">
 {{ $slot }}
-@livewireScriptConfig
+</div>
+@fluxScripts
 @livewireScripts
 </body>
 </html>
