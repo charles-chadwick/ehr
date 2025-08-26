@@ -53,7 +53,6 @@ class Appointment extends Base
         return $start->format(config('ehr.date_format'));
     }
 
-
     public function getStartAtAttribute() : string
     {
         $start = $this->date_and_time;
@@ -70,17 +69,7 @@ class Appointment extends Base
 
     public function getDateAndTimeRangeAttribute() : string
     {
-        $start = $this->date_and_time;
-        $end = $this->end_at;
-
-        $start_formatted = $this->formatDateTime($start, config('ehr.date_format').' '.config('ehr.time_format'));
-        $end_formatted = $this->formatDateTime($end, config('ehr.time_format'));
-
-        return $start_formatted.' to '.$end_formatted;
+        return $this->date.' '.$this->start_at.' to '.$this->end_at;
     }
 
-    private function formatDateTime(CarbonInterface $dateTime, string $format) : string
-    {
-        return $dateTime->format($format);
-    }
 }
