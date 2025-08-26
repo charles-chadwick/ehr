@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PatientStatus;
 use App\Models\Traits\HasAvatar;
 use App\Models\Traits\IsPerson;
 use Carbon\Carbon;
@@ -43,11 +44,16 @@ class Patient extends Base implements AuthenticatableContract, AuthorizableContr
         return [
             // Keep the cast, but with dateFormat set above, it won't query the DB connection.
             'date_of_birth' => 'date',
+            'status'        => PatientStatus::class,
         ];
     }
 
     public function appointments() : HasMany {
         return $this->hasMany(Appointment::class);
+    }
+
+    public function getDOBAttribute() : string {
+        return Carbon::parse($this->attributes['date_of_birth'])->format(config('ehr.dob_format'));
     }
 
     public function getAgeAttribute() : string
