@@ -1,10 +1,9 @@
 <?php
 
-use App\Livewire\Forms\AppointmentForm;
 use App\Enums\AppointmentStatus;
+use App\Livewire\Forms\AppointmentForm;
 use App\Models\AppointmentUser;
 use App\Models\Patient;
-use App\Models\User;
 use Flux\Flux;
 use Illuminate\Support\Carbon;
 use Livewire\Volt\Component;
@@ -12,7 +11,8 @@ use Livewire\Volt\Component;
 new class extends Component {
 
     public AppointmentForm $form;
-    public array $selected_user_ids = [];
+    public array           $selected_user_ids = [];
+    public string          $modal             = "";
 
     public function mount() : void
     {
@@ -25,6 +25,7 @@ new class extends Component {
                       ->setHour(8)
                       ->setMinute(0);
 
+        $this->form->status = AppointmentStatus::Confirmed->value;
         $this->form->date = $date->format('Y-m-d');
         $this->form->time = $date->format('H:i');
     }
@@ -40,6 +41,10 @@ new class extends Component {
 
             $appointment_users = new AppointmentUser();
             $appointment_users->syncUsers($appointment->id, $this->selected_user_ids);
+
+            $this->dispatch('appointments.index:refresh');
+            Flux::modal('create-modal')
+                ->close();
         } else {
             // error
             $message = "Error creating appointment. Please contact administrator.";
@@ -48,6 +53,7 @@ new class extends Component {
         }
 
         Flux::toast($message, heading: $heading, variant: $variant);
+
     }
 
 }; ?>
@@ -93,7 +99,8 @@ new class extends Component {
             <flux:date-picker
                     selectable-header
                     wire:model="form.date"
-                    label="{{ __('appointments.date') }}">
+                    label="{{ __('appointments.date') }}"
+            >
                 <x-slot name="trigger">
                     <flux:date-picker.input />
                 </x-slot>
@@ -125,7 +132,7 @@ new class extends Component {
     </div>
 
     <div class="mt-4">
-    <livewire:users.select wire:model="selected_user_ids" />
+        <livewire:users.select wire:model="selected_user_ids" />
     </div>
 
     {{-- submit button --}}
