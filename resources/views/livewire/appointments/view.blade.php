@@ -1,28 +1,20 @@
 <?php
 
 use App\Enums\AppointmentStatus;
+use App\Livewire\Traits\AppointmentStatusColor;
 use App\Models\Appointment;
 use Livewire\Volt\Component;
 
 new class extends Component {
+
+    use AppointmentStatusColor;
+
     public Appointment $appointment;
-    public string      $status_color;
+
 
     public function mount(Appointment $appointment) : void
     {
         $this->appointment = $appointment;
-        $this->status_color = $this->getStatusColor($appointment->status);
-    }
-
-    private function getStatusColor(AppointmentStatus $status) : string
-    {
-        return match ($status) {
-            AppointmentStatus::Confirmed                            => 'emerald',
-            AppointmentStatus::Cancelled, AppointmentStatus::NoShow => 'red',
-            AppointmentStatus::Rescheduled                          => 'pink',
-            AppointmentStatus::Pending                              => 'yellow',
-            default                                                 => 'gray',
-        };
     }
 }; ?>
 
@@ -41,7 +33,7 @@ new class extends Component {
                         class="mt-1"
                         size="sm"
                         variant="primary"
-                        :color="$status_color"
+                        :color="$this->getStatusColor($appointment->status)"
                 >{{ $appointment->status }}</flux:badge>
             </p>
         </div>
