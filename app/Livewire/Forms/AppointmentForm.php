@@ -5,6 +5,7 @@ namespace App\Livewire\Forms;
 use App\Enums\AppointmentStatus;
 use App\Models\Appointment;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Validation\Rule;
 use Livewire\Form;
 
@@ -24,20 +25,25 @@ class AppointmentForm extends Form
         $this->fill($appointment->toArray());
     }
 
-    public function save() : void
+    public function save() : Appointment
     {
         $this->validate();
-        Appointment::create([
-            'patient_id'    => $this->patient->id,
-            'date_and_time' => Carbon::parse($this->date . ' ' . $this->time)->toDateTimeString(),
-            'length'        => $this->length,
-            'status'        => $this->status,
-            'type'          => $this->type,
-            'title'         => $this->title,
-            'description'   => $this->description,
-        ]);
 
-        session()->flash('success', 'Appointment created successfully.');
+        try {
+            return Appointment::create([
+                'patient_id'    => $this->patient->id,
+                'date_and_time' => Carbon::parse($this->date . ' ' . $this->time)->toDateTimeString(),
+                'length'        => $this->length,
+                'status'        => $this->status,
+                'type'          => $this->type,
+                'title'         => $this->title,
+                'description'   => $this->description,
+            ]);
+
+        } catch(Exception $e) {
+            logger()->error($e->getMessage());
+            return new Appointment();
+        }
     }
 
     public function rules() : array

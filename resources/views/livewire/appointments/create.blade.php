@@ -4,27 +4,57 @@ use App\Livewire\Forms\AppointmentForm;
 use App\Enums\AppointmentStatus;
 use App\Models\Patient;
 use App\Models\User;
+use Flux\Flux;
+use Illuminate\Support\Carbon;
 use Livewire\Volt\Component;
 
 new class extends Component {
 
     public AppointmentForm $form;
 
+    public function mount() : void
+    {
+        // set the patient
+        $this->form->patient = Patient::find(12);
+
+        // set the default date and time for the next weekday at 8am
+        $date = Carbon::today()
+                      ->nextWeekday()
+                      ->setHour(8)
+                      ->setMinute(0);
+
+        $this->form->date = $date->format('Y-m-d');
+        $this->form->time = $date->format('H:i');
+    }
+
     public function save() : void
     {
-        $this->form->patient = Patient::find(12);
-        $this->form->save();
+        $appointment = $this->form->save();
+        if ($appointment->exists) {
+            // success
+            $message = "Successfully created appointment.";
+            $heading = "Success";
+            $variant = "success";
+        } else {
+            // error
+            $message = "Error creating appointment. Please contact administrator.";
+            $heading = "Error";
+            $variant = "danger";
+        }
+
+        Flux::toast($message, heading: $heading, variant: $variant);
     }
 }; ?>
 
-<div
+<form
+        wire:submit="save"
         name="appointment-form"
         class="min-w-1/3"
         variant="flyout"
 >
 
     @session('status')
-        {{ $status }}
+    {{ $status }}
     @endsession
     {{-- title, type, and status --}}
     <div class="flex flex-row gap-4">
@@ -100,9 +130,8 @@ new class extends Component {
                 variant="primary"
                 color="emerald"
                 type="submit"
-                wire:click="save"
         >
             {{ __('ehr.save') }}
         </flux:button>
     </div>
-</div>
+</form>
