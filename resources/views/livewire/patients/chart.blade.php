@@ -8,5 +8,18 @@ new class extends Component {
 }; ?>
 
 <div>
-    <livewire:patients.details :patient="$patient" />
+    <flux:card size="sm">
+        <livewire:patients.details
+                :patient="$patient"
+                :menu="true"
+        />
+    </flux:card>
+    <div class="mt-4">
+        <flux:card size="sm">
+            <h2 class="font-semibold text-sm mb-2">
+                Appointments
+            </h2>
+            <livewire:appointments.index wire:key="{{ uniqid() }}" :patient="$patient" />
+        </flux:card>
+    </div>
 </div>
