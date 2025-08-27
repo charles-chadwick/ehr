@@ -79,7 +79,7 @@ new class extends Component {
         <div class="flex-1/2">
             <flux:input
                     label="{{ __('encounters.title') }}"
-                    placeholder="{{ __('encounters.my_encounter') }}"
+                    placeholder="{{ __('encounters.title') }}"
                     wire:model="form.title"
             />
         </div>
@@ -113,6 +113,7 @@ new class extends Component {
     <div class="gap-4 mt-4">
         <flux:editor
                 class="h-full min-h-[600px]"
+                placeholder="{{ __('encounters.content') }}"
                 wire:model="form.content"
         />
     </div>
