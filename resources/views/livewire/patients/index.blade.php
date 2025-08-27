@@ -42,16 +42,10 @@ new class extends Component {
 
 <div>
     {{-- patient modals --}}
-    <flux:modal name="patient-update">
-        <livewire:patients.update
-                modal="patient-update"
-        />
-    </flux:modal>
-
     <flux:button>
-    <flux:modal.trigger name="create-patient">
-        Create new
-    </flux:modal.trigger>
+        <flux:modal.trigger name="create-patient">
+            Create new
+        </flux:modal.trigger>
     </flux:button>
     <flux:modal name="create-patient">
         <livewire:patients.create
@@ -75,10 +69,10 @@ new class extends Component {
                                 href="#"
                                 class="link font-bold"
                         >
-                            <flux:modal.trigger
-                                    name="patient-update"
-                                    wire:click="$dispatch('patients.update:load', {patient: {{ $patient }}})"
-                            >{{ $patient->full_name }}</flux:modal.trigger>
+                            <a
+                                    class="link"
+                                    href="{{ route('patients.chart', $patient) }}"
+                            >{{ $patient->full_name }}</a>
                         </a>
                     </p>
                     <div class="mt-1 flex items-center gap-x-2">
