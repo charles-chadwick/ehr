@@ -2,6 +2,7 @@
 
 use App\Livewire\Traits\PatientStatusColor;
 use App\Models\Patient;
+use Livewire\Attributes\On;
 use Livewire\Volt\Component;
 
 new class extends Component {
@@ -9,9 +10,18 @@ new class extends Component {
 
     public Patient $patient;
     public string  $menu = "";
+
+    #[On('patients.details:refresh')]
+    public function with() : array
+    {
+        return ['patient' => $this->patient];
+    }
 }; ?>
 
 <div>
+    <flux:modal name="patient-update">
+        <livewire:patients.update :patient="$patient" />
+    </flux:modal>
     <div class="flex flex-row text-sm">
         <div class="flex-none mr-2">
             <flux:avatar
@@ -41,24 +51,18 @@ new class extends Component {
         </div>
         <div class="flex-none text-right">
             @if($menu !== "")
-                <flux:dropdown
-                        position="bottom"
-                        align="end"
-                >
-                    <flux:button
-                            size="sm"
-                            icon="ellipsis-horizontal"
-                            variant="ghost"
-                            inset="top bottom"
-                    ></flux:button>
-                    <flux:navmenu>
-                        <flux:navmenu.item
-                                href="#"
-                                icon="user"
-                        >
-                            {{ __('ehr.edit_profile') }}
-                        </flux:navmenu.item>
-                    </flux:navmenu>
+                <flux:dropdown>
+                    <flux:button icon:trailing="chevron-down">{{ __('ehr.options') }}</flux:button>
+                    <flux:menu>
+                        <flux:menu.item icon="plus">
+                            <flux:modal.trigger
+                                    name="patient-update"
+                                    wire:click="$dispatch('patients.update:load', {patient: {{ $patient }}})"
+                            >
+                                {{ __('ehr.edit', ['item' => __('patients.patient')]) }}
+                            </flux:modal.trigger>
+                        </flux:menu.item>
+                    </flux:menu>
                 </flux:dropdown>
             @endif
         </div>
