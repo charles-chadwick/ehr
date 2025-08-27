@@ -35,15 +35,7 @@ new class extends Component {
 
         if ($patient->exists) {
 
-            if ($this->avatar_path !== "") {
-                try {
-                    $this->patient->addMedia(storage_path('app/public/'.$this->avatar_path))
-                                  ->preservingOriginal()
-                                  ->toMediaCollection('avatars');
-                } catch (FileDoesNotExist|FileIsTooBig $e) {
-                    Flux::toast("Error saving document", heading: "Error", variant: "error", position: "top-right");
-                }
-            }
+            $this->saveAvatar($patient);
 
             // success
             $message = "Successfully updated patient.";
