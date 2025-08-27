@@ -17,8 +17,6 @@ class Base extends Model implements HasMedia
 {
     use InteractsWithMedia, LogsActivity, SoftDeletes, TracksUsers;
 
-    private const DATE_FORMAT = 'm/d/Y @ h:i A';
-
     // Merge base defaults with the child model's fillable
     public function getFillable() : array
     {
@@ -30,39 +28,71 @@ class Base extends Model implements HasMedia
         )));
     }
 
+    /**
+     * Define a relationship to the user who created the entity.
+     */
     public function createdBy() : BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    /**
+     * Define a relationship to the user who last updated the entity.
+     */
     public function updatedBy() : BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
 
+    /**
+     * Define a relationship indicating which user deleted this entity.
+     *
+     * @return BelongsTo
+     */
     public function deletedBy() : BelongsTo
     {
         return $this->belongsTo(User::class, 'deleted_by');
     }
 
+    /**
+     * Accessor for formatting the created_at attribute.
+     *
+     * @return Attribute
+     */
     public function createdAt() : Attribute
     {
         return Attribute::make(get: fn($value) => $value ? Carbon::parse($value)
-                                                                 ->format(self::DATE_FORMAT) : null);
+                                                                 ->format(config('ehr.date_and_time_format')) : null);
     }
 
+    /**
+     * Accessor for the updated_at attribute, formatting the value
+     * using the specified date format if it exists.
+     *
+     * @return Attribute
+     */
     public function updatedAt() : Attribute
     {
         return Attribute::make(get: fn($value) => $value ? Carbon::parse($value)
-                                                                 ->format(self::DATE_FORMAT) : null);
+                                                                 ->format(config('ehr.date_and_time_format')) : null);
     }
 
+    /**
+     * Accessor to format the deleted at timestamp.
+     *
+     * @return Attribute
+     */
     public function deletedAt() : Attribute
     {
         return Attribute::make(get: fn($value) => $value ? Carbon::parse($value)
-                                                                 ->format(self::DATE_FORMAT) : null);
+                                                                 ->format(config('ehr.date_and_time_format')) : null);
     }
 
+    /**
+     * Configure the activity log options for the model.
+     *
+     * @return LogOptions
+     */
     public function getActivitylogOptions() : LogOptions
     {
         return LogOptions::defaults()
