@@ -4,6 +4,7 @@ use App\Enums\AppointmentStatus;
 use App\Livewire\Forms\AppointmentForm;
 use App\Models\AppointmentUser;
 use App\Models\Patient;
+use App\Models\User;
 use Flux\Flux;
 use Illuminate\Support\Carbon;
 use Livewire\Volt\Component;
@@ -13,6 +14,7 @@ new class extends Component {
     public AppointmentForm $form;
     public array           $selected_user_ids = [];
     public string          $modal             = "";
+    public string          $message           = "";
 
     public function mount(Patient $patient) : void
     {
@@ -32,21 +34,45 @@ new class extends Component {
 
     public function save() : void
     {
+        // check if the users are conflicting
+        $appointment_users = new AppointmentUser();
+        $has_conflict = $appointment_users->checkScheduleConflicts($this->selected_user_ids,
+            Carbon::parse($this->form->date.' '.$this->form->time), $this->form->length);
+
+        if (is_array($has_conflict)) {
+            $this->message = "<div class=\"text-xs p-2 m-2 text-white bg-red-700 rounded-sm font-bold\">The following users already have appointments at this time: <p>".collect($has_conflict)
+                    ->map(function (User $user) {
+                        return $user->full_name_extended;
+                    })
+                    ->implode("</p><p>")."</p></div>";
+            return;
+        }
+
+        // try and save the appointment
         $appointment = $this->form->save();
+
+        // check for results
         if ($appointment->exists) {
-            // success
+
+            // set the success messages
             $message = "Successfully created appointment.";
             $heading = "Success";
             $variant = "success";
 
-            $appointment_users = new AppointmentUser();
+            // reset the thing
+            $this->form->resetExcept('patient');
+            $this->message = "";
+            $this->selected_user_ids = [];
+
+            // sync our users
             $appointment_users->syncUsers($appointment->id, $this->selected_user_ids);
 
+            // refresh and close
             $this->dispatch('appointments.index:refresh');
-            Flux::modal('create-modal')
+            Flux::modal($this->modal)
                 ->close();
         } else {
-            // error
+            // set the error messages
             $message = "Error creating appointment. Please contact administrator.";
             $heading = "Error";
             $variant = "danger";
@@ -63,6 +89,9 @@ new class extends Component {
         class="min-w-1/3"
         variant="flyout"
 >
+    @if($message != "")
+        {!! $message !!}
+    @endif
     {{-- title, type, and status --}}
     <div class="flex flex-row gap-4">
         <div class="flex-1/2">
