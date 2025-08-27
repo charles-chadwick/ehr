@@ -35,6 +35,7 @@ class PatientForm extends Form
 
     public function save() : Patient
     {
+        $this->patient = new Patient();
         $this->validate();
 
         try {
@@ -48,7 +49,9 @@ class PatientForm extends Form
                 'nickname'        => $this->nickname,
                 'gender'          => $this->gender,
                 'gender_identity' => $this->gender_identity,
-                'date_of_birth'   => $this->date_of_birth
+                'date_of_birth'   => $this->date_of_birth,
+                'email'           => $this->email,
+                'password'        => bcrypt($this->password)
             ]);
 
         } catch (Exception $e) {
@@ -72,7 +75,8 @@ class PatientForm extends Form
                 'nickname'        => $this->nickname,
                 'gender'          => $this->gender,
                 'gender_identity' => $this->gender_identity,
-                'date_of_birth'   => $this->date_of_birth
+                'date_of_birth'   => $this->date_of_birth,
+                'email'           => $this->email
             ];
 
             if (!empty($validated['password'] ?? null)) {
@@ -98,7 +102,7 @@ class PatientForm extends Form
             ],
             'prefix'                => 'nullable|max:5',
             'first_name'            => 'required|max:255',
-            'middle_name'           => 'required|max:255',
+            'middle_name'           => 'nullable|max:255',
             'last_name'             => 'required|max:255',
             'suffix'                => 'nullable|max:5',
             'nickname'              => 'nullable|max:255',
@@ -108,8 +112,8 @@ class PatientForm extends Form
             ],
             'gender_identity'       => 'nullable|max:255',
             'date_of_birth'         => 'date|before:today',
-            'password'              => 'nullable|string|min:1|max:255|confirmed',
-            'password_confirmation' => 'nullable|string|min:1|max:255'
+            'password'              => $this->patient->id ? 'nullable' : 'required'.'|string|min:1|max:255|confirmed',
+            'password_confirmation' => $this->patient->id ? 'nullable' : 'required'.'|string|min:1|max:255'
         ];
     }
 }

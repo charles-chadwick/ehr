@@ -4,7 +4,6 @@ use App\Enums\PatientGender;
 use App\Enums\PatientStatus;
 use App\Livewire\Forms\PatientForm;
 use App\Livewire\Traits\HasAvatarUpload;
-use App\Livewire\Traits\HasDocumentUpload;
 use App\Models\Patient;
 use Flux\Flux;
 use Livewire\Attributes\On;
@@ -20,26 +19,16 @@ new class extends Component {
     public Patient     $patient;
     public string      $modal = "";
 
-    #[On('patients.update:load')]
-    public function load(Patient $patient) : void
+    public function save() : void
     {
-        $this->patient = $patient;
-        $this->form->patient = $patient;
-        $this->form->setPatient($patient);
-        $this->form->password = "";
-        $this->avatar_url = $patient->avatar;
-    }
-
-    public function update() : void
-    {
-        $patient = $this->form->update();
+        $patient = $this->form->save();
 
         if ($patient->exists) {
 
             $this->saveAvatar($patient);
 
             // success
-            $message = "Successfully updated patient.";
+            $message = "Successfully created patient.";
             $heading = "Success";
             $variant = "success";
 
@@ -48,7 +37,7 @@ new class extends Component {
                 ->close();
         } else {
             // error
-            $message = "Error updating patient. Please contact administrator.";
+            $message = "Error creating patient. Please contact administrator.";
             $heading = "Error";
             $variant = "danger";
         }
@@ -58,7 +47,7 @@ new class extends Component {
 
 }; ?>
 <form
-        wire:submit="update"
+        wire:submit="save"
         name="patient-form"
         class="min-w-1/3"
         variant="flyout"
@@ -214,9 +203,8 @@ new class extends Component {
                 <img
                         class="flex-none w-24 h-24  rounded-full object-cover mr-4"
                         src="{{ $avatar_url }}"
-                        alt="{{ $patient->full_name_extended }}"
-                        title="{{ $patient->full_name_extended }}"
                         size="md"
+                        alt="Avatar"
                 />
                 <a
                         wire:click="removeImage"
