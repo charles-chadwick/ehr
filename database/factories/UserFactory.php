@@ -26,11 +26,10 @@ class UserFactory extends Factory
             'email_verified_at'                          => Carbon::now(),
             'password'                                   => bcrypt($this->faker->password()),
             'remember_token'                             => Str::random(10),
-            'created_at'                                 => $this->faker->word(),
-            'updated_at'                                 => $this->faker->word(),
-            'created_by' => User::factory(),
-            'updated_by' => User::factory(),
-            'deleted_by' => User::factory(),
+            'created_at'                                 => Carbon::now(),
+            'updated_at'                                 => Carbon::now(),
+            'created_by' => $this->faker->numberBetween(1, 10),
+
         ];
     }
 }

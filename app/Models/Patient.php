@@ -33,7 +33,8 @@ class Patient extends Base implements AuthenticatableContract, AuthorizableContr
         'gender',
         'gender_identity',
         'email',
-        'password'
+        'password',
+        'id'
     ];
 
     protected function casts() : array

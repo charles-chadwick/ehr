@@ -2,9 +2,11 @@
 
 use App\Livewire\Forms\AppointmentForm;
 use App\Models\Patient;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Livewire\Volt\Volt;
+use function Pest\Laravel\actingAs;
 
 uses(RefreshDatabase::class);
 
@@ -15,10 +17,11 @@ it('prefills patient and default date/time on mount', function () {
     // Freeze time to ensure deterministic "nextWeekday at 8:00"
     Carbon::setTestNow(Carbon::parse('2025-01-01 12:00:00')); // Wednesday
 
-    // Replace with your actual view name (e.g., 'appointments.create')
-    $component = Volt::test('appointments.create')->withSession([
+    // Replace with your actual view name (e.g., 'appointments.create')\
+    actingAs(User::factory()->create())->withSession([
         '_token' => csrf_token() ?: Str::random(40),
     ]);
+    $component = Volt::test('appointments.create');
     $expected = Carbon::today()->nextWeekday()->setHour(8)->setMinute(0);
 
     $component
