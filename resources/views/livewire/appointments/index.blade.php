@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Livewire\Traits\AppointmentStatusColor;
 use App\Livewire\Traits\Sortable;
 use App\Models\Appointment;
 use App\Models\Patient;
@@ -16,7 +17,7 @@ use Livewire\WithPagination;
 
 new class extends Component {
 
-    use Sortable;
+    use Sortable, AppointmentStatusColor;
 
     public Patient $patient;
 
@@ -27,7 +28,7 @@ new class extends Component {
     }
 
     #[Computed]
-    #[On('appointment.index:refresh')]
+    #[On('appointments.index:refresh')]
     public function appointments() : array|LengthAwarePaginator|_IH_Base_C|_IH_Appointment_C
     {
         return Appointment::where('patient_id', $this->patient->id)
@@ -44,6 +45,10 @@ new class extends Component {
 }; ?>
 
 <div>
+
+    <flux:modal name="appointment-update">
+        <livewire:appointments.update modal="appointment-update" :patient="$patient" />
+    </flux:modal>
 
     {{-- table --}}
     <flux:table :paginate="$this->appointments">
@@ -90,7 +95,8 @@ new class extends Component {
                                 class="link"
                         >
                             <flux:modal.trigger
-                                    name="appointment-update-{{ $appointment }}"
+                                    name="appointment-update"
+                                    wire:click="$dispatch('appointments.update:load', {appointment: {{ $appointment }}})"
                             >{{ $appointment->title }}
                             </flux:modal.trigger>
                         </a>
@@ -101,30 +107,11 @@ new class extends Component {
                     <flux:table.cell>
                         <flux:badge
                                 size="sm"
+                                variant="primary"
+                                color="{{ $this->getStatusColor($appointment->status) }}"
                         >
                             {{ $appointment->status }}
                         </flux:badge>
-                    </flux:table.cell>
-                    <flux:table.cell>
-                        <flux:dropdown
-                                position="bottom"
-                                align="end"
-                        >
-                            <flux:button
-                                    size="sm"
-                                    icon="ellipsis-horizontal"
-                                    variant="ghost"
-                                    inset="top bottom"
-                            ></flux:button>
-                            <flux:navmenu>
-                                <flux:navmenu.item
-                                        href="#"
-                                        icon="user"
-                                >
-                                    {{ __('appointments.go_to_appointment') }}
-                                </flux:navmenu.item>
-                            </flux:navmenu>
-                        </flux:dropdown>
                     </flux:table.cell>
                 </flux:table.row>
             @empty

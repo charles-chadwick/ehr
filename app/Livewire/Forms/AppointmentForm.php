@@ -20,9 +20,14 @@ class AppointmentForm extends Form
     public $title;
     public $description;
 
+    public ?Appointment $appointment;
+
     public function setAppointment(Appointment $appointment) : void
     {
-        $this->fill($appointment->toArray());
+        $this->fill($appointment);
+        $this->appointment = $appointment;
+        $this->date = $appointment->date_and_time->format('Y-m-d');
+        $this->time = $appointment->date_and_time->format('H:i');
     }
 
     public function save() : Appointment
@@ -39,6 +44,29 @@ class AppointmentForm extends Form
                 'title'         => $this->title,
                 'description'   => $this->description,
             ]);
+
+        } catch(Exception $e) {
+            logger()->error($e->getMessage());
+            return new Appointment();
+        }
+    }
+
+    public function update() : Appointment
+    {
+        $this->validate();
+
+        try {
+            $this->appointment->update([
+                'patient_id'    => $this->patient->id,
+                'date_and_time' => Carbon::parse($this->date . ' ' . $this->time)->toDateTimeString(),
+                'length'        => $this->length,
+                'status'        => $this->status,
+                'type'          => $this->type,
+                'title'         => $this->title,
+                'description'   => $this->description,
+            ]);
+
+            return $this->appointment;
 
         } catch(Exception $e) {
             logger()->error($e->getMessage());
