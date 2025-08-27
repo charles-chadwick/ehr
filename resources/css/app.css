@@ -10,7 +10,7 @@
 }
 
 body {
-    @apply text-zinc-800;
+    @apply text-zinc-700;
 }
 a.link {
     @apply text-emerald-600 hover:underline;
