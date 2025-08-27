@@ -4,10 +4,13 @@ namespace App\Livewire\Forms;
 
 use App\Enums\AppointmentStatus;
 use App\Models\Appointment;
+use App\Models\AppointmentUser;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Validation\Rule;
 use Livewire\Form;
+use Throwable;
 
 class AppointmentForm extends Form
 {
@@ -24,10 +27,29 @@ class AppointmentForm extends Form
 
     public function setAppointment(Appointment $appointment) : void
     {
+        $this->resetExcept('patient');
         $this->fill($appointment);
         $this->appointment = $appointment;
         $this->date = $appointment->date_and_time->format('Y-m-d');
         $this->time = $appointment->date_and_time->format('H:i');
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function checkScheduleConflicts(array $user_ids) : string|null
+    {
+        // first see if we have any conflicts
+        $appointment_users = new AppointmentUser();
+        $has_conflict = $appointment_users->checkScheduleConflicts($user_ids,
+            Carbon::parse($this->date.' '.$this->time), $this->length, isset($this->appointment) ? $this->appointment->id : null);
+
+        // if we have a conflict, return the error message
+        if (is_array($has_conflict)) {
+            return view('livewire.appointments.conflict-message', ['users' => collect($has_conflict)])->render();
+        }
+
+        return null;
     }
 
     public function save() : Appointment
@@ -37,7 +59,8 @@ class AppointmentForm extends Form
         try {
             return Appointment::create([
                 'patient_id'    => $this->patient->id,
-                'date_and_time' => Carbon::parse($this->date . ' ' . $this->time)->toDateTimeString(),
+                'date_and_time' => Carbon::parse($this->date.' '.$this->time)
+                                         ->toDateTimeString(),
                 'length'        => $this->length,
                 'status'        => $this->status,
                 'type'          => $this->type,
@@ -45,7 +68,7 @@ class AppointmentForm extends Form
                 'description'   => $this->description,
             ]);
 
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             logger()->error($e->getMessage());
             return new Appointment();
         }
@@ -58,7 +81,8 @@ class AppointmentForm extends Form
         try {
             $this->appointment->update([
                 'patient_id'    => $this->patient->id,
-                'date_and_time' => Carbon::parse($this->date . ' ' . $this->time)->toDateTimeString(),
+                'date_and_time' => Carbon::parse($this->date.' '.$this->time)
+                                         ->toDateTimeString(),
                 'length'        => $this->length,
                 'status'        => $this->status,
                 'type'          => $this->type,
@@ -68,7 +92,7 @@ class AppointmentForm extends Form
 
             return $this->appointment;
 
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             logger()->error($e->getMessage());
             return new Appointment();
         }

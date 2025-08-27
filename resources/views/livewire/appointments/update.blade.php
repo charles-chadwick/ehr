@@ -12,21 +12,34 @@ use Livewire\Volt\Component;
 new class extends Component {
 
     public AppointmentForm $form;
+    public Patient         $patient;
     public array           $selected_user_ids = [];
     public string          $modal             = "";
-    public Patient         $patient;
+    public string          $message           = "";
 
     #[On('appointments.update:load')]
     public function load(Appointment $appointment) : void
     {
+        $this->message = "";
         $this->form->patient = $this->patient;
         $this->form->setAppointment($appointment);
-        $this->selected_user_ids = $appointment->users()->pluck('user_id')->toArray();
+        $this->selected_user_ids = $appointment->users()
+                                               ->pluck('user_id')
+                                               ->toArray();
     }
 
     public function update() : void
     {
+        // check if the users are conflicting
+        $has_conflicts = $this->form->checkScheduleConflicts($this->selected_user_ids);
+        if ($has_conflicts !== null) {
+            $this->message = $has_conflicts;
+            return;
+        }
+
+        // update the appointment
         $appointment = $this->form->update();
+
         if ($appointment->exists) {
             // success
             $message = "Successfully created appointment.";
@@ -57,6 +70,11 @@ new class extends Component {
         class="min-w-1/3"
         variant="flyout"
 >
+    {{-- message --}}
+    @if($message != "")
+        {!! $message !!}
+    @endif
+
     {{-- title, type, and status --}}
     <div class="flex flex-row gap-4">
         <div class="flex-1/2">

@@ -34,17 +34,13 @@ new class extends Component {
 
     public function save() : void
     {
-        // check if the users are conflicting
-        $appointment_users = new AppointmentUser();
-        $has_conflict = $appointment_users->checkScheduleConflicts($this->selected_user_ids,
-            Carbon::parse($this->form->date.' '.$this->form->time), $this->form->length);
+        // clear out the message
+        $this->message = "";
 
-        if (is_array($has_conflict)) {
-            $this->message = "<div class=\"text-xs p-2 m-2 text-white bg-red-700 rounded-sm font-bold\">The following users already have appointments at this time: <p>".collect($has_conflict)
-                    ->map(function (User $user) {
-                        return $user->full_name_extended;
-                    })
-                    ->implode("</p><p>")."</p></div>";
+        // check if the users are conflicting
+        $has_conflicts = $this->form->checkScheduleConflicts($this->selected_user_ids);
+        if ($has_conflicts !== null) {
+            $this->message = $has_conflicts;
             return;
         }
 
@@ -65,6 +61,7 @@ new class extends Component {
             $this->selected_user_ids = [];
 
             // sync our users
+            $appointment_users = new AppointmentUser();
             $appointment_users->syncUsers($appointment->id, $this->selected_user_ids);
 
             // refresh and close
