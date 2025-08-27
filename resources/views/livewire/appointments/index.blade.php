@@ -46,25 +46,26 @@ new class extends Component {
 }; ?>
 
 <div>
-
     <flux:modal name="appointment-update">
         <livewire:appointments.update
                 modal="appointment-update"
                 :patient="$patient"
         />
     </flux:modal>
-
     <ul
             role="list"
             class="divide-y divide-gray-100 dark:divide-white/5  text-sm"
     >
         @forelse($appointments as $appointment)
-            <li wire:key="appointment-{{ $appointment->id }}" class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5 sm:flex-nowrap">
+            <li
+                    wire:key="appointment-{{ $appointment->id }}"
+                    class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5 sm:flex-nowrap"
+            >
                 <div>
                     <p class="font-semibold">
                         <a
                                 href="#"
-                                class="link"
+                                class="link font-bold"
                         >
                             <flux:modal.trigger
                                     name="appointment-update"
@@ -79,7 +80,10 @@ new class extends Component {
                     </div>
                 </div>
                 {{-- users --}}
-                <livewire:users.show-list wire:key="show-list-{{ uniqid() }}" :users="$appointment->users" />
+                <livewire:users.show-list
+                        wire:key="show-list-{{ uniqid() }}"
+                        :users="$appointment->users"
+                />
             </li>
         @empty
             <li class="text-center">{{ __('ehr.no_records', ['items' => __('appointments.appointments')]) }}</li>
