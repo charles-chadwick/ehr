@@ -31,7 +31,8 @@ new class extends Component {
     #[On('appointments.index:refresh')]
     public function appointments() : array|LengthAwarePaginator|_IH_Base_C|_IH_Appointment_C
     {
-        return Appointment::with('users')->where('patient_id', $this->patient->id)
+        return Appointment::with('users')
+                          ->where('patient_id', $this->patient->id)
                           ->orderBy($this->sort_by, $this->sort_direction)
                           ->paginate(5);
     }
@@ -53,50 +54,14 @@ new class extends Component {
         />
     </flux:modal>
 
-    {{-- table --}}
-    <flux:table :paginate="$this->appointments">
-        <flux:table.columns>
-            <flux:table.column
-                    sortable
-                    :sorted="$sort_by === 'date_and_time'"
-                    :direction="$sort_direction"
-                    wire:click="sort('date_and_time')"
-            >{{ __('appointments.date_and_time') }}
-            </flux:table.column>
-            <flux:table.column
-                    sortable
-                    :sorted="$sort_by === 'title'"
-                    :direction="$sort_direction"
-                    wire:click="sort('title')"
-            >{{ __('appointments.title') }}
-            </flux:table.column>
-            <flux:table.column
-                    sortable
-                    :sorted="$sort_by === 'type'"
-                    :direction="$sort_direction"
-                    wire:click="sort('type')"
-            >{{ __('appointments.type') }}
-            </flux:table.column>
-            <flux:table.column
-                    sortable
-                    :sorted="$sort_by === 'status'"
-                    :direction="$sort_direction"
-                    wire:click="sort('status')"
-            >{{ __('appointments.status') }}
-            </flux:table.column>
-            <flux:table.column
-
-            >{{ __('users.users') }}
-            </flux:table.column>
-        </flux:table.columns>
-
-        <flux:table.rows>
-            @forelse ($appointments as $appointment)
-                <flux:table.row :key="$appointment->id">
-                    <flux:table.cell>
-                        {{ $appointment->date_and_time_range }}
-                    </flux:table.cell>
-                    <flux:table.cell>
+    <ul
+            role="list"
+            class="divide-y divide-gray-100 dark:divide-white/5  text-sm"
+    >
+        @forelse($appointments as $appointment)
+            <li wire:key="appointment-{{ $appointment->id }}" class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5 sm:flex-nowrap">
+                <div>
+                    <p class="font-semibold">
                         <a
                                 href="#"
                                 class="link"
@@ -104,37 +69,20 @@ new class extends Component {
                             <flux:modal.trigger
                                     name="appointment-update"
                                     wire:click="$dispatch('appointments.update:load', {appointment: {{ $appointment }}})"
-                            >{{ $appointment->title }}
-                            </flux:modal.trigger>
+                            >{{ $appointment->title }}</flux:modal.trigger>
                         </a>
-                    </flux:table.cell>
-                    <flux:table.cell>
-                        {{ $appointment->type }}
-                    </flux:table.cell>
-                    <flux:table.cell>
-                        <flux:badge
-                                size="sm"
-                                variant="primary"
-                                color="{{ $this->getStatusColor($appointment->status) }}"
-                        >
-                            {{ $appointment->status }}
-                        </flux:badge>
-                    </flux:table.cell>
-                    <flux:table.cell>
-                        <livewire:users.show-list :users="$appointment->users" />
-                    </flux:table.cell>
-                </flux:table.row>
-            @empty
-                <flux:table.row>
-                    <flux:table.cell
-                            colspan="5"
-                            class="text-center"
-                    >
-                        {{ __('ehr.no_records', ['items' => __('appointments.appointments')]) }}
-                    </flux:table.cell>
-                </flux:table.row>
-            @endforelse
-        </flux:table.rows>
-
-    </flux:table>
+                    </p>
+                    <div class="mt-1 flex items-center gap-x-2">
+                        <p>
+                            {{ $appointment->date_and_time_range }}
+                        </p>
+                    </div>
+                </div>
+                {{-- users --}}
+                <livewire:users.show-list wire:key="show-list-{{ uniqid() }}" :users="$appointment->users" />
+            </li>
+        @empty
+            <li class="text-center">{{ __('ehr.no_records', ['items' => __('appointments.appointments')]) }}</li>
+        @endforelse
+    </ul>
 </div>

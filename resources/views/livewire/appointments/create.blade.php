@@ -14,10 +14,10 @@ new class extends Component {
     public array           $selected_user_ids = [];
     public string          $modal             = "";
 
-    public function mount() : void
+    public function mount(Patient $patient) : void
     {
         // set the patient
-        $this->form->patient = Patient::find(12);
+        $this->form->patient = $patient;
 
         // set the default date and time for the next weekday at 8am
         $date = Carbon::today()

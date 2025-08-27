@@ -9,13 +9,16 @@ new class extends Component {
 
 }; ?>
 
-<div class="flex flex-wrap gap-2 mt-1">
+<dl class="flex w-full flex-none justify-between gap-x-1 sm:w-auto">
     @foreach ($users as $user)
-        <flux:avatar
-                tooltip="{{ $user->full_name_extended }}"
-                src="{{ $user->avatar }}"
-                size="xs"
-                class="shadow-xs border border-zinc-200"
-        />
+        <dd wire:key="user-{{ $user->id.'-'.uniqid() }}">
+            <img
+                    src="{{ $user->avatar }}"
+                    alt="Emma Dorsey"
+                    class="size-6 rounded-full bg-gray-50 outline-2 outline-white dark:bg-gray-800 dark:outline-gray-900"
+            />
+        </dd>
     @endforeach
-</div>
+
+
+</dl>
