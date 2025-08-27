@@ -23,7 +23,7 @@ new class extends Component {
                 <h2 class="font-semibold text-sm mb-2">
                     {{ __('appointments.appointments') }}
                 </h2>
-                <flux:modal name="create-appointment">
+                <flux:modal class="md:max-w-1/2 md:w-1/2 sm:max-w-full sm:w-3/4" name="create-appointment">
                     <livewire:appointments.create
                             modal="create-appointment"
                             :patient="$patient"
@@ -54,7 +54,10 @@ new class extends Component {
                 <h2 class="font-semibold text-sm mb-2">
                     {{ __('encounters.encounters') }}
                 </h2>
-                <flux:modal class="max-w-1/2 w-1/2" name="create-encounter">
+                <flux:modal
+                        class="md:max-w-1/2 md:w-1/2 sm:max-w-full sm:w-3/4"
+                        name="create-encounter"
+                >
                     <livewire:encounters.create
                             modal="create-encounter"
                             :patient="$patient"
@@ -65,7 +68,7 @@ new class extends Component {
                     <flux:menu>
                         <flux:menu.item icon="plus">
                             <flux:modal.trigger name="create-encounter">
-                                {{ __('encounters.schedule_new') }}
+                                {{ __('ehr.create_new', ['item' => __('encounters.encounter')]) }}
                             </flux:modal.trigger>
                         </flux:menu.item>
                     </flux:menu>
