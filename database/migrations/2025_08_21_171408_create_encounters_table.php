@@ -14,11 +14,11 @@ return new class extends Migration {
             $table->foreignIdFor(Patient::class);
             $table->dateTime('date_of_service');
             $table->string('type');
-            $table->string('title');
             $table->string('status');
+            $table->string('title');
+            $table->text('content');
             $table->foreignIdFor(User::class, 'signed_by')->nullable();
             $table->dateTime('signed_at')->nullable();
-            $table->text('content');
             $table->unsignedBigInteger('created_by')->default(1);
             $table->unsignedBigInteger('updated_by')->default(1)->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();

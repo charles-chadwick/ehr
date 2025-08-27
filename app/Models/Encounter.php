@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\EncounterStatus;
+use App\Enums\EncounterType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,27 +24,30 @@ class Encounter extends Base
         'content'
     ];
 
+    protected function casts() : array
+    {
+        return [
+            'date_of_service' => 'datetime',
+            'type'            => EncounterType::class,
+            'status'          => EncounterStatus::class,
+            'signed_at'       => 'datetime',
+        ];
+    }
+
+    /**
+     * Define a relationship to the patient.
+     */
     public function patient() : BelongsTo
     {
         return $this->belongsTo(Patient::class);
     }
 
+    /**
+     * Define a relationship to the user who signed the encounter.
+     */
     public function signedBy() : BelongsTo
     {
         return $this->belongsTo(User::class, 'signed_by');
-    }
-
-    protected function casts() : array
-    {
-        return [
-            'date_of_service' => 'datetime',
-        ];
-    }
-
-    protected function signedAt() : Attribute {
-        return Attribute::make(
-            get: fn($value) => Carbon::parse($value)->format(config('ehr.long_date_format'))
-        );
     }
 
 }
