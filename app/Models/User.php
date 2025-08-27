@@ -29,6 +29,20 @@ class User extends Base implements AuthenticatableContract, AuthorizableContract
         'remember_token',
     ];
 
+    protected function casts() : array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password'          => 'hashed',
+        ];
+    }
+
+    /**
+     * Define a many-to-many relationship with the Appointment model.
+     * Uses a custom pivot model AppointmentUser.
+     * Includes pivot columns 'deleted_at' and timestamps.
+     * Filters results to exclude records with a non-null 'deleted_at' value.
+     */
     public function appointments() : BelongsToMany
     {
         return $this->belongsToMany(Appointment::class, 'appointments_users')
@@ -38,13 +52,4 @@ class User extends Base implements AuthenticatableContract, AuthorizableContract
                     ->wherePivotNull('deleted_at');
 
     }
-
-    protected function casts() : array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
-        ];
-    }
-
 }

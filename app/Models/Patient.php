@@ -21,9 +21,6 @@ class Patient extends Base implements AuthenticatableContract, AuthorizableContr
     use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
     use HasFactory, HasAvatar, IsPerson;
 
-    // Define a date format so Eloquent doesn't require a DB connection to resolve it.
-    protected $dateFormat = 'Y-m-d H:i:s';
-
     protected $fillable = [
         'status',
         'prefix',
@@ -48,14 +45,26 @@ class Patient extends Base implements AuthenticatableContract, AuthorizableContr
         ];
     }
 
+    /**
+     * Get the appointments for the patient.
+     * @return HasMany
+     */
     public function appointments() : HasMany {
         return $this->hasMany(Appointment::class);
     }
 
+    /**
+     * Get the patient's date of birth in the format specified in the config.'
+     * @return string
+     */
     public function getDOBAttribute() : string {
         return Carbon::parse($this->attributes['date_of_birth'])->format(config('ehr.dob_format'));
     }
 
+    /**
+     * Get the patient's age in the past years and months.
+     * @return string
+     **/
     public function getAgeAttribute() : string
     {
         $now = Carbon::now();
