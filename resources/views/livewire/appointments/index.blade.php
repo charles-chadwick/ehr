@@ -31,7 +31,7 @@ new class extends Component {
     #[On('appointments.index:refresh')]
     public function appointments() : array|LengthAwarePaginator|_IH_Base_C|_IH_Appointment_C
     {
-        return Appointment::where('patient_id', $this->patient->id)
+        return Appointment::with('users')->where('patient_id', $this->patient->id)
                           ->orderBy($this->sort_by, $this->sort_direction)
                           ->paginate(5);
     }
@@ -47,7 +47,10 @@ new class extends Component {
 <div>
 
     <flux:modal name="appointment-update">
-        <livewire:appointments.update modal="appointment-update" :patient="$patient" />
+        <livewire:appointments.update
+                modal="appointment-update"
+                :patient="$patient"
+        />
     </flux:modal>
 
     {{-- table --}}
@@ -81,6 +84,10 @@ new class extends Component {
                     wire:click="sort('status')"
             >{{ __('appointments.status') }}
             </flux:table.column>
+            <flux:table.column
+
+            >{{ __('users.users') }}
+            </flux:table.column>
         </flux:table.columns>
 
         <flux:table.rows>
@@ -113,6 +120,9 @@ new class extends Component {
                             {{ $appointment->status }}
                         </flux:badge>
                     </flux:table.cell>
+                    <flux:table.cell>
+                        <livewire:users.show-list :users="$appointment->users" />
+                    </flux:table.cell>
                 </flux:table.row>
             @empty
                 <flux:table.row>
@@ -120,7 +130,7 @@ new class extends Component {
                             colspan="5"
                             class="text-center"
                     >
-                        {{ __('appointments.no_appointments') }}
+                        {{ __('ehr.no_records', ['items' => __('appointments.appointments')]) }}
                     </flux:table.cell>
                 </flux:table.row>
             @endforelse

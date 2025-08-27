@@ -12,7 +12,6 @@ new class extends Component {
 <div class="flex flex-wrap gap-2 mt-1">
     @foreach ($users as $user)
         <flux:avatar
-                initials="{{ $user->full_name_extended }}"
                 tooltip="{{ $user->full_name_extended }}"
                 src="{{ $user->avatar }}"
                 size="xs"

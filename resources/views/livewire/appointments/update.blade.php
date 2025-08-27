@@ -21,9 +21,10 @@ new class extends Component {
     {
         $this->form->patient = $this->patient;
         $this->form->setAppointment($appointment);
+        $this->selected_user_ids = $appointment->users()->pluck('user_id')->toArray();
     }
 
-    public function save() : void
+    public function update() : void
     {
         $appointment = $this->form->update();
         if ($appointment->exists) {
@@ -51,7 +52,7 @@ new class extends Component {
 
 }; ?>
 <form
-        wire:submit="save"
+        wire:submit="update"
         name="appointment-form"
         class="min-w-1/3"
         variant="flyout"
