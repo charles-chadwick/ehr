@@ -3,12 +3,18 @@
 use App\Enums\PatientGender;
 use App\Enums\PatientStatus;
 use App\Livewire\Forms\PatientForm;
+use App\Livewire\Traits\HasAvatarUpload;
+use App\Livewire\Traits\HasDocumentUpload;
 use App\Models\Patient;
 use Flux\Flux;
 use Livewire\Attributes\On;
 use Livewire\Volt\Component;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 new class extends Component {
+
+    use HasAvatarUpload;
 
     public PatientForm $form;
     public Patient     $patient;
@@ -20,12 +26,25 @@ new class extends Component {
         $this->form->patient = $this->patient;
         $this->form->setPatient($patient);
         $this->form->password = "";
+        $this->avatar_url = $this->patient->avatar;
     }
 
     public function update() : void
     {
         $patient = $this->form->update();
+
         if ($patient->exists) {
+
+            if ($this->avatar_path !== "") {
+                try {
+                    $this->patient->addMedia(storage_path('app/public/'.$this->avatar_path))
+                                  ->preservingOriginal()
+                                  ->toMediaCollection('avatars');
+                } catch (FileDoesNotExist|FileIsTooBig $e) {
+                    Flux::toast("Error saving document", heading: "Error", variant: "error", position: "top-right");
+                }
+            }
+
             // success
             $message = "Successfully updated patient.";
             $heading = "Success";
@@ -41,7 +60,7 @@ new class extends Component {
             $variant = "danger";
         }
 
-        Flux::toast($message, heading: $heading, variant: $variant);
+        Flux::toast($message, heading: $heading, variant: $variant, position: "top-right");
     }
 
 }; ?>
@@ -52,6 +71,7 @@ new class extends Component {
         variant="flyout"
 >
 
+    {{-- name --}}
     <div class="flex gap-4 py-4">
         <div class="w-auto">
             <flux:input
@@ -76,6 +96,7 @@ new class extends Component {
         </div>
     </div>
 
+    {{-- salutations --}}
     <div class="flex gap-4 py-4">
         <div class="w-auto">
             <flux:input
@@ -133,10 +154,9 @@ new class extends Component {
                     wire:model="form.gender_identity"
             />
         </div>
-
     </div>
 
-    {{-- email, status, avatar --}}
+    {{-- email, status --}}
     <div class="flex gap-4 py-4">
 
         {{-- status --}}
@@ -188,6 +208,40 @@ new class extends Component {
             class="text-xs text-center"
     >Only fill out these fields if you are setting or changing the password.
     </flux:callout.text>
+
+    {{-- avatar --}}
+    <div
+            id="avatar"
+    >
+        <div class="mt-4">
+
+            @if($avatar_url)
+                <flux:label for="avatar">Avatar</flux:label>
+
+                <img
+                        class="flex-none w-24 h-24  rounded-full object-cover mr-4"
+                        src="{{ $avatar_url }}"
+                        alt="{{ $patient->full_name_extended }}"
+                        title="{{ $patient->full_name_extended }}"
+                        size="md"
+                />
+                <a
+                        wire:click="removeImage"
+                        href="#"
+                        class="text-xs text-gray-500 truncate max-w-xs"
+                >Remove</a>
+            @else
+                <livewire:documents.upload
+                        directory="avatars"
+                        disk="public"
+                        event="file-uploaded"
+                        accept="image/*"
+                        label="Avatar"
+                        wire:key="avatar-uploader"
+                />
+            @endif
+        </div>
+    </div>
 
     {{-- submit button --}}
     <div class="px-2 mt-4 text-center">

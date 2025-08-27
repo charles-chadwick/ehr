@@ -78,6 +78,7 @@ class PatientForm extends Form
             if (!empty($validated['password'] ?? null)) {
                 $patient_data['password'] = bcrypt($validated['password']);
             }
+
             $this->patient->update($patient_data);
 
             return $this->patient;
