@@ -89,4 +89,5 @@ new class extends Component {
             <li class="text-center">{{ __('ehr.no_records', ['items' => __('appointments.appointments')]) }}</li>
         @endforelse
     </ul>
+    {{ $appointments->links() }}
 </div>
