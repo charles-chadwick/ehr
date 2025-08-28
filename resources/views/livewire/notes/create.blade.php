@@ -10,7 +10,12 @@ new class extends Component {
     public NoteForm $form;
     public $model;
 
-    private function save() : void
+    public function mount( $model) : void
+    {
+        $this->form->model = $model;
+    }
+
+    public function save() : void
     {
         // try and save the note
         $note = $this->form->save();
@@ -34,6 +39,7 @@ new class extends Component {
             $variant = "danger";
         }
         Flux::toast($message, heading: $heading, variant: $variant);
+        $this->dispatch('notes.index:refresh');
     }
 }; ?>
 
@@ -65,6 +71,7 @@ new class extends Component {
     <div class="mt-4 text-center">
         <flux:button
                 color="emerald"
+                type="submit"
                 variant="primary"
         >
             {{ __('ehr.save') }}
