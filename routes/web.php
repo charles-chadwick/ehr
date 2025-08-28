@@ -13,3 +13,4 @@ Volt::route('patients', 'patients.index')
 
 Volt::route('encounters/{patient}/create', 'encounters.create')->name('encounters.create');
 Volt::route('encounters/{encounter}/signed', 'encounters.signed')->name('encounters.view');
+Volt::route('diagnosis/search', 'diagnosis.search')->name('diagnosis.search');
