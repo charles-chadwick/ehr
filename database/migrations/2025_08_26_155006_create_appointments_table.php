@@ -17,6 +17,9 @@ return new class extends Migration {
             $table->string('type');
             $table->string('title');
             $table->string('description')->nullable();
+            $table->unsignedBigInteger('created_by')->default(1);
+            $table->unsignedBigInteger('updated_by')->default(1)->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
