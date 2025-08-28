@@ -65,8 +65,6 @@ new class extends Component {
             $variant = "danger";
             Flux::toast($message, heading: $heading, variant: $variant);
         }
-
-
     }
 }; ?>
 

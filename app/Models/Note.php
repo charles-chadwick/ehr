@@ -25,6 +25,11 @@ class Note extends Base
         ];
     }
 
+    /**
+     * Get the parent notable model.
+     *
+     * @return MorphTo
+     */
     public function notable() : MorphTo
     {
         return $this->morphTo();
