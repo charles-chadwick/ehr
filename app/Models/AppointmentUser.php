@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Traits\TracksUsers;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class AppointmentUser extends Pivot
 {
+    use TracksUsers;
+
     protected $table = 'appointments_users';
 
     protected $fillable = [
