@@ -10,6 +10,7 @@ use App\Models\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Seeder;
+use Spatie\Activitylog\Facades\CauserResolver;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
@@ -62,7 +63,7 @@ class PatientSeeder extends Seeder
             $admin = User::where('role', '!=', 'Administrator')
                          ->inRandomOrder()
                          ->first();
-
+            CauserResolver::setCauser($admin);
             $first_name = array_shift($name);
             $last_name = array_pop($name);
 
@@ -119,6 +120,7 @@ class PatientSeeder extends Seeder
                                 'status'        => $status,
                                 'created_at'    => $created_at,
                                 'updated_at'    => $created_at,
+                                'created_by'    => $admin->id,
                             ]);
 
             $avatar_path = database_path('src/avatars/'.str_replace(' ', '-', $character['id']).'.jpeg');

@@ -7,6 +7,7 @@ use App\Models\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Seeder;
+use Spatie\Activitylog\Facades\CauserResolver;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
@@ -55,7 +56,7 @@ class UserSeeder extends Seeder
         ]);
         $already_in = [];
         $counter = 0;
-
+        CauserResolver::setCauser($admin);
         foreach ($characters as $character) {
 
             if (in_array($character['name'], $already_in)) {
