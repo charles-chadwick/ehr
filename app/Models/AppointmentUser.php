@@ -56,7 +56,6 @@ class AppointmentUser extends Pivot
                 'user_id' => $user_id,
             ]);
         });
-
     }
 
     /**
