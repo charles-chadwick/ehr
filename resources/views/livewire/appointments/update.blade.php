@@ -42,8 +42,8 @@ new class extends Component {
 
         if ($appointment->exists) {
             // success
-            $message = "Successfully created appointment.";
-            $heading = "Success";
+            $message = __('ehr.success_message', ['action' => __('ehr.action_updated'), 'item' => __('appointments.appointment')]);
+            $heading = __('ehr.success_heading');
             $variant = "success";
 
             $appointment_users = new AppointmentUser();
@@ -54,13 +54,12 @@ new class extends Component {
                 ->close();
         } else {
             // error
-            $message = "Error creating appointment. Please contact administrator.";
-            $heading = "Error";
+            $message = __('ehr.error_message', ['action' => __('ehr.action_updating'), 'item' => __('appointments.appointment')]);
+            $heading = __('ehr.error_heading');
             $variant = "danger";
         }
 
         Flux::toast($message, heading: $heading, variant: $variant);
-
     }
 
 }; ?>

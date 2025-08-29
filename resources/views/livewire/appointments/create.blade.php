@@ -38,6 +38,7 @@ new class extends Component {
         $this->message = "";
 
         // check if the users are conflicting
+
         $has_conflicts = $this->form->checkScheduleConflicts($this->selected_user_ids);
         if ($has_conflicts !== null) {
             $this->message = $has_conflicts;
@@ -51,18 +52,18 @@ new class extends Component {
         if ($appointment->exists) {
 
             // set the success messages
-            $message = "Successfully created appointment.";
-            $heading = "Success";
+            $message = __('ehr.success_message', ['action' => __('ehr.action_created'), 'item' => __('appointments.appointment')]);
+            $heading = __('ehr.success_heading');
             $variant = "success";
+
+            // sync our users
+            $appointment_users = new AppointmentUser();
+            $appointment_users->syncUsers($appointment->id, $this->selected_user_ids);
 
             // reset the thing
             $this->form->resetExcept('patient');
             $this->message = "";
             $this->selected_user_ids = [];
-
-            // sync our users
-            $appointment_users = new AppointmentUser();
-            $appointment_users->syncUsers($appointment->id, $this->selected_user_ids);
 
             // refresh and close
             $this->dispatch('appointments.index:refresh');
@@ -70,8 +71,8 @@ new class extends Component {
                 ->close();
         } else {
             // set the error messages
-            $message = "Error creating appointment. Please contact administrator.";
-            $heading = "Error";
+            $message = __('ehr.error_message', ['action' => __('ehr.action_created'), 'item' => __('appointments.appointment')]);
+            $heading = __('ehr.error_heading');
             $variant = "danger";
         }
 

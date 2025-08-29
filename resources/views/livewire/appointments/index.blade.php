@@ -34,7 +34,7 @@ new class extends Component {
         return Appointment::with('users')
                           ->where('patient_id', $this->patient->id)
                           ->orderBy($this->sort_by, $this->sort_direction)
-                          ->paginate(2);
+                          ->paginate(3);
     }
 
     public function with() : array
