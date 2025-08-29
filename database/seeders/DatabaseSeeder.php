@@ -2,12 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Enums\UserRole;
-use App\Models\Patient;
+use Illuminate\Database\Seeder;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\User;
-use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,8 +13,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run() : void
     {
-//        (new UserSeeder())->run();
-//        (new PatientSeeder())->run();
+        (new UserSeeder())->run();
+        (new PatientSeeder())->run();
         (new DxSeeder())->run();
     }
 }

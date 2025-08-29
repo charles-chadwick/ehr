@@ -139,8 +139,8 @@ class PatientSeeder extends Seeder
                 echo $e->getMessage();
             }
 
-            if ($counter++ === 200) {
-                die('Dead');
+            if ($counter++ > 200) {
+                continue;
             }
             $already_in[] = $character['name'];
             echo $character['id'].",";
