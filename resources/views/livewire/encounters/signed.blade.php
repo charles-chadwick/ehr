@@ -7,5 +7,5 @@ new class extends Component {
 }; ?>
 
 <div>
-I'M A SIGNED ENOCOUNTER LOL
+I'M A SIGNED ENCOUNTER LOL
 </div>

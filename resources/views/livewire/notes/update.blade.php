@@ -28,8 +28,8 @@ new class extends Component {
 
         if ($note->exists) {
             // success
-            $message = "Successfully created note.";
-            $heading = "Success";
+            $message = __('ehr.success_created', ['item' => __('notes.note')]);
+            $heading = __('ehr.success_heading');
             $variant = "success";
 
             $this->dispatch('notes.index:refresh');
@@ -37,8 +37,8 @@ new class extends Component {
                 ->close();
         } else {
             // error
-            $message = "Error creating note. Please contact administrator.";
-            $heading = "Error";
+            $message = __('ehr.error_updating', ['item' => __('notes.note')]);
+            $heading = __('ehr.error_heading');
             $variant = "danger";
         }
 

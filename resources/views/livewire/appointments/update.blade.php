@@ -42,7 +42,7 @@ new class extends Component {
 
         if ($appointment->exists) {
             // success
-            $message = __('ehr.success_message', ['action' => __('ehr.action_updated'), 'item' => __('appointments.appointment')]);
+            $message = __('ehr.success_updated', ['item' => __('appointments.appointment')]);
             $heading = __('ehr.success_heading');
             $variant = "success";
 
@@ -54,7 +54,7 @@ new class extends Component {
                 ->close();
         } else {
             // error
-            $message = __('ehr.error_message', ['action' => __('ehr.action_updating'), 'item' => __('appointments.appointment')]);
+            $message = __('ehr.error_updated', ['item' => __('appointments.appointment')]);
             $heading = __('ehr.error_heading');
             $variant = "danger";
         }

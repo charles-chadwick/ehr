@@ -37,7 +37,7 @@ new class extends Component {
                         position="bottom"
                         align="end"
                 >
-                    <flux:button icon:trailing="chevron-down">Options</flux:button>
+                    <flux:button icon:trailing="chevron-down">{{ __('ehr.options') }}</flux:button>
                     <flux:menu>
                         <flux:menu.item icon="plus">
                             <flux:modal.trigger name="create-appointment">
@@ -69,7 +69,7 @@ new class extends Component {
                     />
                 </flux:modal>
                 <flux:dropdown>
-                    <flux:button icon:trailing="chevron-down">Options</flux:button>
+                    <flux:button icon:trailing="chevron-down">{{ __('ehr.options') }}</flux:button>
                     <flux:menu
                             position="bottom"
                             align="end"
@@ -110,7 +110,7 @@ new class extends Component {
                         position="bottom"
                         align="end"
                 >
-                    <flux:button icon:trailing="chevron-down">Options</flux:button>
+                    <flux:button icon:trailing="chevron-down">{{ __('ehr.options') }}</flux:button>
                     <flux:menu>
                         <flux:menu.item icon="plus">
                             <flux:modal.trigger name="notes.create">
@@ -146,7 +146,7 @@ new class extends Component {
                         align="end"
                         position="bottom"
                 >
-                    <flux:button icon:trailing="chevron-down">Options</flux:button>
+                    <flux:button icon:trailing="chevron-down">{{ __('ehr.options') }}</flux:button>
                     <flux:menu>
                         <flux:menu.item icon="plus">
                             <flux:modal.trigger name="diagnosis.search">

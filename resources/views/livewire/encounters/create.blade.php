@@ -44,8 +44,8 @@ new class extends Component {
         if ($encounter->exists) {
 
             // set the success messages
-            $message = "Successfully created encounter.";
-            $heading = "Success";
+            $message = __('ehr.success_created', ['item' => __('encounters.encounter')]);
+            $heading = __('ehr.success_heading');
             $variant = "success";
 
             // reset the thing
@@ -60,8 +60,8 @@ new class extends Component {
         } else {
 
             // set the error messages
-            $message = "Error creating encounter. Please contact administrator.";
-            $heading = "Error";
+            $message = __('ehr.error_creating', ['item' => __('encounters.encounter')]);
+            $heading = __('ehr.error_heading');
             $variant = "danger";
             Flux::toast($message, heading: $heading, variant: $variant);
         }

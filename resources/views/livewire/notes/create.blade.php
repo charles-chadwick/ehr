@@ -25,8 +25,8 @@ new class extends Component {
         if ($note->exists) {
 
             // set the success messages
-            $message = "Successfully created note.";
-            $heading = "Success";
+            $message = __('ehr.success_created', ['item' => __('notes.note')]);
+            $heading = __('ehr.success_heading');
             $variant = "success";
 
             // reset the thing
@@ -35,8 +35,8 @@ new class extends Component {
         } else {
 
             // set the error messages
-            $message = "Error creating note. Please contact administrator.";
-            $heading = "Error";
+            $message = __('ehr.error_creating', ['item' => __('notes.note')]);
+            $heading = __('ehr.error_heading');
             $variant = "danger";
         }
         Flux::toast($message, heading: $heading, variant: $variant, position: "top end");

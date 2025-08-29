@@ -28,8 +28,8 @@ new class extends Component {
             $this->saveAvatar($patient);
 
             // success
-            $message = "Successfully created patient.";
-            $heading = "Success";
+            $message = __('ehr.success_created', ['item' => __('patients.patient')]);
+            $heading = __('ehr.success_heading');
             $variant = "success";
 
             $this->dispatch('patients.details:refresh');
@@ -37,8 +37,8 @@ new class extends Component {
                 ->close();
         } else {
             // error
-            $message = "Error creating patient. Please contact administrator.";
-            $heading = "Error";
+            $message = __('ehr.error_creating', ['item' => __('patients.patient')]);
+            $heading = __('ehr.error_heading');
             $variant = "danger";
         }
 
