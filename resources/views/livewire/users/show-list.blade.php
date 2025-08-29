@@ -9,15 +9,64 @@ new class extends Component {
 
 }; ?>
 
-<dl class="flex w-full flex-none justify-between gap-x sm:w-auto">
+<div class="flex w-full flex-none justify-between items-center gap-x sm:w-auto">
+    <flux:avatar.group>
     @foreach ($users as $user)
-        <dd wire:key="user-{{ $user->id.'-'.uniqid() }}">
-            <img
-                    src="{{ $user->avatar }}"
-                    alt="{{ $user->full_name }}"
-                    title="{{ $user->full_name }}"
-                    class="size-6 rounded-full bg-gray-50 outline-2 outline-white dark:bg-gray-800 dark:outline-gray-900"
-            />
-        </dd>
+        <flux:dropdown
+                align="end"
+                gap="10"
+                hover
+                offset="-32"
+                position="bottom"
+                wire:key="user-{{ $user->id.'-'.uniqid() }}"
+        >
+            <button
+                    class="flex items-center gap-3"
+                    type="button"
+            >
+                <flux:avatar
+                        circle
+                        name="{{ $user->full_name }}"
+                        size="sm"
+                        src="{{ $user->avatar }}"
+                />
+            </button>
+
+            <flux:popover class="flex flex-col rounded-xl shadow-xl">
+                <div class="flex gap-2">
+                    <flux:avatar
+                            class="rounded-full"
+                            name="{{ $user->full_name }}"
+                            size="xl"
+                            src="{{ $user->avatar }}"
+                    />
+
+                    <div>
+                        <flux:heading size="lg">{{ $user->full_name }}</flux:heading>
+                        <flux:text size="lg">{{ $user->role }}</flux:text>
+                    </div>
+                </div>
+
+                <div class="flex gap-2 mt-2">
+                    <flux:button
+                            class="flex-1"
+                            icon:class="opacity-75"
+                            icon="check"
+                            size="sm"
+                            variant="outline"
+                    >Visit Profile
+                    </flux:button>
+                    <flux:button
+                            class="flex-1"
+                            icon:class="opacity-75"
+                            icon="chat-bubble-left-right"
+                            size="sm"
+                            variant="primary"
+                    >Message
+                    </flux:button>
+                </div>
+            </flux:popover>
+        </flux:dropdown>
     @endforeach
-</dl>
+    </flux:avatar.group>
+</div>
