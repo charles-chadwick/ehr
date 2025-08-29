@@ -13,21 +13,13 @@ use Livewire\Form;
 class EncounterForm extends Form
 {
     public Patient $patient;
-
     public $date_of_service;
-
     public $type;
-
     public $status;
-
     public $signed_by;
-
     public $signed_at;
-
     public $title;
-
     public $content;
-
     public ?Encounter $encounter;
 
     public function setEncounter(Encounter $encounter): void

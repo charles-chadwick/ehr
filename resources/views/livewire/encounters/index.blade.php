@@ -31,8 +31,8 @@ new class extends Component {
     public function encounters() : LengthAwarePaginator|_IH_Base_C|array
     {
         return Encounter::where('patient_id', $this->patient->id)
-                        ->orderBy($this->sort_by, $this->sort_direction)
-                        ->paginate(5);
+            ->orderBy($this->sort_by, $this->sort_direction)
+            ->paginate(3);
     }
 
     public function with() : array
@@ -44,33 +44,46 @@ new class extends Component {
 }; ?>
 
 <div>
+    <flux:modal name="encounters.update">
+        <livewire:encounters.update
+            modal="encounters.update"
+            :patient="$patient"
+        />
+    </flux:modal>
     <ul
-            role="list"
-            class="divide-y divide-gray-100 dark:divide-white/5  text-sm"
+        role="list"
+        class="list-group"
     >
         @forelse($encounters as $encounter)
             <li
-                    wire:key="encounter-{{ $encounter->id }}"
-                    class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5 sm:flex-nowrap"
+                wire:key="encounter-{{ $encounter->id }}"
+                class="list-item"
             >
                 <div>
-                    <p class="font-semibold">
-                        <a
-                                href="{{ route('encounters.view', $encounter) }}"
-                                class="link font-bold"
+                    <a
+                        href="#"
+                        class="link font-bold"
+                    >
+                        <flux:modal.trigger
+                            name="encounters.update"
+                            wire:click="$dispatch('encounters.update:load', {encounter: {{ $encounter }}})"
                         >
                             {{ $encounter->title }}
-                        </a>
-                    </p>
+                        </flux:modal.trigger>
+                    </a>
                     <div class="mt-1 flex items-center gap-x-2">
                         <p>
-                            {{ $encounter->date_of_service }}
+                            {{ $encounter->date_of_service->format(config('ehr.date_format')) }}
                         </p>
                     </div>
+                </div>
+                <div>
+                    {{ $encounter->createdBy->full_name }}
                 </div>
             </li>
         @empty
             <li class="text-center">{{ __('ehr.no_records', ['items' => __('encounters.encounters')]) }}</li>
         @endforelse
+        {{ $encounters->links() }}
     </ul>
 </div>
