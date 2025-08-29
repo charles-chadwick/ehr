@@ -11,16 +11,18 @@ return [
     'no_records'      => 'No :items Found',
     'upload_file'     => 'Upload File',
 
-    'action_created' => 'created',
-    'action_updated' => 'updated',
-    'action_deleted' => 'deleted',
-
-    'action_creating' => 'creating',
-    'action_updating' => 'updating',
-    'action_deleting' => 'deleting',
-
-    'success_message' => 'Successfully :action :item.',
+    // Success Messages
     'success_heading' => 'Success!',
-    'error_message'   => 'Error :action :item.',
-    'error_heading'   => 'Error!'
+    'success_created' => 'Successfully created :item.',
+    'success_updated' => 'Successfully updating :item.',
+    'success_deleted' => 'Successfully deleting :item.',
+
+    'error_heading' => 'Error!',
+    'error_creating' => 'Error creating :item.',
+    'error_updating' => 'Error updating :item.',
+    'error_deleting' => 'Error deleting :item.',
+    
+    
+    
+
 ];
