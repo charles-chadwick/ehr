@@ -77,6 +77,7 @@ new class extends Component {
                 </div>
 
                 <div class="text-sm text-right">
+                    {{ $note->created_at->diffForHumans() }}
                 </div>
             </li>
         @empty
