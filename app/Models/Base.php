@@ -53,34 +53,6 @@ class Base extends Model implements HasMedia
     }
 
     /**
-     * Accessor for formatting the created_at attribute.
-     */
-    public function createdAt(): Attribute
-    {
-        return Attribute::make(get: fn ($value) => $value ? Carbon::parse($value)
-            ->format(config('ehr.date_and_time_format')) : null);
-    }
-
-    /**
-     * Accessor for the updated_at attribute, formatting the value
-     * using the specified date format if it exists.
-     */
-    public function updatedAt(): Attribute
-    {
-        return Attribute::make(get: fn ($value) => $value ? Carbon::parse($value)
-            ->format(config('ehr.date_and_time_format')) : null);
-    }
-
-    /**
-     * Accessor to format the deleted at timestamp.
-     */
-    public function deletedAt(): Attribute
-    {
-        return Attribute::make(get: fn ($value) => $value ? Carbon::parse($value)
-            ->format(config('ehr.date_and_time_format')) : null);
-    }
-
-    /**
      * Configure the activity log options for the model.
      */
     public function getActivitylogOptions(): LogOptions
