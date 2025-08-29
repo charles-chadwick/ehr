@@ -44,7 +44,7 @@ new class extends Component {
 }; ?>
 
 <div>
-    <flux:modal name="encounters.update">
+    <flux:modal class="xl:max-w-1/2 xl:w-1/2 sm:max-w-3/4 sm:w-3/4" name="encounters.update">
         <livewire:encounters.update
             modal="encounters.update"
             :patient="$patient"
@@ -72,13 +72,17 @@ new class extends Component {
                         </flux:modal.trigger>
                     </a>
                     <div class="mt-1 flex items-center gap-x-2">
-                        <p>
-                            {{ $encounter->date_of_service->format(config('ehr.date_format')) }}
-                        </p>
+                        <p>{{ $encounter->createdBy->full_name }} {{ $encounter->date_of_service->format(config('ehr.date_format')) }}</p>
                     </div>
                 </div>
                 <div>
-                    {{ $encounter->createdBy->full_name }}
+                    <flux:badge
+                        size="sm"
+                        variant="primary"
+                        color="{{ $this->getStatusColor($encounter->status) }}">
+                        {{ $encounter->status }}
+                    </flux:badge>
+
                 </div>
             </li>
         @empty

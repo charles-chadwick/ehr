@@ -61,10 +61,10 @@ new class extends Component {
                 </h2>
                 <flux:modal
                         class="xl:max-w-1/2 xl:w-1/2 sm:max-w-3/4 sm:w-3/4"
-                        name="create-encounter"
+                        name="encounters.create"
                 >
                     <livewire:encounters.create
-                            modal="create-encounter"
+                            modal="encounters.create"
                             :patient="$patient"
                     />
                 </flux:modal>
@@ -75,7 +75,7 @@ new class extends Component {
                             align="end"
                     >
                         <flux:menu.item icon="plus">
-                            <flux:modal.trigger name="create-encounter">
+                            <flux:modal.trigger name="encounters.create">
                                 {{ __('ehr.create_new', ['item' => __('encounters.encounter')]) }}
                             </flux:modal.trigger>
                         </flux:menu.item>
