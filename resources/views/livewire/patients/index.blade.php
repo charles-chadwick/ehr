@@ -57,7 +57,7 @@ new class extends Component {
     {{-- patient modals --}}
     <div class="flex justify-between mb-4">
         <flux:button>
-            <flux:modal.trigger name="create-patient">
+            <flux:modal.trigger name="patients.create">
                 Create new
             </flux:modal.trigger>
         </flux:button>
@@ -72,9 +72,9 @@ new class extends Component {
             />
         </div>
     </div>
-    <flux:modal name="create-patient">
+    <flux:modal name="patients.create">
         <livewire:patients.create
-            modal="create-patient"
+            modal="patients.create"
         />
     </flux:modal>
     <flux:card>

@@ -46,9 +46,9 @@ new class extends Component {
 }; ?>
 
 <div>
-    <flux:modal name="appointment-update">
+    <flux:modal name="appointments.update">
         <livewire:appointments.update
-                modal="appointment-update"
+                modal="appointments.update"
                 :patient="$patient"
         />
     </flux:modal>
@@ -68,7 +68,7 @@ new class extends Component {
                                 href="#"
                         >
                             <flux:modal.trigger
-                                    name="appointment-update"
+                                    name="appointments.update"
                                     wire:click="$dispatch('appointments.update:load', {appointment: {{ $appointment }}})"
                             >{{ $appointment->title }}</flux:modal.trigger>
                         </a>

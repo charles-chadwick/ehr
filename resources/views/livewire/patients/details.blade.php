@@ -21,7 +21,7 @@ new class extends Component {
 
 <div>
     {{-- modals --}}
-    <flux:modal name="patient-update">
+    <flux:modal name="patients.update">
         <livewire:patients.update
                 class="md:max-w-3/4 md:w-full"
                 :patient="$patient"
@@ -77,7 +77,7 @@ new class extends Component {
                     <flux:menu>
                         <flux:menu.item icon="plus">
                             <flux:modal.trigger
-                                    name="patient-update"
+                                    name="patients.update"
                                     wire:click="$dispatch('patients.update:load', {patient: {{ $patient }}})"
                             >
                                 {{ __('ehr.edit', ['item' => __('patients.patient')]) }}
