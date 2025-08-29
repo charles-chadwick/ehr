@@ -3,6 +3,10 @@
 ### Pagination
 * When on a second page in one block, and an item in another block is added, the page number should be reset. 
 
+### Avatars
+* Make avatars pop out.
+* Resize avatar on upload.
+
 ### Appointments
 * ~~Clean up schedule conflict code~~
 * ~~Add schedule conflict code to update~~
