@@ -8,6 +8,7 @@ new class extends Component {
 }; ?>
 
 <div>
+
     <flux:card size="sm">
         <livewire:patients.details
                 :patient="$patient"
@@ -29,7 +30,7 @@ new class extends Component {
                             :patient="$patient"
                     />
                 </flux:modal>
-                <flux:dropdown>
+                <flux:dropdown position="bottom" align="end">
                     <flux:button icon:trailing="chevron-down">Options</flux:button>
                     <flux:menu>
                         <flux:menu.item icon="plus">
@@ -55,7 +56,7 @@ new class extends Component {
                     {{ __('encounters.encounters') }}
                 </h2>
                 <flux:modal
-                        class="md:max-w-1/2 md:w-1/2 sm:max-w-full sm:w-3/4"
+                        class="xl:max-w-1/2 xl:w-1/2 sm:max-w-3/4 sm:w-3/4"
                         name="create-encounter"
                 >
                     <livewire:encounters.create
@@ -65,7 +66,7 @@ new class extends Component {
                 </flux:modal>
                 <flux:dropdown>
                     <flux:button icon:trailing="chevron-down">Options</flux:button>
-                    <flux:menu>
+                    <flux:menu position="bottom" align="end">
                         <flux:menu.item icon="plus">
                             <flux:modal.trigger name="create-encounter">
                                 {{ __('ehr.create_new', ['item' => __('encounters.encounter')]) }}
@@ -98,7 +99,7 @@ new class extends Component {
                             :model="$patient"
                     />
                 </flux:modal>
-                <flux:dropdown>
+                <flux:dropdown position="bottom" align="end">
                     <flux:button icon:trailing="chevron-down">Options</flux:button>
                     <flux:menu>
                         <flux:menu.item icon="plus">
@@ -109,6 +110,7 @@ new class extends Component {
                     </flux:menu>
                 </flux:dropdown>
             </div>
+
             <livewire:notes.index
                     wire:key="{{ uniqid() }}"
                     :model="$patient"

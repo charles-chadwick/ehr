@@ -9,7 +9,7 @@ new class extends Component {
     use PatientStatusColor;
 
     public Patient $patient;
-    public string  $menu = "";
+    public bool  $menu = false;
     public bool    $short_name = false;
 
     #[On('patients.details:refresh')]
@@ -20,11 +20,22 @@ new class extends Component {
 }; ?>
 
 <div>
+    {{-- modals --}}
     <flux:modal name="patient-update">
         <livewire:patients.update
+                class="md:max-w-3/4 md:w-full"
                 :patient="$patient"
         />
     </flux:modal>
+
+    <flux:modal
+            class="md:max-w-3/4 md:w-full"
+            name="activity-log-patient-{{ $patient->id }}"
+    >
+        <livewire:activity.index :object="$patient" />
+    </flux:modal>
+
+    {{-- basic --}}
     <div class="flex flex-row text-sm">
         <div class="flex-none mr-2">
             <flux:avatar
@@ -57,8 +68,10 @@ new class extends Component {
                 </flux:badge>
             </p>
         </div>
+
+        {{-- option menu --}}
         <div class="flex-none text-right">
-            @if($menu !== "")
+            @if($menu)
                 <flux:dropdown>
                     <flux:button icon:trailing="chevron-down">{{ __('ehr.options') }}</flux:button>
                     <flux:menu>
@@ -69,6 +82,14 @@ new class extends Component {
                             >
                                 {{ __('ehr.edit', ['item' => __('patients.patient')]) }}
                             </flux:modal.trigger>
+                        </flux:menu.item>
+                        <flux:menu.separator />
+                        <flux:menu.item icon="clock">
+
+                            <flux:modal.trigger name="activity-log-patient-{{ $patient->id }}">
+                                View Activity Log
+                            </flux:modal.trigger>
+
                         </flux:menu.item>
                     </flux:menu>
                 </flux:dropdown>
