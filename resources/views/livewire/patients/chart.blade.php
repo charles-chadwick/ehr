@@ -139,6 +139,7 @@ new class extends Component {
                 >
                     <livewire:diagnosis.search
                             modal="diagnosis.search"
+                            :patient="$patient"
                     />
                 </flux:modal>
                 <flux:dropdown
@@ -157,9 +158,10 @@ new class extends Component {
             </div>
 
             <livewire:diagnosis.index
+                    :patient="$patient"
                     wire:key="{{ uniqid() }}"
-                    :model="$patient"
             />
+
         </flux:card>
     </div>
 </div>

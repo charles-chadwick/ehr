@@ -16,6 +16,9 @@ class AppointmentUser extends Pivot
     protected $fillable = [
         'appointment_id',
         'user_id',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     /**

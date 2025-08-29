@@ -22,7 +22,7 @@
 </head>
 <body class="h-screen  bg-zinc-100">
 @persist('toast')
-<flux:toast />
+<flux:toast position="top end" />
 @endpersist
 <div class="m-6 mx-auto mt-4 sm:px-6 lg:px-8">
     {{ $slot }}

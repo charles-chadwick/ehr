@@ -39,7 +39,7 @@ new class extends Component {
             $heading = "Error";
             $variant = "danger";
         }
-        Flux::toast($message, heading: $heading, variant: $variant);
+        Flux::toast($message, heading: $heading, variant: $variant, position: "top end");
         Flux::modal($this->modal)
             ->close();
         $this->dispatch('notes.index:refresh');

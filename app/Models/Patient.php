@@ -13,6 +13,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
@@ -52,6 +53,19 @@ class Patient extends Base implements AuthenticatableContract, AuthorizableContr
     public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
+    }
+
+    /**
+     * Define a many-to-many relationship with the Diagnosis model.
+     */
+    public function diagnoses(): BelongsToMany
+    {
+        return $this->belongsToMany(Diagnosis::class, 'patient_dxs')
+            ->using(PatientDx::class)
+            ->withTimestamps()
+            ->withPivot('deleted_at')
+            ->wherePivotNull('deleted_at');
+
     }
 
     /**
