@@ -6,13 +6,17 @@ use App\Models\Traits\IsPerson;
 use Illuminate\Database\Eloquent\Model;
 
 test('getFullNameExtendedAttribute without middle name or suffix', function () {
-    $model = new class extends Model {
+    $model = new class extends Model
+    {
         use IsPerson;
 
-        public $prefix     = 'Dr.';
+        public $prefix = 'Dr.';
+
         public $first_name = 'John';
-        public $last_name  = 'Smith';
-        public $suffix     = '';
+
+        public $last_name = 'Smith';
+
+        public $suffix = '';
     };
 
     $result = $model->getFullNameExtendedAttribute();
@@ -21,11 +25,13 @@ test('getFullNameExtendedAttribute without middle name or suffix', function () {
 });
 
 test('getFullNameAttribute with first and last name', function () {
-    $model = new class extends Model {
+    $model = new class extends Model
+    {
         use IsPerson;
 
         public $first_name = 'Anna';
-        public $last_name  = 'Taylor';
+
+        public $last_name = 'Taylor';
     };
 
     $result = $model->getFullNameAttribute();
@@ -34,11 +40,13 @@ test('getFullNameAttribute with first and last name', function () {
 });
 
 test('getFullNameAttribute with an empty first name', function () {
-    $model = new class extends Model {
+    $model = new class extends Model
+    {
         use IsPerson;
 
         public $first_name = '';
-        public $last_name  = 'Taylor';
+
+        public $last_name = 'Taylor';
     };
 
     $result = $model->getFullNameAttribute();
@@ -47,11 +55,13 @@ test('getFullNameAttribute with an empty first name', function () {
 });
 
 test('getFullNameAttribute with a null last name', function () {
-    $model = new class extends Model {
+    $model = new class extends Model
+    {
         use IsPerson;
 
         public $first_name = 'Anna';
-        public $last_name  = null;
+
+        public $last_name = null;
     };
 
     $result = $model->getFullNameAttribute();
@@ -60,14 +70,19 @@ test('getFullNameAttribute with a null last name', function () {
 });
 
 test('getFullNameExtendedAttribute with middle name', function () {
-    $model = new class extends Model {
+    $model = new class extends Model
+    {
         use IsPerson;
 
-        public $prefix      = 'Dr.';
-        public $first_name  = 'John';
+        public $prefix = 'Dr.';
+
+        public $first_name = 'John';
+
         public $middle_name = 'Alan';
-        public $last_name   = 'Smith';
-        public $suffix      = '';
+
+        public $last_name = 'Smith';
+
+        public $suffix = '';
     };
 
     $result = $model->getFullNameExtendedAttribute();
@@ -76,13 +91,17 @@ test('getFullNameExtendedAttribute with middle name', function () {
 });
 
 test('getFullNameExtendedAttribute with suffix', function () {
-    $model = new class extends Model {
+    $model = new class extends Model
+    {
         use IsPerson;
 
-        public $prefix     = 'Mr.';
+        public $prefix = 'Mr.';
+
         public $first_name = 'Adam';
-        public $last_name  = 'Johnson';
-        public $suffix     = 'Jr.';
+
+        public $last_name = 'Johnson';
+
+        public $suffix = 'Jr.';
     };
 
     $result = $model->getFullNameExtendedAttribute();
@@ -91,14 +110,19 @@ test('getFullNameExtendedAttribute with suffix', function () {
 });
 
 test('getFullNameExtendedAttribute with middle name and suffix', function () {
-    $model = new class extends Model {
+    $model = new class extends Model
+    {
         use IsPerson;
 
-        public $prefix      = 'Prof.';
-        public $first_name  = 'Jane';
+        public $prefix = 'Prof.';
+
+        public $first_name = 'Jane';
+
         public $middle_name = 'Elizabeth';
-        public $last_name   = 'Doe';
-        public $suffix      = 'PhD';
+
+        public $last_name = 'Doe';
+
+        public $suffix = 'PhD';
     };
 
     $result = $model->getFullNameExtendedAttribute();
@@ -107,13 +131,17 @@ test('getFullNameExtendedAttribute with middle name and suffix', function () {
 });
 
 test('getFullNameExtendedAttribute with empty prefix and suffix', function () {
-    $model = new class extends Model {
+    $model = new class extends Model
+    {
         use IsPerson;
 
-        public $prefix     = '';
+        public $prefix = '';
+
         public $first_name = 'Emily';
-        public $last_name  = 'Brown';
-        public $suffix     = '';
+
+        public $last_name = 'Brown';
+
+        public $suffix = '';
     };
 
     $result = $model->getFullNameExtendedAttribute();
@@ -122,14 +150,19 @@ test('getFullNameExtendedAttribute with empty prefix and suffix', function () {
 });
 
 test('getFullNameExtendedAttribute without prefix', function () {
-    $model = new class extends Model {
+    $model = new class extends Model
+    {
         use IsPerson;
 
-        public $prefix      = null;
-        public $first_name  = 'Michael';
+        public $prefix = null;
+
+        public $first_name = 'Michael';
+
         public $middle_name = 'T.';
-        public $last_name   = 'Williams';
-        public $suffix      = '';
+
+        public $last_name = 'Williams';
+
+        public $suffix = '';
     };
 
     $result = $model->getFullNameExtendedAttribute();

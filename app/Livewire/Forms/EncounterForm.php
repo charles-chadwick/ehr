@@ -15,37 +15,43 @@ class EncounterForm extends Form
     public Patient $patient;
 
     public $date_of_service;
+
     public $type;
+
     public $status;
+
     public $signed_by;
+
     public $signed_at;
+
     public $title;
+
     public $content;
 
     public ?Encounter $encounter;
 
-    public function setEncounter(Encounter $encounter) : void
+    public function setEncounter(Encounter $encounter): void
     {
         $this->resetExcept('patient');
         $this->fill($encounter);
         $this->encounter = $encounter;
     }
 
-    private function collectData(EncounterStatus $status) : array
+    private function collectData(EncounterStatus $status): array
     {
         return [
-            'patient_id'      => $this->patient->id,
+            'patient_id' => $this->patient->id,
             'date_of_service' => $this->date_of_service,
-            'type'            => $this->type,
-            'status'          => $status,
-            'signed_by'       => $status == EncounterStatus::Unsigned ? null : auth()->user()->id,
-            'signed_at'       => $status == EncounterStatus::Unsigned ? null : now(),
-            'title'           => $this->title,
-            'content'         => $this->content,
+            'type' => $this->type,
+            'status' => $status,
+            'signed_by' => $status == EncounterStatus::Unsigned ? null : auth()->user()->id,
+            'signed_at' => $status == EncounterStatus::Unsigned ? null : now(),
+            'title' => $this->title,
+            'content' => $this->content,
         ];
     }
 
-    public function save(EncounterStatus $status) : Encounter
+    public function save(EncounterStatus $status): Encounter
     {
         $this->validate();
 
@@ -54,11 +60,12 @@ class EncounterForm extends Form
 
         } catch (Exception $e) {
             logger()->error($e->getMessage());
-            return new Encounter();
+
+            return new Encounter;
         }
     }
 
-    public function update(EncounterStatus $status) : Encounter
+    public function update(EncounterStatus $status): Encounter
     {
         $this->validate();
 
@@ -69,20 +76,21 @@ class EncounterForm extends Form
 
         } catch (Exception $e) {
             logger()->error($e->getMessage());
-            return new Encounter();
+
+            return new Encounter;
         }
     }
 
-    public function rules() : array
+    public function rules(): array
     {
         return [
             'date_of_service' => 'required|date',
-            'type'            => [
+            'type' => [
                 'required',
-                Rule::in(EncounterType::cases())
+                Rule::in(EncounterType::cases()),
             ],
-            'title'           => 'required|max:255',
-            'content'         => 'nullable',
+            'title' => 'required|max:255',
+            'content' => 'nullable',
         ];
     }
 }

@@ -14,19 +14,21 @@ class NoteForm extends Form
     public Patient $model;
 
     public $type;
+
     public $title;
+
     public $content;
 
     public ?Note $note;
 
-    public function setNote(Note $note) : void
+    public function setNote(Note $note): void
     {
         $this->resetExcept('model');
         $this->fill($note);
         $this->note = $note;
     }
 
-    public function save() : Note
+    public function save(): Note
     {
         $this->validate();
 
@@ -35,11 +37,12 @@ class NoteForm extends Form
 
         } catch (Exception $e) {
             logger()->error($e->getMessage());
-            return new Note();
+
+            return new Note;
         }
     }
 
-    public function update() : Note
+    public function update(): Note
     {
         $this->validate();
 
@@ -50,30 +53,31 @@ class NoteForm extends Form
 
         } catch (Exception $e) {
             logger()->error($e->getMessage());
-            return new Note();
+
+            return new Note;
         }
     }
 
-    private function collectData() : array
+    private function collectData(): array
     {
         return [
-            'notable_type'    => get_class($this->model),
-            'notable_id'      => $this->model->id,
-            'type'            => $this->type,
-            'title'           => $this->title,
-            'content'         => $this->content,
+            'notable_type' => get_class($this->model),
+            'notable_id' => $this->model->id,
+            'type' => $this->type,
+            'title' => $this->title,
+            'content' => $this->content,
         ];
     }
 
-    public function rules() : array
+    public function rules(): array
     {
         return [
-            'type'            => [
+            'type' => [
                 'required',
-                Rule::in(NoteType::cases())
+                Rule::in(NoteType::cases()),
             ],
-            'title'           => 'required|max:255',
-            'content'         => 'nullable',
+            'title' => 'required|max:255',
+            'content' => 'nullable',
         ];
     }
 }

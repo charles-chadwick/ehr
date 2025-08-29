@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection ALL */
 
 namespace App\Models\Traits;
@@ -9,18 +10,17 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 trait HasAvatar
 {
-
-    public function registerMediaConversions(?Media $media = null) : void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('avatars')
-             ->fit(Fit::Contain, 300, 300)
-             ->nonQueued();
+            ->fit(Fit::Contain, 300, 300)
+            ->nonQueued();
     }
 
-    public function registerMediaCollections() : void
+    public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatars')
-             ->singleFile();
+            ->singleFile();
     }
 
     public function avatar(): Attribute

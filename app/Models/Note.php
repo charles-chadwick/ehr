@@ -15,10 +15,10 @@ class Note extends Base
         'notable_type',
         'type',
         'title',
-        'content'
+        'content',
     ];
 
-    public function casts() : array
+    public function casts(): array
     {
         return [
             'type' => NoteType::class,
@@ -27,10 +27,8 @@ class Note extends Base
 
     /**
      * Get the parent notable model.
-     *
-     * @return MorphTo
      */
-    public function notable() : MorphTo
+    public function notable(): MorphTo
     {
         return $this->morphTo();
     }

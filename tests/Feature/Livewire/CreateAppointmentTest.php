@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Livewire\Volt\Volt;
+
 use function Pest\Laravel\actingAs;
 
 uses(RefreshDatabase::class);
@@ -42,7 +43,7 @@ it('submits the form and handles the success path', function () {
 
     // Mock the AppointmentForm so that save() returns an object with exists=true
     $formMock = Mockery::mock(AppointmentForm::class)->makePartial();
-    $formMock->shouldReceive('save')->andReturn((object)['exists' => true]);
+    $formMock->shouldReceive('save')->andReturn((object) ['exists' => true]);
 
     // Bind the mock into the container so the Volt component resolves it
     app()->instance(AppointmentForm::class, $formMock);

@@ -10,16 +10,16 @@ class DiagnosisFactory extends Factory
 {
     protected $model = Diagnosis::class;
 
-    public function definition() : array
+    public function definition(): array
     {
         return [
-            'set'         => 'ICD-11',
-            
-            'code'        => $this->faker->word(),
-            'title'       => $this->faker->word(),
+            'set' => 'ICD-11',
+
+            'code' => $this->faker->word(),
+            'title' => $this->faker->word(),
             'description' => $this->faker->text(),
-            'created_at'  => Carbon::now(),
-            'updated_at'  => Carbon::now(),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
         ];
     }
 }

@@ -10,42 +10,43 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 trait HasAvatarUpload
 {
+    public $avatar_path = '';
 
-    public $avatar_path = "";
-    public $avatar_url  = "";
+    public $avatar_url = '';
 
     #[On('file-uploaded')]
-    public function onFileUploaded(string $path, ?string $url = null) : void
+    public function onFileUploaded(string $path, ?string $url = null): void
     {
         $this->avatar_path = $path;
         $this->avatar_url = $url ?? '';
     }
 
-    public function saveAvatar($model) : bool|string|null
+    public function saveAvatar($model): bool|string|null
     {
-        if ($this->avatar_path !== "") {
+        if ($this->avatar_path !== '') {
             try {
                 $model->addMedia(storage_path('app/public/'.$this->avatar_path))
-                      ->preservingOriginal()
-                      ->toMediaCollection('avatars');
+                    ->preservingOriginal()
+                    ->toMediaCollection('avatars');
+
                 return true;
             } catch (FileDoesNotExist|FileIsTooBig $e) {
                 return $e->getMessage();
             }
         }
+
         return null;
     }
 
-    public function removeImage() : void
+    public function removeImage(): void
     {
         // do this the stupid way
         DB::table('media')
-          ->where('model_type', Patient::class)
-          ->where('model_id', $this->patient->id)
-          ->delete();
-        $this->avatar_url = "";
-        $this->avatar_path = "";
+            ->where('model_type', Patient::class)
+            ->where('model_id', $this->patient->id)
+            ->delete();
+        $this->avatar_url = '';
+        $this->avatar_path = '';
 
     }
-
 }

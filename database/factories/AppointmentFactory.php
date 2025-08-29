@@ -11,18 +11,18 @@ class AppointmentFactory extends Factory
 {
     protected $model = Appointment::class;
 
-    public function definition() : array
+    public function definition(): array
     {
         return [
             'date_and_time' => Carbon::now(),
 
-            'length'        => $this->faker->randomElement([15, 30, 45, 60, 90]),
-            'status'        => $this->faker->word(),
-            'type'          => $this->faker->word(),
-            'title'         => $this->faker->word(),
-            'description'   => $this->faker->text(),
-            'created_at'    => Carbon::now(),
-            'updated_at'    => Carbon::now(),
+            'length' => $this->faker->randomElement([15, 30, 45, 60, 90]),
+            'status' => $this->faker->word(),
+            'type' => $this->faker->word(),
+            'title' => $this->faker->word(),
+            'description' => $this->faker->text(),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
 
             'patient_id' => Patient::factory(),
         ];

@@ -24,13 +24,19 @@ new class extends Component {
                 <h2 class="font-semibold text-sm mb-2">
                     {{ __('appointments.appointments') }}
                 </h2>
-                <flux:modal class="md:max-w-1/2 md:w-1/2 sm:max-w-full sm:w-3/4" name="create-appointment">
+                <flux:modal
+                        class="md:max-w-1/2 md:w-1/2 sm:max-w-full sm:w-3/4"
+                        name="create-appointment"
+                >
                     <livewire:appointments.create
                             modal="create-appointment"
                             :patient="$patient"
                     />
                 </flux:modal>
-                <flux:dropdown position="bottom" align="end">
+                <flux:dropdown
+                        position="bottom"
+                        align="end"
+                >
                     <flux:button icon:trailing="chevron-down">Options</flux:button>
                     <flux:menu>
                         <flux:menu.item icon="plus">
@@ -47,9 +53,7 @@ new class extends Component {
             />
         </flux:card>
 
-
         {{-- encounters --}}
-
         <flux:card size="sm">
             <div class="flex flex-row justify-between items-center">
                 <h2 class="font-semibold text-sm mb-2">
@@ -66,7 +70,10 @@ new class extends Component {
                 </flux:modal>
                 <flux:dropdown>
                     <flux:button icon:trailing="chevron-down">Options</flux:button>
-                    <flux:menu position="bottom" align="end">
+                    <flux:menu
+                            position="bottom"
+                            align="end"
+                    >
                         <flux:menu.item icon="plus">
                             <flux:modal.trigger name="create-encounter">
                                 {{ __('ehr.create_new', ['item' => __('encounters.encounter')]) }}
@@ -80,11 +87,11 @@ new class extends Component {
                     :patient="$patient"
             />
         </flux:card>
-
     </div>
 
-    {{-- notes --}}
     <div class="grid md:grid-cols-2 gap-2 mt-2">
+
+        {{-- notes --}}
         <flux:card size="sm">
             <div class="flex flex-row justify-between items-center">
                 <h2 class="font-semibold text-sm mb-2">
@@ -99,7 +106,10 @@ new class extends Component {
                             :model="$patient"
                     />
                 </flux:modal>
-                <flux:dropdown position="bottom" align="end">
+                <flux:dropdown
+                        position="bottom"
+                        align="end"
+                >
                     <flux:button icon:trailing="chevron-down">Options</flux:button>
                     <flux:menu>
                         <flux:menu.item icon="plus">
@@ -112,6 +122,41 @@ new class extends Component {
             </div>
 
             <livewire:notes.index
+                    :model="$patient"
+                    wire:key="{{ uniqid() }}"
+            />
+        </flux:card>
+
+        {{-- diagnosis --}}
+        <flux:card size="sm">
+            <div class="flex flex-row justify-between items-center">
+                <h2 class="font-semibold text-sm mb-2">
+                    {{ __('diagnosis.diagnosis') }}
+                </h2>
+                <flux:modal
+                        class="xl:max-w-1/4 xl:w-1/4 sm:max-w-full sm:w-3/4"
+                        name="diagnosis.search"
+                >
+                    <livewire:diagnosis.search
+                            modal="diagnosis.search"
+                    />
+                </flux:modal>
+                <flux:dropdown
+                        align="end"
+                        position="bottom"
+                >
+                    <flux:button icon:trailing="chevron-down">Options</flux:button>
+                    <flux:menu>
+                        <flux:menu.item icon="plus">
+                            <flux:modal.trigger name="diagnosis.search">
+                                {{ __('ehr.create_new', ['item' => __('diagnosis.diagnosis')]) }}
+                            </flux:modal.trigger>
+                        </flux:menu.item>
+                    </flux:menu>
+                </flux:dropdown>
+            </div>
+
+            <livewire:diagnosis.index
                     wire:key="{{ uniqid() }}"
                     :model="$patient"
             />

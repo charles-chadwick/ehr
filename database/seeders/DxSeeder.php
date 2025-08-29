@@ -16,7 +16,7 @@ class DxSeeder extends Seeder
         Diagnosis::truncate();
         $csv_file = database_path('src/dxs.csv');
 
-        if (!File::exists($csv_file)) {
+        if (! File::exists($csv_file)) {
             throw new \RuntimeException("CSV file not found: {$csv_file}");
         }
 
@@ -25,9 +25,9 @@ class DxSeeder extends Seeder
         // Skip header row
         fgetcsv($handle);
 
-
         $records = [];
         $record_count = 0;
+        $total_record_count = 0;
 
         while (($data = fgetcsv($handle)) !== false) {
 
@@ -36,17 +36,21 @@ class DxSeeder extends Seeder
                 continue;
             }
 
-            if ($record_count++ < 100) {
-                $records[]  = [
-                    'code'        => $data[0],
-                    'title'       => $title,
+            if ($record_count++ < 500) {
+                $total_record_count++;
+                $records[] = [
+                    'code' => $data[0],
+                    'title' => $title,
                     'description' => '',
                 ];
+
                 continue;
             }
             Diagnosis::factory()->createMany($records);
             $records = [];
-            echo $record_count.PHP_EOL;
+
+            echo $total_record_count.PHP_EOL;
+            $record_count = 0;
         }
 
         fclose($handle);

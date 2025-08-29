@@ -1,4 +1,5 @@
 <?php
+
 /** @noinspection ALL */
 
 namespace App\Models\Traits;
@@ -7,10 +8,10 @@ use Illuminate\Support\Facades\Auth;
 
 trait TracksUsers
 {
-    public static function bootTracksUsers() : void
+    public static function bootTracksUsers(): void
     {
         static::creating(function ($model) {
-            if (!Auth::check()) {
+            if (! Auth::check()) {
                 return;
             }
 

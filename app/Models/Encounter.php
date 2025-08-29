@@ -4,10 +4,8 @@ namespace App\Models;
 
 use App\Enums\EncounterStatus;
 use App\Enums\EncounterType;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
 
 class Encounter extends Base
 {
@@ -21,23 +19,23 @@ class Encounter extends Base
         'status',
         'signed_by',
         'signed_at',
-        'content'
+        'content',
     ];
 
-    protected function casts() : array
+    protected function casts(): array
     {
         return [
             'date_of_service' => 'datetime',
-            'type'            => EncounterType::class,
-            'status'          => EncounterStatus::class,
-            'signed_at'       => 'datetime',
+            'type' => EncounterType::class,
+            'status' => EncounterStatus::class,
+            'signed_at' => 'datetime',
         ];
     }
 
     /**
      * Define a relationship to the patient.
      */
-    public function patient() : BelongsTo
+    public function patient(): BelongsTo
     {
         return $this->belongsTo(Patient::class);
     }
@@ -45,9 +43,8 @@ class Encounter extends Base
     /**
      * Define a relationship to the user who signed the encounter.
      */
-    public function signedBy() : BelongsTo
+    public function signedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'signed_by');
     }
-
 }

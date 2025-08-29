@@ -4,8 +4,9 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
-    public function up() : void
+return new class extends Migration
+{
+    public function up(): void
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
@@ -13,7 +14,7 @@ return new class extends Migration {
             $table->integer('notable_id');
             $table->string('type');
             $table->string('title')
-                  ->nullable();
+                ->nullable();
             $table->string('content');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();
@@ -23,7 +24,7 @@ return new class extends Migration {
         });
     }
 
-    public function down() : void
+    public function down(): void
     {
         Schema::dropIfExists('notes');
     }

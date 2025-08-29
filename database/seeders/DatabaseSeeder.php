@@ -11,10 +11,10 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run() : void
+    public function run(): void
     {
-        (new UserSeeder())->run();
-        (new PatientSeeder())->run();
-        (new DxSeeder())->run();
+        //        (new UserSeeder())->run();
+        //        (new PatientSeeder())->run();
+        (new DxSeeder)->run();
     }
 }

@@ -8,9 +8,9 @@ use Carbon\Carbon;
 test('getAgeAttribute returns correct age when the birthday is in a past month in the current year', function () {
     $patient = new Patient([
         'date_of_birth' => Carbon::now()
-                                 ->subYears(25)
-                                 ->subMonths(3)
-                                 ->toDateString()
+            ->subYears(25)
+            ->subMonths(3)
+            ->toDateString(),
     ]);
 
     $age = $patient->age;
@@ -21,9 +21,9 @@ test('getAgeAttribute returns correct age when the birthday is in a past month i
 test('getAgeAttribute returns correct age when the birthday is in the current month', function () {
     $patient = new Patient([
         'date_of_birth' => Carbon::now()
-                                 ->subYears(30)
-                                 ->startOfMonth()
-                                 ->toDateString()
+            ->subYears(30)
+            ->startOfMonth()
+            ->toDateString(),
     ]);
     $age = $patient->age;
 
@@ -33,9 +33,9 @@ test('getAgeAttribute returns correct age when the birthday is in the current mo
 test('getAgeAttribute returns correct age when the birthday is in a future month in the current year', function () {
     $patient = new Patient([
         'date_of_birth' => Carbon::now()
-                                 ->subYears(40)
-                                 ->addMonths(2)
-                                 ->toDateString()
+            ->subYears(40)
+            ->addMonths(2)
+            ->toDateString(),
     ]);
     $age = $patient->age;
 

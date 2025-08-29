@@ -18,10 +18,10 @@ use Illuminate\Notifications\Notifiable;
 class User extends Base implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
     use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
-    use HasFactory, Notifiable, HasAvatar, IsPerson;
+    use HasAvatar, HasFactory, IsPerson, Notifiable;
 
     protected $guarded = [
-        'id'
+        'id',
     ];
 
     protected $hidden = [
@@ -29,11 +29,11 @@ class User extends Base implements AuthenticatableContract, AuthorizableContract
         'remember_token',
     ];
 
-    protected function casts() : array
+    protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
+            'password' => 'hashed',
         ];
     }
 
@@ -43,13 +43,13 @@ class User extends Base implements AuthenticatableContract, AuthorizableContract
      * Includes pivot columns 'deleted_at' and timestamps.
      * Filters results to exclude records with a non-null 'deleted_at' value.
      */
-    public function appointments() : BelongsToMany
+    public function appointments(): BelongsToMany
     {
         return $this->belongsToMany(Appointment::class, 'appointments_users')
-                    ->using(AppointmentUser::class)
-                    ->withTimestamps()
-                    ->withPivot('deleted_at')
-                    ->wherePivotNull('deleted_at');
+            ->using(AppointmentUser::class)
+            ->withTimestamps()
+            ->withPivot('deleted_at')
+            ->wherePivotNull('deleted_at');
 
     }
 }
