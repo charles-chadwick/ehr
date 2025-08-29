@@ -55,33 +55,43 @@ new class extends Component {
 
     public function save() : void
     {
+        // get the DX that have already been saved
         $diagnoses_already_saved = PatientDx::where('patient_id', $this->patient->id)
             ->get('diagnosis_id')
             ->flatten()
             ->pluck('diagnosis_id')
             ->toArray();
 
-        $saved_diagnoses = $this->selected_diagnoses
+        // filter out the above and then save
+        $this->selected_diagnoses
             ->filter(function (Diagnosis $diagnosis) use ($diagnoses_already_saved) {
                 return !in_array($diagnosis->id, $diagnoses_already_saved);
             })
             ->each(function (Diagnosis $diagnosis) {
-            PatientDx::createOrFirst([
-                'patient_id'   => $this->patient->id,
-                'diagnosis_id' => $diagnosis->id,
-            ]);
-        });
+                PatientDx::createOrFirst([
+                    'patient_id'   => $this->patient->id,
+                    'diagnosis_id' => $diagnosis->id,
+                ]);
+            });
+        $this->resetExcept([
+            'patient',
+            'modal'
+        ]);
 
+
+        // set our modal and reset everything
         Flux::modal($this->modal)
             ->close();
-        $this->resetExcept(['patient', 'modal']);
+
+        // set our selected diagnoses
         $this->selected_diagnoses = collect($this->patient->diagnoses);
 
-        // set the error messages
-        $message = __('ehr.success_message', ['item' => __('diagnosis.diagnoses')]);
+        // set the messages, toast
+        $message = __('ehr.success_created', ['item' => __('diagnosis.diagnoses')]);
         $heading = __('ehr.success_heading');
         $variant = "success";
         Flux::toast($message, heading: $heading, variant: $variant);
+        // dispatch our event
         $this->dispatch('diagnosis.index:refresh');
     }
 
@@ -94,14 +104,17 @@ new class extends Component {
     }
 }; ?>
 
-<form wire:submit="save" class="mt-6">
+<form
+        wire:submit="save"
+        class="mt-6"
+>
     <div class="space-y-2">
         <flux:select
                 wire:model="diagnosis_id"
                 variant="combobox"
         >
             <x-slot name="input">
-                <flux:select.input wire:model.live="search" />
+                <flux:select.input wire:model.live="search" placeholder="{{ __('diagnosis.search') }}" />
             </x-slot>
 
             @if(count($this->diagnoses) > 0)
@@ -118,7 +131,10 @@ new class extends Component {
         @if(count($selected_diagnoses) > 0)
             <div class="list-group">
                 @foreach($selected_diagnoses as $selected_diagnosis)
-                    <div class="list-item" wire:key="selected-{{ $selected_diagnosis->id }}">
+                    <div
+                            class="list-item"
+                            wire:key="selected-{{ $selected_diagnosis->id }}"
+                    >
                         <div>
                             {{ $selected_diagnosis->title }} ({{ $selected_diagnosis->code }})
                         </div>

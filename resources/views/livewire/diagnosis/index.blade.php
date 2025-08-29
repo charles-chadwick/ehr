@@ -21,7 +21,6 @@ new class extends Component {
             ->paginate(3);
     }
 
-    #[On("diagnosis.index:refresh")]
     public function with()
     {
         return ['diagnoses' => $this->diagnoses];
