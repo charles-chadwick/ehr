@@ -10,6 +10,7 @@ new class extends Component {
 
     public Patient $patient;
     public string  $menu = "";
+    public bool    $short_name = false;
 
     #[On('patients.details:refresh')]
     public function with() : array
@@ -20,7 +21,9 @@ new class extends Component {
 
 <div>
     <flux:modal name="patient-update">
-        <livewire:patients.update :patient="$patient" />
+        <livewire:patients.update
+                :patient="$patient"
+        />
     </flux:modal>
     <div class="flex flex-row text-sm">
         <div class="flex-none mr-2">
@@ -34,8 +37,13 @@ new class extends Component {
             <a
                     href="{{ route('patients.chart', $patient) }}"
                     class="font-semibold"
-            >
-                {{ $patient->full_name_extended }}
+            > (#{{$patient->id}})
+                @if ($short_name)
+                    {{ $patient->full_name }}
+                @else
+                    {{ $patient->full_name_extended }}
+                @endif
+
             </a>
             <p>{{ $patient->gender }} / {{ $patient->age }} ({{ $patient->dob }})</p>
             <p>
