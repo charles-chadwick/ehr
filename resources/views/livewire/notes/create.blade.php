@@ -9,6 +9,7 @@ new class extends Component {
 
     public NoteForm $form;
     public $model;
+    public $modal;
 
     public function mount( $model) : void
     {
@@ -39,6 +40,8 @@ new class extends Component {
             $variant = "danger";
         }
         Flux::toast($message, heading: $heading, variant: $variant);
+        Flux::modal($this->modal)
+            ->close();
         $this->dispatch('notes.index:refresh');
     }
 }; ?>
@@ -57,14 +60,14 @@ new class extends Component {
     <div class="mt-4">
         <flux:input
                 label="{{ __('notes.title') }}"
-                placeholder="title"
+                placeholder="{{ __('notes.title') }}"
                 wire:model="form.title"
         />
     </div>
     <div class="mt-4">
         <flux:editor
                 label="{{ __('notes.content') }}"
-                placeholder="content"
+                placeholder="{{ __('notes.content') }}"
                 wire:model="form.content"
         />
     </div>

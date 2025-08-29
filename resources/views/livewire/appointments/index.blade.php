@@ -34,7 +34,7 @@ new class extends Component {
         return Appointment::with('users')
                           ->where('patient_id', $this->patient->id)
                           ->orderBy($this->sort_by, $this->sort_direction)
-                          ->paginate(5);
+                          ->paginate(2);
     }
 
     public function with() : array
@@ -53,19 +53,19 @@ new class extends Component {
         />
     </flux:modal>
     <ul
+            class="list-group"
             role="list"
-            class="divide-y divide-gray-100 dark:divide-white/5  text-sm"
     >
         @forelse($appointments as $appointment)
             <li
+                    class="list-item"
                     wire:key="appointment-{{ $appointment->id }}"
-                    class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4 py-5 sm:flex-nowrap"
             >
                 <div>
                     <p class="font-semibold">
                         <a
-                                href="#"
                                 class="link font-bold"
+                                href="#"
                         >
                             <flux:modal.trigger
                                     name="appointment-update"
@@ -81,13 +81,13 @@ new class extends Component {
                 </div>
                 {{-- users --}}
                 <livewire:users.show-list
-                        wire:key="show-list-{{ uniqid() }}"
                         :users="$appointment->users"
+                        wire:key="show-list-{{ uniqid() }}"
                 />
             </li>
         @empty
             <li class="text-center">{{ __('ehr.no_records', ['items' => __('appointments.appointments')]) }}</li>
         @endforelse
     </ul>
-    {{ $appointments->links() }}
+    <flux:pagination :paginator="$appointments" />
 </div>

@@ -60,14 +60,14 @@ new class extends Component {
     <div class="mt-4">
         <flux:input
                 label="{{ __('notes.title') }}"
-                placeholder="title"
+                placeholder="{{ __('notes.title') }}"
                 wire:model="form.title"
         />
     </div>
     <div class="mt-4">
         <flux:editor
                 label="{{ __('notes.content') }}"
-                placeholder="content"
+                placeholder="{{ __('notes.content') }}"
                 wire:model="form.content"
         />
     </div>
