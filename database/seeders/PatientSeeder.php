@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 
+use App\Enums\PatientGender;
 use App\Enums\PatientStatus;
 use App\Models\Patient;
 use App\Models\User;
@@ -103,6 +104,11 @@ class PatientSeeder extends Seeder
                                     'III',
                                     ''
                                 ]),
+                                'gender' => match($character['gender']) {
+                                    'Male'   => PatientGender::Male,
+                                    'Female' => PatientGender::Female,
+                                    default => PatientGender::NotSpecified
+                                },
                                 'first_name'    => $first_name,
                                 'middle_name'   => count($name) > 0 ? implode(' ', $name) : '',
                                 'last_name'     => $last_name === '' ? 'N/A' : $last_name,
