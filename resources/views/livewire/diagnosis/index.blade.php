@@ -1,10 +1,9 @@
 <?php
 /** @noinspection ALL */
 
-use  App\Livewire\Traits\Sortable;
+use App\Livewire\Traits\Sortable;
 use App\Models\Patient;
-use App\Models\PatientDx;
-use Livewire\Attributes;
+use Carbon\Carbon;
 use Livewire\Attributes\Computed;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
@@ -15,13 +14,14 @@ new class extends Component {
     public Patient $patient;
 
     #[Computed]
-    #[On('diagnosis.index:refresh')]
+    #[On("diagnosis.index:refresh")]
     public function diagnoses()
     {
         return $this->patient->diagnoses()
             ->paginate(3);
     }
-    #[On('diagnosis.index:refresh')]
+
+    #[On("diagnosis.index:refresh")]
     public function with()
     {
         return ['diagnoses' => $this->diagnoses];
@@ -31,17 +31,18 @@ new class extends Component {
 <ul class="list-group">
     @forelse($diagnoses as $diagnosis)
         <li
-                class="list-item"
+                class="list-item flex-row"
                 wire:key="diagnosis-{{ $diagnosis->id }}"
         >
-            <p class="font-semibold">
+            <a
+                    class="link"
+                    href="#"
+            >
                 ({{ $diagnosis->code }}) {{ $diagnosis->title }}
+            </a>
+            <p class="flex-none">
+                {{ Carbon::parse($diagnosis->pivot->created_at)->format(config('ehr.date_format')) }}
             </p>
-            <div class="mt-1 flex items-center gap-x-2">
-                <p>
-                    {{ $diagnosis->created_at }}
-                </p>
-            </div>
         </li>
     @empty
         <li class="text-center">{{ __('ehr.no_records', ['items' => __('diagnosis.diagnoses')]) }}</li>

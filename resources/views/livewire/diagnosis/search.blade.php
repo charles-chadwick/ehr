@@ -21,12 +21,12 @@ new class extends Component {
     public string     $search       = '';
     public            $diagnosis_id = null;
     public Collection $selected_diagnoses;
-    public string $modal;
+    public string     $modal;
 
     public function mount(Patient $patient) : void
     {
         $this->patient = $patient;
-        $this->selected_diagnoses = collect([]);
+        $this->selected_diagnoses = collect($this->patient->diagnoses);
     }
 
     #[Computed]
@@ -55,14 +55,28 @@ new class extends Component {
 
     public function save() : void
     {
-        $this->selected_diagnoses->each(function (Diagnosis $diagnosis) {
-            PatientDx::create([
+        $diagnoses_already_saved = PatientDx::where('patient_id', $this->patient->id)
+            ->get('diagnosis_id')
+            ->flatten()
+            ->pluck('diagnosis_id')
+            ->toArray();
+
+        $saved_diagnoses = $this->selected_diagnoses
+            ->filter(function (Diagnosis $diagnosis) use ($diagnoses_already_saved) {
+                return !in_array($diagnosis->id, $diagnoses_already_saved);
+            })
+            ->each(function (Diagnosis $diagnosis) {
+            PatientDx::createOrFirst([
                 'patient_id'   => $this->patient->id,
                 'diagnosis_id' => $diagnosis->id,
             ]);
         });
 
-        Flux::modal($this->modal)->close();
+        Flux::modal($this->modal)
+            ->close();
+        $this->resetExcept(['patient', 'modal']);
+        $this->selected_diagnoses = collect($this->patient->diagnoses);
+
         // set the error messages
         $message = __('ehr.success_message', ['item' => __('diagnosis.diagnoses')]);
         $heading = __('ehr.success_heading');
@@ -80,7 +94,7 @@ new class extends Component {
     }
 }; ?>
 
-<form wire:submit="save">
+<form wire:submit="save" class="mt-6">
     <div class="space-y-2">
         <flux:select
                 wire:model="diagnosis_id"
@@ -103,9 +117,8 @@ new class extends Component {
         </flux:select>
         @if(count($selected_diagnoses) > 0)
             <div class="list-group">
-
                 @foreach($selected_diagnoses as $selected_diagnosis)
-                    <div class="list-item">
+                    <div class="list-item" wire:key="selected-{{ $selected_diagnosis->id }}">
                         <div>
                             {{ $selected_diagnosis->title }} ({{ $selected_diagnosis->code }})
                         </div>
@@ -119,7 +132,11 @@ new class extends Component {
             </div>
         @endif
         <div class="flex justify-center gap-2">
-            <flux:button type="submit" variant="primary" color="emerald">
+            <flux:button
+                    type="submit"
+                    variant="primary"
+                    color="emerald"
+            >
                 Save
             </flux:button>
 
