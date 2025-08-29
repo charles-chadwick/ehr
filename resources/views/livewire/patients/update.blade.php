@@ -4,7 +4,6 @@ use App\Enums\PatientGender;
 use App\Enums\PatientStatus;
 use App\Livewire\Forms\PatientForm;
 use App\Livewire\Traits\HasAvatarUpload;
-use App\Livewire\Traits\HasDocumentUpload;
 use App\Models\Patient;
 use Flux\Flux;
 use Livewire\Attributes\On;
