@@ -3,6 +3,9 @@
 ### Pagination
 * When on a second page in one block, and an item in another block is added, the page number should be reset. 
 
+### Filtering and Sorting 
+* Need to come up with a component that can be reused for all tables.
+
 ### Avatars
 * ~~Make avatars pop out~~.
 * Resize avatar on upload.
