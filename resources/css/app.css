@@ -9,9 +9,27 @@
 
 }
 
-body {
-    @apply text-zinc-700;
+
+@theme {
+    --color-accent: var(--color-emerald-600);
+    --color-accent-content: var(--color-emerald-600);
+    --color-accent-foreground: var(--color-white);
+} @layer theme {
+    .dark {
+        --color-accent: var(--color-emerald-600);
+        --color-accent-content: var(--color-emerald-400);
+        --color-accent-foreground: var(--color-white);
+    }
 }
+
+[data-flux-navbar-items] {
+    @apply text-white;
+}
+
+body {
+    @apply bg-zinc-100 text-zinc-700;
+}
+
 a.link {
     @apply text-emerald-600 hover:underline;
 }
@@ -19,6 +37,7 @@ a.link {
 .list-group {
     @apply divide-y divide-gray-100 dark:divide-white/5  text-sm;
 }
+
 .list-item {
     @apply flex flex-wrap items-center justify-between gap-x-2 gap-y-2 py-2 sm:flex-nowrap;
 }

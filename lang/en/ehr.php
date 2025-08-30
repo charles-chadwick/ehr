@@ -26,10 +26,12 @@ return [
     // Nav Menu Items
     'dashboard'       => 'Dashboard',
     'settings'        => 'Settings',
+    'help'            => 'Help',
     'your_profile'    => 'Your Profile',
     'sign_out'        => 'Sign Out',
     'open_menu'       => 'Open Main Menu',
-    'open_user_menu'       => 'Open User Menu',
+    'open_user_menu'  => 'Open User Menu',
+    'show_all'        => 'Show All :items',
 
 
 ];

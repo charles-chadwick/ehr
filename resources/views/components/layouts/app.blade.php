@@ -24,232 +24,173 @@
     @fluxAppearance
     <!-- Styles / Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+
 </head>
-<body class="h-full  bg-zinc-100">
+
+
+<body class="min-h-screen bg-white dark:bg-zinc-800">
+{{-- modals --}}
+<flux:modal name="patients.create">
+    <livewire:patients.create
+        modal="patients.create"
+    />
+</flux:modal>
+
+{{-- header ---}}
+<flux:header
+    class="bg-emerald-500 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700"
+>
+    <flux:sidebar.toggle
+        class="lg:hidden"
+        icon="bars-2"
+    />
+
+    {{-- left hand side --}}
+    <flux:navbar class="-mb-px max-lg:hidden">
+
+        <flux:navbar.item
+            href="#"
+        >{{ __('ehr.dashboard') }}
+        </flux:navbar.item>
+
+        <flux:separator
+            vertical
+            class="my-2"
+        />
+
+        <flux:dropdown class="max-lg:hidden">
+            <flux:navbar.item icon:trailing="chevron-down">{{ __('patients.patients') }}</flux:navbar.item>
+            <flux:navmenu>
+                <flux:navmenu.item href="{{ route('patients.index') }}">
+                    {{ __('ehr.show_all', ['items' => __('patients.patients')]) }}
+                </flux:navmenu.item>
+                <flux:separator />
+                <flux:navmenu.item href="#">
+                    <flux:modal.trigger name="patients.create">{{ __('ehr.create_new', ['item' => __('patients.patient')]) }}</flux:modal.trigger>
+                </flux:navmenu.item>
+            </flux:navmenu>
+        </flux:dropdown>
+
+        <flux:separator
+            vertical
+            class="my-2"
+        />
+
+        <flux:navbar.item
+            href="#"
+        >Calendar
+        </flux:navbar.item>
+
+        <flux:separator
+            vertical
+            class="my-2"
+        />
+    </flux:navbar>
+
+    <flux:spacer />
+
+    {{-- right hand side --}}
+    <flux:navbar class="me-4">
+        <flux:navbar.item
+            class="max-lg:hidden"
+            icon="cog-6-tooth"
+            href="#"
+            label="{{ __('ehr.settings') }}"
+        />
+        <flux:navbar.item
+            class="max-lg:hidden"
+            icon="information-circle"
+            href="#"
+            label="{{ __('ehr.help') }}"
+        />
+    </flux:navbar>
+
+    <flux:dropdown
+        position="top"
+        align="start"
+    >
+        <flux:profile avatar="{{ auth()->user()->avatar  }}" />
+        <flux:menu>
+            <flux:menu.item>{{ auth()->user()->full_name }}</flux:menu.item>
+            <flux:menu.separator />
+            <flux:menu.item icon="arrow-right-start-on-rectangle">{{ __('ehr.sign_out') }}</flux:menu.item>
+        </flux:menu>
+    </flux:dropdown>
+
+</flux:header>
+
+<flux:sidebar
+    stashable
+    sticky
+    class="lg:hidden bg-zinc-50 dark:bg-zinc-900 border-r rtl:border-r-0 rtl:border-l border-zinc-200 dark:border-zinc-700"
+>
+    <flux:sidebar.toggle
+        class="lg:hidden"
+        icon="x-mark"
+    />
+
+    <flux:navlist variant="outline">
+        <flux:navlist.item
+            icon="home"
+            href="#"
+            current
+        >Home
+        </flux:navlist.item>
+        <flux:navlist.item
+            icon="inbox"
+            badge="12"
+            href="#"
+        >Inbox
+        </flux:navlist.item>
+        <flux:navlist.item
+            icon="document-text"
+            href="#"
+        >Documents
+        </flux:navlist.item>
+        <flux:navlist.item
+            icon="calendar"
+            href="#"
+        >Calendar
+        </flux:navlist.item>
+        <flux:navlist.group
+            expandable
+            heading="Favorites"
+            class="max-lg:hidden"
+        >
+            <flux:navlist.item href="#">Marketing site</flux:navlist.item>
+            <flux:navlist.item href="#">Android app</flux:navlist.item>
+            <flux:navlist.item href="#">Brand guidelines</flux:navlist.item>
+        </flux:navlist.group>
+    </flux:navlist>
+    <flux:spacer />
+    <flux:navlist variant="outline">
+        <flux:navlist.item
+            icon="cog-6-tooth"
+            href="#"
+        >Settings
+        </flux:navlist.item>
+        <flux:navlist.item
+            icon="information-circle"
+            href="#"
+        >Help
+        </flux:navlist.item>
+    </flux:navlist>
+</flux:sidebar>
+<flux:main>
+    <div class="flex max-md:flex-col items-start">
+        <flux:separator class="md:hidden" />
+        <div class="flex-1 max-md:pt-6 self-stretch">
+            {{ $slot }}
+        </div>
+    </div>
+</flux:main>
+</body>
+@fluxScripts
+@livewireScripts
 @persist('toast')
 <flux:toast position="top end" />
 @endpersist
-<div class="min-h-full">
-    <nav class="bg-emerald-600 dark:bg-emerald-800">
-        <div class="mx-auto  px-4 sm:px-6 lg:px-8">
-            <div class="flex h-16 items-center justify-between">
-                <div class="flex items-center">
-                    <div class="shrink-0">
-                        <img
-                            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=emerald&shade=300"
-                            alt="Your Company"
-                            class="size-8"
-                        />
-                    </div>
-                    <div class="hidden md:block">
-                        <div class="ml-10 flex items-baseline space-x-4">
-                            <!-- Current: "bg-emerald-700 dark:bg-emerald-950/40 text-white", Default: "text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75" -->
-                            <a
-                                href="#"
-                                aria-current="page"
-                                class="rounded-md bg-emerald-700 px-3 py-2 text-sm font-medium text-white dark:bg-emerald-950/40"
-                            >{{ __('ehr.dashboard') }}</a>
-                            <a
-                                href="{{ route('patients.index') }}"
-                                class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
-                            >{{ __('patients.patients') }}</a> <a
-                                href="{{ route('settings.dashboard') }}"
-                                class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
-                            >{{ __('ehr.settings') }}</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-4 flex items-center md:ml-6">
-                        <button
-                            type="button"
-                            class="relative rounded-full p-1 text-emerald-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white"
-                        >
-                            <span class="absolute -inset-1.5"></span>
-                            <span class="sr-only">{{ __('ehr.view_notifications') }}</span>
-                            <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                                data-slot="icon"
-                                aria-hidden="true"
-                                class="size-6"
-                            >
-                                <path
-                                    d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
-                        </button>
 
-                        <!-- Profile dropdown -->
-                        <el-dropdown class="relative ml-3">
-                            <button class="relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
-                                <span class="absolute -inset-1.5"></span>
-                                <span class="sr-only">{{ __('ehr.open_user_menu') }}</span>
-                                <img
-                                    src="{{ auth()->user()->avatar }}"
-                                    alt=""
-                                    class="size-8 rounded-full outline -outline-offset-1 outline-white/10"
-                                />
-                            </button>
-
-                            <el-menu
-                                anchor="bottom end"
-                                popover
-                                class="w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline-1 outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-zinc-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10"
-                            >
-                                <a
-                                    href="#"
-                                    class="block px-4 py-2 text-sm text-zinc-700 focus:bg-zinc-100 focus:outline-hidden dark:text-zinc-200 dark:focus:bg-white/5"
-                                >{{ __('ehr.your_profile') }}</a>
-                                <a
-                                    href="#"
-                                    class="block px-4 py-2 text-sm text-zinc-700 focus:bg-zinc-100 focus:outline-hidden dark:text-zinc-200 dark:focus:bg-white/5"
-                                >{{ __('ehr.settings') }}</a>
-                                <a
-                                    href="#"
-                                    class="block px-4 py-2 text-sm text-zinc-700 focus:bg-zinc-100 focus:outline-hidden dark:text-zinc-200 dark:focus:bg-white/5"
-                                >{{ __('ehr.sign_out') }}</a>
-                            </el-menu>
-                        </el-dropdown>
-                    </div>
-                </div>
-                <div class="-mr-2 flex md:hidden">
-                    <!-- Mobile menu button -->
-                    <button
-                        type="button"
-                        command="--toggle"
-                        commandfor="mobile-menu"
-                        class="relative inline-flex items-center justify-center rounded-md bg-emerald-600 p-2 text-emerald-200 hover:bg-emerald-500/75 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white dark:bg-emerald-800 dark:hover:bg-emerald-700/75"
-                    >
-                        <span class="absolute -inset-0.5"></span>
-                        <span class="sr-only">{{ __('ehr.open_menu') }}</span>
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.5"
-                            data-slot="icon"
-                            aria-hidden="true"
-                            class="size-6 in-aria-expanded:hidden"
-                        >
-                            <path
-                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            />
-                        </svg>
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.5"
-                            data-slot="icon"
-                            aria-hidden="true"
-                            class="size-6 not-in-aria-expanded:hidden"
-                        >
-                            <path
-                                d="M6 18 18 6M6 6l12 12"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <el-disclosure
-            id="mobile-menu"
-            hidden
-            class="block md:hidden"
-        >
-            <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-                <!-- Current: "bg-emerald-700 dark:bg-emerald-950/40 text-white", Default: "text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75" -->
-                <a
-                    href="#"
-                    aria-current="page"
-                    class="block rounded-md bg-emerald-700 px-3 py-2 text-base font-medium text-white dark:bg-emerald-950/40"
-                >{{ __('ehr.dashboard') }}</a>
-                <a
-                    href="{{ route('patients.index') }}"
-                    class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
-                >{{ __('patients.patients') }}</a>
-                <a
-                    href="{{ route('settings.dashboard') }}"
-                    class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
-                >{{ __('ehr.settings') }}</a>
-            </div>
-            <div class="border-t border-emerald-700 pt-4 pb-3 dark:border-emerald-800">
-                <div class="flex items-center px-5">
-                    <div class="shrink-0">
-                        <img
-                            src="{{ auth()->user()->avatar }}"
-                            alt=""
-                            class="size-10 rounded-full outline -outline-offset-1 outline-white/10"
-                        />
-                    </div>
-                    <div class="ml-3">
-                        <div class="text-base font-medium text-white">{{ auth()->user()->full_name }}</div>
-                        <div class="text-sm font-medium text-emerald-300">{{ auth()->user()->email }}</div>
-                    </div>
-                    <button
-                        type="button"
-                        class="relative ml-auto shrink-0 rounded-full p-1 text-emerald-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white"
-                    >
-                        <span class="absolute -inset-1.5"></span>
-                        <span class="sr-only">{{ __('ehr.view_notifications') }}</span>
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="1.5"
-                            data-slot="icon"
-                            aria-hidden="true"
-                            class="size-6"
-                        >
-                            <path
-                                d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                            />
-                        </svg>
-                    </button>
-                </div>
-                <div class="mt-3 space-y-1 px-2">
-                    <a
-                        href="#"
-                        class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
-                    >{{ __('ehr.your_profile') }}</a>
-                    <a
-                        href="#"
-                        class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
-                    >{{ __('ehr.settings') }}</a>
-                    <a
-                        href="#"
-                        class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
-                    >{{ __('ehr.sign_out') }}</a>
-                </div>
-            </div>
-        </el-disclosure>
-    </nav>
-
-    <header class="relative bg-white shadow-sm dark:bg-zinc-800 dark:shadow-none dark:after:pointer-events-none dark:after:absolute dark:after:inset-x-0 dark:after:bottom-0 dark:after:h-px dark:after:bg-white/10">
-        <div class="mx-auto px-4 py-4 sm:px-6 lg:px-8">
-            <h1 class="text-lg/6 font-semibold text-zinc-900 dark:text-white">{{ __('ehr.dashboard') }}</h1>
-        </div>
-    </header>
-    <main>
-        <div class="px-4 py-6 sm:px-6 lg:px-8">
-            {{ $slot }}
-        </div>
-    </main>
-</div>
-@fluxScripts
-@livewireScripts
-</body>
 </html>

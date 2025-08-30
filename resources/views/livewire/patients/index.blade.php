@@ -24,7 +24,7 @@ new class extends Component {
     public function mount(Patient $patient) : void
     {
         $this->patient = $patient;
-        $this->sort_by = 'id';
+        $this->sort_by = 'first_name';
         $this->sort_direction = 'asc';
     }
 
@@ -55,12 +55,7 @@ new class extends Component {
 
 <div>
     {{-- patient modals --}}
-    <div class="flex justify-between mb-4">
-        <flux:button>
-            <flux:modal.trigger name="patients.create">
-                Create new
-            </flux:modal.trigger>
-        </flux:button>
+    <div class="flex justify-end mb-4">
         <div class="search-form">
             <flux:input
                     icon="magnifying-glass"
@@ -72,11 +67,7 @@ new class extends Component {
             />
         </div>
     </div>
-    <flux:modal name="patients.create">
-        <livewire:patients.create
-            modal="patients.create"
-        />
-    </flux:modal>
+
     <flux:card>
         {{-- patient list --}}
         <ul
