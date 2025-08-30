@@ -74,9 +74,9 @@ new class extends Component {
                 </flux:menu.submenu>
 
                 <flux:menu.submenu heading="Filter">
-                    <flux:menu.radio wire:click="filter('status', PatientStatus::Active)">{{ PatientStatus::Active }}</flux:menu.radio>
-                    <flux:menu.radio wire:click="filter('status', PatientStatus::Inactive)">{{ PatientStatus::Inactive }}</flux:menu.checkbox>
-                    <flux:menu.radio wire:click="filter('status', PatientStatus::Prospective)">{{ PatientStatus::Prospective }}</flux:menu.checkbox>
+                    <flux:menu.radio wire:click="filter('status', '{{PatientStatus::Active}} ')">{{ PatientStatus::Active }}</flux:menu.checkbox>
+                    <flux:menu.radio wire:click="filter('status', '{{PatientStatus::Inactive}} ')">{{ PatientStatus::Inactive }}</flux:menu.checkbox>
+                    <flux:menu.radio wire:click="filter('status', '{{PatientStatus::Prospective}} ')">{{ PatientStatus::Prospective }}</flux:menu.checkbox>
                 </flux:menu.submenu>
             </flux:menu>
         </flux:dropdown>

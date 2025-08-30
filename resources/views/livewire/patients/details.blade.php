@@ -35,14 +35,22 @@ new class extends Component {
         <livewire:activity.index :object="$patient" />
     </flux:modal>
 
+    <flux:modal
+            name="avatar-{{ $patient->id }}" class="max-w-[300px] max-h-[300px] overflow-hidden"
+    >
+        <img src="{{ $patient->avatar }}" alt="Hi">
+    </flux:modal>
+
     {{-- basic --}}
     <div class="flex flex-row text-sm">
         <div class="flex-none mr-2">
+            <flux:modal.trigger name="avatar-{{ $patient->id }}">
             <flux:avatar
                     src="{{ $patient->avatar }}"
                     alt=""
-                    class="w-16 h-16"
+                    class="w-16 h-16 max-w-16 max-h-16 overflow-hidden cursor-pointer"
             />
+            </flux:modal.trigger>
         </div>
         <div class="flex-grow">
             <a
