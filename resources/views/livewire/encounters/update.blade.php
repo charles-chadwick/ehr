@@ -3,6 +3,7 @@
 use App\Enums\EncounterStatus;
 use App\Enums\EncounterType;
 use App\Livewire\Forms\EncounterForm;
+use App\Livewire\Traits\HasModal;
 use App\Models\Encounter;
 use App\Models\Patient;
 use Carbon\Carbon;
@@ -12,6 +13,8 @@ use Livewire\Volt\Component;
 
 new class extends Component {
 
+    use HasModal;
+
     public EncounterForm $form;
     public Patient       $patient;
     public               $date_of_service;
@@ -19,7 +22,7 @@ new class extends Component {
     public               $status;
     public               $title;
     public               $content;
-    public $modal;
+
     public function mount(Patient $patient) : void
     {
         $this->form->patient = $patient;
@@ -58,10 +61,12 @@ new class extends Component {
 
             // reset the thing
             $this->form->resetExcept('patient');
+            $this->form->date = now()->format('Y-m-d');
 
             // toast and then redirect if need be
             Flux::toast($message, heading: $heading, variant: $variant);
-            Flux::modal($this->modal)->close();
+            Flux::modal($this->modal)
+                ->close();
 
         } else {
 
@@ -136,6 +141,9 @@ new class extends Component {
             wire:click="saveAndSign"
         >
             {{ __('encounters.save_and_sign') }}
+        </flux:button>
+        <flux:button x-on:click="Flux.modal('{{ $this->modal }}').close()">
+            {{ __('ehr.cancel') }}
         </flux:button>
     </div>
 
