@@ -3,12 +3,15 @@
 use App\Enums\EncounterStatus;
 use App\Enums\EncounterType;
 use App\Livewire\Forms\EncounterForm;
+use App\Livewire\Traits\HasModal;
 use App\Models\Patient;
 use Carbon\Carbon;
 use Flux\Flux;
 use Livewire\Volt\Component;
 
 new class extends Component {
+
+    use HasModal;
 
     public EncounterForm $form;
     public Patient       $patient;
@@ -22,7 +25,7 @@ new class extends Component {
     {
         $this->form->patient = $patient;
         $this->form->date_of_service = Carbon::tomorrow()
-                                       ->format('Y-m-d');
+            ->format('Y-m-d');
     }
 
     public function saveWithoutSigning() : void
@@ -50,13 +53,12 @@ new class extends Component {
 
             // reset the thing
             $this->form->resetExcept('patient');
+            $this->form->date = now()->format('Y-m-d');
 
-            // toast and then redirect if need be
+            // toast and dispatch
             Flux::toast($message, heading: $heading, variant: $variant);
-
-            if ($status == EncounterStatus::Signed) {
-                $this->redirect(route('encounters.view', $encounter));
-            }
+            Flux::modal($this->modal)->close();
+            $this->dispatch('encounters.index:refresh');
         } else {
 
             // set the error messages
@@ -70,23 +72,23 @@ new class extends Component {
 
 
 <form
-        wire:submit="saveWithoutSigning"
+    wire:submit="saveWithoutSigning"
 >
     {{-- Title, Type and DOS --}}
     <div class="flex flex-row gap-4">
         <div class="flex-1/2">
             <flux:input
-                    label="{{ __('encounters.title') }}"
-                    placeholder="{{ __('encounters.title') }}"
-                    wire:model="form.title"
+                label="{{ __('encounters.title') }}"
+                placeholder="{{ __('encounters.title') }}"
+                wire:model="form.title"
             />
         </div>
         <div class="flex-1/4">
             <flux:select
-                    label="{{ __('encounters.type') }}"
-                    placeholder="{{ __('Choose Type') }}"
-                    variant="listbox"
-                    wire:model="form.type"
+                label="{{ __('encounters.type') }}"
+                placeholder="{{ __('Choose Type') }}"
+                variant="listbox"
+                wire:model="form.type"
             >
                 @foreach(EncounterType::cases() as $encounter_type)
                     <flux:select.option>{{ $encounter_type }}</flux:select.option>
@@ -95,10 +97,10 @@ new class extends Component {
         </div>
         <div class="flex-1/4">
             <flux:date-picker
-                    label="{{ __('encounters.date_of_service') }}"
-                    selectable-header
-                    value="{{ $date_of_service }}"
-                    wire:model="form.date_of_service"
+                label="{{ __('encounters.date_of_service') }}"
+                selectable-header
+                value="{{ $date_of_service }}"
+                wire:model="form.date_of_service"
             >
                 <x-slot name="trigger">
                     <flux:date-picker.input />
@@ -110,26 +112,29 @@ new class extends Component {
     {{-- content --}}
     <div class="gap-4 mt-4">
         <flux:editor
-                class="h-full min-h-[600px]"
-                placeholder="{{ __('encounters.content') }}"
-                wire:model="form.content"
+            class="h-full min-h-[600px]"
+            placeholder="{{ __('encounters.content') }}"
+            wire:model="form.content"
         />
     </div>
 
     {{-- buttons --}}
     <div class="px-2 mt-4 text-center">
         <flux:button
-                color="emerald"
-                type="submit"
-                variant="primary"
+            color="emerald"
+            type="submit"
+            variant="primary"
         >
             {{ __('ehr.save') }}
         </flux:button>
         <flux:button
-                color="primary"
-                wire:click="saveAndSign"
+            color="primary"
+            wire:click="saveAndSign"
         >
             {{ __('encounters.save_and_sign') }}
+        </flux:button>
+        <flux:button x-on:click="Flux.modal('{{ $this->modal }}').close()">
+            {{ __('ehr.cancel') }}
         </flux:button>
     </div>
 
