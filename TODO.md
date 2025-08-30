@@ -4,7 +4,7 @@
 * When on a second page in one block, and an item in another block is added, the page number should be reset. 
 
 ### Avatars
-* Make avatars pop out.
+* ~~Make avatars pop out~~.
 * Resize avatar on upload.
 
 ### Appointments
@@ -16,10 +16,10 @@
 
 ### Patients
 * ~~Add patient search~~
-* Fix avatar upload issue on creating user. 
-* Add filtering to patients' list
+* ~~Fix avatar upload issue on creating user~~. 
+* ~~Add filtering to patients' list~~
 * ~~Style patients list better~~ 
-* Make avatar pop out
+* ~~Make avatar pop out~~
 
 ### Diagnoses 
 * Fix issue with event not firing when adding. 
