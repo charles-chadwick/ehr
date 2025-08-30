@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserRole;
 use App\Models\Traits\HasAvatar;
 use App\Models\Traits\IsPerson;
 use Illuminate\Auth\Authenticatable;
@@ -35,6 +36,11 @@ class User extends Base implements AuthenticatableContract, AuthorizableContract
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function scopeStaff($query)
+    {
+        return $query->where('role', '!=', UserRole::Admin->value);
     }
 
     /**

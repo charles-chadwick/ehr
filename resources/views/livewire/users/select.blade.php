@@ -13,7 +13,8 @@ new class extends Component {
 
     public function mount() : void
     {
-        $this->user_list = User::all();
+        $this->user_list = User::staff()
+            ->get();
     }
 
     public function removeUser(int $id) : void
@@ -26,12 +27,12 @@ new class extends Component {
 {{-- user selection --}}
 <div>
     <flux:select
-            variant="listbox"
-            searchable
-            placeholder="{{ __('users.choose') }}"
-            wire:model.live="selected_user_ids"
-            label="{{ __('users.users') }}"
-            multiple
+        label="{{ __('users.users') }}"
+        multiple
+        placeholder="{{ __('users.choose') }}"
+        searchable
+        variant="listbox"
+        wire:model.live="selected_user_ids"
     >
         @foreach($user_list as $user)
             <flux:select.option value="{{ $user->id }}">{{ $user->full_name_extended }}</flux:select.option>
@@ -41,8 +42,8 @@ new class extends Component {
         @foreach($selected_user_ids as $user_id)
             @php $user = User::find($user_id) @endphp
             <flux:badge
-                    dismissable
-                    wire:click="removeUser({{ $user_id }})"
+                dismissable
+                wire:click="removeUser({{ $user_id }})"
             >
                 {{ $user->full_name_extended }}
             </flux:badge>
