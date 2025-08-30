@@ -2,6 +2,7 @@
 
 use App\Enums\NoteType;
 use App\Livewire\Forms\NoteForm;
+use App\Livewire\Traits\HasModal;
 use App\Models\Note;
 use Flux\Flux;
 use Illuminate\Database\Eloquent\Model;
@@ -10,9 +11,11 @@ use Livewire\Volt\Component;
 
 new class extends Component {
 
+    use HasModal;
+
     public NoteForm $form;
     public Model    $model;
-    public string   $modal             = "";
+
 
     #[On('notes.update:load')]
     public function load(Note $note) : void
@@ -37,7 +40,8 @@ new class extends Component {
 
             // refresh and close
             $this->dispatch('notes.index:refresh');
-            Flux::modal($this->modal)->close();
+            Flux::modal($this->modal)
+                ->close();
         } else {
             // error
             $message = __('ehr.error_updating', ['item' => __('notes.note')]);
@@ -51,10 +55,10 @@ new class extends Component {
 }; ?>
 <form wire:submit="update">
     <flux:select
-            label="{{ __('notes.type') }}"
-            placeholder="{{ __('notes.type') }}"
-            variant="listbox"
-            wire:model="form.type"
+        label="{{ __('notes.type') }}"
+        placeholder="{{ __('notes.type') }}"
+        variant="listbox"
+        wire:model="form.type"
     >
         @foreach(NoteType::cases() as $note_type)
             <flux:select.option>{{ $note_type->value }}</flux:select.option>
@@ -62,27 +66,27 @@ new class extends Component {
     </flux:select>
     <div class="mt-4">
         <flux:input
-                label="{{ __('notes.title') }}"
-                placeholder="{{ __('notes.title') }}"
-                wire:model="form.title"
+            label="{{ __('notes.title') }}"
+            placeholder="{{ __('notes.title') }}"
+            wire:model="form.title"
         />
     </div>
     <div class="mt-4">
         <flux:editor
-                label="{{ __('notes.content') }}"
-                placeholder="{{ __('notes.content') }}"
-                wire:model="form.content"
+            label="{{ __('notes.content') }}"
+            placeholder="{{ __('notes.content') }}"
+            wire:model="form.content"
         />
     </div>
     <div class="mt-4 text-center">
         <flux:button
-                color="emerald"
-                type="submit"
-                variant="primary"
+            color="emerald"
+            type="submit"
+            variant="primary"
         >
             {{ __('ehr.save') }}
         </flux:button>
-        <flux:button>
+        <flux:button x-on:click="Flux.modal('{{ $this->modal }}').close()">
             {{ __('ehr.cancel') }}
         </flux:button>
     </div>
