@@ -34,26 +34,7 @@ class UserSeeder extends Seeder
 
         $characters = collect(json_decode(file_get_contents(database_path('src/rickandmorty_characters.json')),
             true))->whereIn('id', [
-                3,
-                5,
-                9,
-                10,
-                23,
-                29,
-                41,
-                59,
-                108,
-                109,
-                111,
-                121,
-                139,
-                146,
-                149,
-                163,
-                187,
-                196,
-                218,
-                21,
+            1,11,15,42,43,79,82,85,86,91,103,107,116,175,199,206,209,215,230,236,249,270,274,277,28
             ]);
         $already_in = [];
         $counter = 0;
@@ -65,13 +46,13 @@ class UserSeeder extends Seeder
             }
 
             $role = match (true) {
-                $counter <= 4 => UserRole::Doctor,
+                $counter <= 5 => UserRole::Doctor,
                 $counter <= 10 => UserRole::Nurse,
                 $counter <= 15 => UserRole::MedicalAssistant,
                 default => UserRole::Staff
             };
 
-            if ($counter === 40) {
+            if ($counter === 25) {
                 exit('Done');
             }
 
