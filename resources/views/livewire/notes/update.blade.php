@@ -32,9 +32,12 @@ new class extends Component {
             $heading = __('ehr.success_heading');
             $variant = "success";
 
+            // reset the thing
+            $this->form->resetExcept('model');
+
+            // refresh and close
             $this->dispatch('notes.index:refresh');
-            Flux::modal($this->modal)
-                ->close();
+            Flux::modal($this->modal);
         } else {
             // error
             $message = __('ehr.error_updating', ['item' => __('notes.note')]);

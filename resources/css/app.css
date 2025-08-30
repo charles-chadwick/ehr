@@ -22,7 +22,7 @@
     }
 }
 
-[data-flux-navbar-items], [data-flux-icon] {
+header [data-flux-navbar-items], header [data-flux-icon] {
     @apply text-white;
 }
 

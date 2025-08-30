@@ -126,42 +126,5 @@ new class extends Component {
                     wire:key="{{ uniqid() }}"
             />
         </flux:card>
-
-        {{-- diagnosis --}}
-        <flux:card size="sm">
-            <div class="flex flex-row justify-between items-center">
-                <h2 class="font-semibold text-sm mb-2">
-                    {{ __('diagnosis.diagnosis') }}
-                </h2>
-                <flux:modal
-                        class="xl:max-w-1/4 xl:w-1/4 sm:max-w-full sm:w-3/4"
-                        name="diagnosis.search"
-                >
-                    <livewire:diagnosis.search
-                            modal="diagnosis.search"
-                            :patient="$patient"
-                    />
-                </flux:modal>
-                <flux:dropdown
-                        align="end"
-                        position="bottom"
-                >
-                    <flux:button icon:trailing="chevron-down">{{ __('ehr.options') }}</flux:button>
-                    <flux:menu>
-                        <flux:menu.item icon="plus">
-                            <flux:modal.trigger name="diagnosis.search">
-                                {{ __('ehr.create_new', ['item' => __('diagnosis.diagnosis')]) }}
-                            </flux:modal.trigger>
-                        </flux:menu.item>
-                    </flux:menu>
-                </flux:dropdown>
-            </div>
-
-            <livewire:diagnosis.index
-                    :patient="$patient"
-                    wire:key="{{ uniqid() }}"
-            />
-
-        </flux:card>
     </div>
 </div>

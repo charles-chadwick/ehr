@@ -32,6 +32,9 @@ new class extends Component {
             // reset the thing
             $this->form->resetExcept('model');
 
+            // refresh and close
+            $this->dispatch('notes.index:refresh');
+
         } else {
 
             // set the error messages
@@ -39,10 +42,10 @@ new class extends Component {
             $heading = __('ehr.error_heading');
             $variant = "danger";
         }
+
         Flux::toast($message, heading: $heading, variant: $variant, position: "top end");
         Flux::modal($this->modal)
             ->close();
-        $this->dispatch('notes.index:refresh');
     }
 }; ?>
 
