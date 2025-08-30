@@ -17,12 +17,19 @@ return [
     'success_updated' => 'Successfully updated :item.',
     'success_deleted' => 'Successfully deleted :item.',
 
-    'error_heading' => 'Error!',
-    'error_creating' => 'Error creating :item.',
-    'error_updating' => 'Error updating :item.',
-    'error_deleting' => 'Error deleting :item.',
-    
-    
-    
+    // Error Messages
+    'error_heading'   => 'Error!',
+    'error_creating'  => 'Error creating :item.',
+    'error_updating'  => 'Error updating :item.',
+    'error_deleting'  => 'Error deleting :item.',
+
+    // Nav Menu Items
+    'dashboard'       => 'Dashboard',
+    'settings'        => 'Settings',
+    'your_profile'    => 'Your Profile',
+    'sign_out'        => 'Sign Out',
+    'open_menu'       => 'Open Main Menu',
+    'open_user_menu'       => 'Open User Menu',
+
 
 ];

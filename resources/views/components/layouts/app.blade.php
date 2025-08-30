@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html
-        lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-        class="h-full bg-gray-100 dark:bg-zinc-900"
+    lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+    class="h-full bg-gray-100 dark:bg-zinc-900"
 >
 <head>
     <meta charset="utf-8">
     <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1"
+        name="viewport"
+        content="width=device-width, initial-scale=1"
     >
 
     <title>Laravel</title>
 
     <!-- Fonts -->
     <link
-            rel="preconnect"
-            href="https://fonts.bunny.net"
+        rel="preconnect"
+        href="https://fonts.bunny.net"
     >
     <script
-            src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1"
-            type="module"
+        src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1"
+        type="module"
     ></script>
     @fluxAppearance
     <!-- Styles / Scripts -->
@@ -37,47 +37,50 @@
                 <div class="flex items-center">
                     <div class="shrink-0">
                         <img
-                                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=emerald&shade=300"
-                                alt="Your Company"
-                                class="size-8"
+                            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=emerald&shade=300"
+                            alt="Your Company"
+                            class="size-8"
                         />
                     </div>
                     <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-4">
                             <!-- Current: "bg-emerald-700 dark:bg-emerald-950/40 text-white", Default: "text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75" -->
                             <a
-                                    href="#"
-                                    aria-current="page"
-                                    class="rounded-md bg-emerald-700 px-3 py-2 text-sm font-medium text-white dark:bg-emerald-950/40"
-                            >Dashboard</a>
+                                href="#"
+                                aria-current="page"
+                                class="rounded-md bg-emerald-700 px-3 py-2 text-sm font-medium text-white dark:bg-emerald-950/40"
+                            >{{ __('ehr.dashboard') }}</a>
                             <a
-                                    href="{{ route('patients.index') }}"
-                                    class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
-                            >Patients</a>
+                                href="{{ route('patients.index') }}"
+                                class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
+                            >{{ __('patients.patients') }}</a> <a
+                                href="{{ route('settings.dashboard') }}"
+                                class="rounded-md px-3 py-2 text-sm font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
+                            >{{ __('ehr.settings') }}</a>
                         </div>
                     </div>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-4 flex items-center md:ml-6">
                         <button
-                                type="button"
-                                class="relative rounded-full p-1 text-emerald-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white"
+                            type="button"
+                            class="relative rounded-full p-1 text-emerald-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white"
                         >
                             <span class="absolute -inset-1.5"></span>
-                            <span class="sr-only">View notifications</span>
+                            <span class="sr-only">{{ __('ehr.view_notifications') }}</span>
                             <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="1.5"
-                                    data-slot="icon"
-                                    aria-hidden="true"
-                                    class="size-6"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                data-slot="icon"
+                                aria-hidden="true"
+                                class="size-6"
                             >
                                 <path
-                                        d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                    d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
                                 />
                             </svg>
                         </button>
@@ -86,31 +89,31 @@
                         <el-dropdown class="relative ml-3">
                             <button class="relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
                                 <span class="absolute -inset-1.5"></span>
-                                <span class="sr-only">Open user menu</span>
+                                <span class="sr-only">{{ __('ehr.open_user_menu') }}</span>
                                 <img
-                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                        alt=""
-                                        class="size-8 rounded-full outline -outline-offset-1 outline-white/10"
+                                    src="{{ auth()->user()->avatar }}"
+                                    alt=""
+                                    class="size-8 rounded-full outline -outline-offset-1 outline-white/10"
                                 />
                             </button>
 
                             <el-menu
-                                    anchor="bottom end"
-                                    popover
-                                    class="w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline-1 outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-zinc-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10"
+                                anchor="bottom end"
+                                popover
+                                class="w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline-1 outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-zinc-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10"
                             >
                                 <a
-                                        href="#"
-                                        class="block px-4 py-2 text-sm text-zinc-700 focus:bg-zinc-100 focus:outline-hidden dark:text-zinc-200 dark:focus:bg-white/5"
-                                >Your profile</a>
+                                    href="#"
+                                    class="block px-4 py-2 text-sm text-zinc-700 focus:bg-zinc-100 focus:outline-hidden dark:text-zinc-200 dark:focus:bg-white/5"
+                                >{{ __('ehr.your_profile') }}</a>
                                 <a
-                                        href="#"
-                                        class="block px-4 py-2 text-sm text-zinc-700 focus:bg-zinc-100 focus:outline-hidden dark:text-zinc-200 dark:focus:bg-white/5"
-                                >Settings</a>
+                                    href="#"
+                                    class="block px-4 py-2 text-sm text-zinc-700 focus:bg-zinc-100 focus:outline-hidden dark:text-zinc-200 dark:focus:bg-white/5"
+                                >{{ __('ehr.settings') }}</a>
                                 <a
-                                        href="#"
-                                        class="block px-4 py-2 text-sm text-zinc-700 focus:bg-zinc-100 focus:outline-hidden dark:text-zinc-200 dark:focus:bg-white/5"
-                                >Sign out</a>
+                                    href="#"
+                                    class="block px-4 py-2 text-sm text-zinc-700 focus:bg-zinc-100 focus:outline-hidden dark:text-zinc-200 dark:focus:bg-white/5"
+                                >{{ __('ehr.sign_out') }}</a>
                             </el-menu>
                         </el-dropdown>
                     </div>
@@ -118,41 +121,41 @@
                 <div class="-mr-2 flex md:hidden">
                     <!-- Mobile menu button -->
                     <button
-                            type="button"
-                            command="--toggle"
-                            commandfor="mobile-menu"
-                            class="relative inline-flex items-center justify-center rounded-md bg-emerald-600 p-2 text-emerald-200 hover:bg-emerald-500/75 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white dark:bg-emerald-800 dark:hover:bg-emerald-700/75"
+                        type="button"
+                        command="--toggle"
+                        commandfor="mobile-menu"
+                        class="relative inline-flex items-center justify-center rounded-md bg-emerald-600 p-2 text-emerald-200 hover:bg-emerald-500/75 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white dark:bg-emerald-800 dark:hover:bg-emerald-700/75"
                     >
                         <span class="absolute -inset-0.5"></span>
-                        <span class="sr-only">Open main menu</span>
+                        <span class="sr-only">{{ __('ehr.open_menu') }}</span>
                         <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                                data-slot="icon"
-                                aria-hidden="true"
-                                class="size-6 in-aria-expanded:hidden"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            data-slot="icon"
+                            aria-hidden="true"
+                            class="size-6 in-aria-expanded:hidden"
                         >
                             <path
-                                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
                             />
                         </svg>
                         <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                                data-slot="icon"
-                                aria-hidden="true"
-                                class="size-6 not-in-aria-expanded:hidden"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            data-slot="icon"
+                            aria-hidden="true"
+                            class="size-6 not-in-aria-expanded:hidden"
                         >
                             <path
-                                    d="M6 18 18 6M6 6l12 12"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                d="M6 18 18 6M6 6l12 12"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
                             />
                         </svg>
                     </button>
@@ -161,71 +164,75 @@
         </div>
 
         <el-disclosure
-                id="mobile-menu"
-                hidden
-                class="block md:hidden"
+            id="mobile-menu"
+            hidden
+            class="block md:hidden"
         >
             <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
                 <!-- Current: "bg-emerald-700 dark:bg-emerald-950/40 text-white", Default: "text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75" -->
                 <a
-                        href="#"
-                        aria-current="page"
-                        class="block rounded-md bg-emerald-700 px-3 py-2 text-base font-medium text-white dark:bg-emerald-950/40"
-                >Dashboard</a>
+                    href="#"
+                    aria-current="page"
+                    class="block rounded-md bg-emerald-700 px-3 py-2 text-base font-medium text-white dark:bg-emerald-950/40"
+                >{{ __('ehr.dashboard') }}</a>
                 <a
-                        href="{{ route('patients.index') }}"
-                        class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
-                >Patients</a>
+                    href="{{ route('patients.index') }}"
+                    class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
+                >{{ __('patients.patients') }}</a>
+                <a
+                    href="{{ route('settings.dashboard') }}"
+                    class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
+                >{{ __('ehr.settings') }}</a>
             </div>
             <div class="border-t border-emerald-700 pt-4 pb-3 dark:border-emerald-800">
                 <div class="flex items-center px-5">
                     <div class="shrink-0">
                         <img
-                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                alt=""
-                                class="size-10 rounded-full outline -outline-offset-1 outline-white/10"
+                            src="{{ auth()->user()->avatar }}"
+                            alt=""
+                            class="size-10 rounded-full outline -outline-offset-1 outline-white/10"
                         />
                     </div>
                     <div class="ml-3">
-                        <div class="text-base font-medium text-white">Tom Cook</div>
-                        <div class="text-sm font-medium text-emerald-300">tom@example.com</div>
+                        <div class="text-base font-medium text-white">{{ auth()->user()->full_name }}</div>
+                        <div class="text-sm font-medium text-emerald-300">{{ auth()->user()->email }}</div>
                     </div>
                     <button
-                            type="button"
-                            class="relative ml-auto shrink-0 rounded-full p-1 text-emerald-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white"
+                        type="button"
+                        class="relative ml-auto shrink-0 rounded-full p-1 text-emerald-200 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-white"
                     >
                         <span class="absolute -inset-1.5"></span>
-                        <span class="sr-only">View notifications</span>
+                        <span class="sr-only">{{ __('ehr.view_notifications') }}</span>
                         <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                                data-slot="icon"
-                                aria-hidden="true"
-                                class="size-6"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            data-slot="icon"
+                            aria-hidden="true"
+                            class="size-6"
                         >
                             <path
-                                    d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
+                                d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
                             />
                         </svg>
                     </button>
                 </div>
                 <div class="mt-3 space-y-1 px-2">
                     <a
-                            href="#"
-                            class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
-                    >Your profile</a>
+                        href="#"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
+                    >{{ __('ehr.your_profile') }}</a>
                     <a
-                            href="#"
-                            class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
-                    >Settings</a>
+                        href="#"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
+                    >{{ __('ehr.settings') }}</a>
                     <a
-                            href="#"
-                            class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
-                    >Sign out</a>
+                        href="#"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-emerald-500/75 dark:hover:bg-emerald-700/75"
+                    >{{ __('ehr.sign_out') }}</a>
                 </div>
             </div>
         </el-disclosure>
@@ -233,7 +240,7 @@
 
     <header class="relative bg-white shadow-sm dark:bg-zinc-800 dark:shadow-none dark:after:pointer-events-none dark:after:absolute dark:after:inset-x-0 dark:after:bottom-0 dark:after:h-px dark:after:bg-white/10">
         <div class="mx-auto px-4 py-4 sm:px-6 lg:px-8">
-            <h1 class="text-lg/6 font-semibold text-zinc-900 dark:text-white">Dashboard</h1>
+            <h1 class="text-lg/6 font-semibold text-zinc-900 dark:text-white">{{ __('ehr.dashboard') }}</h1>
         </div>
     </header>
     <main>
