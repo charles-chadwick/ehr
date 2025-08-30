@@ -37,7 +37,7 @@ new class extends Component {
 
             // refresh and close
             $this->dispatch('notes.index:refresh');
-            Flux::modal($this->modal);
+            Flux::modal($this->modal)->close();
         } else {
             // error
             $message = __('ehr.error_updating', ['item' => __('notes.note')]);

@@ -82,7 +82,9 @@ new class extends Component {
         >
             {{ __('ehr.save') }}
         </flux:button>
-        <flux:button>
+        <flux:button
+            x-on:click="$flux.modals().close()"
+        >
             {{ __('ehr.cancel') }}
         </flux:button>
     </div>
