@@ -27,9 +27,9 @@ new class extends Component {
     public function notes() : LengthAwarePaginator|_IH_Base_C|array
     {
         return Note::where('notes.notable_type', $this->model::class)
-                   ->where('notes.notable_id', $this->model->id)
-                   ->orderBy($this->sort_by, $this->sort_direction)
-                   ->paginate(3);
+            ->where('notes.notable_id', $this->model->id)
+            ->orderBy($this->sort_by, $this->sort_direction)
+            ->paginate(3);
     }
 
     public function with() : array
@@ -42,34 +42,34 @@ new class extends Component {
 
 <div>
     <flux:modal
-            class="md:max-w-1/2 md:w-1/2 sm:max-w-full sm:w-3/4"
-            name="notes.update"
+        class="md:max-w-1/2 md:w-1/2 sm:max-w-full sm:w-3/4"
+        name="notes.update"
     >
         <livewire:notes.update
-                modal="notes.update"
-                :model="$model"
+            modal="notes.update"
+            :model="$model"
         />
     </flux:modal>
     <ul
-            role="list"
-            class="list-group"
+        role="list"
+        class="list-group"
     >
         @forelse($notes as $note)
             <li
-                    class="list-item"
-                    wire:key="note-{{ $note->id }}"
+                class="list-item"
+                wire:key="note-{{ $note->id }}"
             >
                 {{-- title and stuff --}}
                 <div>
                     <div class="font-semibold flex flex-wrap items-center gap-x-2">
 
                         <a
-                                class="link font-bold"
-                                href="#"
+                            class="link font-bold"
+                            href="#"
                         >
                             <flux:modal.trigger
-                                    name="notes.update"
-                                    wire:click="$dispatch('notes.update:load', {note: {{ $note }}})"
+                                name="notes.update"
+                                wire:click="$dispatch('notes.update:load', {note: {{ $note }}})"
                             >{{ $note->title }}</flux:modal.trigger>
                         </a>
                     </div>
@@ -77,7 +77,12 @@ new class extends Component {
                 </div>
 
                 <div class="text-sm text-right">
-                    {{ $note->created_at->diffForHumans() }}
+                    <time
+                        title="{{ $note->created_at->format(config('ehr.date_and_time_format')) }}"
+                        datetime="{{ $note->created_at }}"
+                    >
+                        {{ $note->created_at->diffForHumans() }}
+                    </time>
                 </div>
             </li>
         @empty
