@@ -56,7 +56,12 @@ new class extends Component {
                 @endif
 
             </a>
-            <p>{{ $patient->gender }} / {{ $patient->age }} ({{ $patient->dob }})</p>
+            <p>{{ $patient->gender }}
+                @if($patient->gender_identity !== "")
+                    ({{ $patient->gender_identity }})
+                @endif
+
+                / {{ $patient->age }} ({{ $patient->dob }})</p>
             <p>
                 <flux:badge
                         class="h-5"
