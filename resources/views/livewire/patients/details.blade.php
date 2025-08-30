@@ -9,7 +9,7 @@ new class extends Component {
     use PatientStatusColor;
 
     public Patient $patient;
-    public bool  $menu = false;
+    public bool    $menu = false;
     public bool    $short_name = false;
 
     #[On('patients.details:refresh')]
@@ -23,39 +23,53 @@ new class extends Component {
     {{-- modals --}}
     <flux:modal name="patients.update">
         <livewire:patients.update
-                class="md:max-w-3/4 md:w-full"
-                :patient="$patient"
+            class="md:max-w-3/4 md:w-full"
+            :patient="$patient"
         />
     </flux:modal>
 
     <flux:modal
-            class="md:max-w-3/4 md:w-full"
-            name="activity-log-patient-{{ $patient->id }}"
+        class="md:max-w-3/4 md:w-full"
+        name="activity-log-patient-{{ $patient->id }}"
     >
         <livewire:activity.index :object="$patient" />
     </flux:modal>
 
     <flux:modal
-            name="avatar-{{ $patient->id }}" class="max-w-[300px] max-h-[300px] overflow-hidden"
+        name="avatar-{{ $patient->id }}"
+        class="max-w-[300px] max-h-[300px] overflow-hidden"
     >
-        <img src="{{ $patient->avatar }}" alt="Hi">
+        <img
+            src="{{ $patient->avatar }}"
+            alt="{{ $patient->full_name }} Avatar"
+            title="{{ $patient->full_name }}"
+        >
     </flux:modal>
 
     {{-- basic --}}
     <div class="flex flex-row text-sm">
         <div class="flex-none mr-2">
-            <flux:modal.trigger name="avatar-{{ $patient->id }}">
-            <flux:avatar
+            @if($patient->avatar !== "")
+                <flux:modal.trigger name="avatar-{{ $patient->id }}">
+                    <flux:avatar
+                        src="{{ $patient->avatar }}"
+                        alt="{{ $patient->avatar }} Avatar"
+                        title="Click to view"
+                        class="w-16 h-16 max-w-16 max-h-16 overflow-hidden cursor-pointer"
+                    />
+                </flux:modal.trigger>
+            @else
+                <flux:avatar
                     src="{{ $patient->avatar }}"
                     alt=""
-                    class="w-16 h-16 max-w-16 max-h-16 overflow-hidden cursor-pointer"
-            />
-            </flux:modal.trigger>
+                    class="w-16 h-16 max-w-16 max-h-16 overflow-hidden"
+                />
+            @endif
         </div>
         <div class="flex-grow">
             <a
-                    href="{{ route('patients.chart', $patient) }}"
-                    class="font-semibold"
+                href="{{ route('patients.chart', $patient) }}"
+                class="font-semibold"
             > (#{{$patient->id}})
                 @if ($short_name)
                     {{ $patient->full_name }}
@@ -69,13 +83,13 @@ new class extends Component {
                     ({{ $patient->gender_identity }})
                 @endif
 
-                / {{ $patient->age }} ({{ $patient->dob }})</p>
+                    / {{ $patient->age }} ({{ $patient->dob }})</p>
             <p>
                 <flux:badge
-                        class="h-5"
-                        size="sm"
-                        variant="primary"
-                        color="{{ $this->statusColor($patient->status) }}"
+                    class="h-5"
+                    size="sm"
+                    variant="primary"
+                    color="{{ $this->statusColor($patient->status) }}"
                 >
                     {{ $patient->status }}
                 </flux:badge>
@@ -90,8 +104,8 @@ new class extends Component {
                     <flux:menu>
                         <flux:menu.item icon="plus">
                             <flux:modal.trigger
-                                    name="patients.update"
-                                    wire:click="$dispatch('patients.update:load', {patient: {{ $patient }}})"
+                                name="patients.update"
+                                wire:click="$dispatch('patients.update:load', {patient: {{ $patient }}})"
                             >
                                 {{ __('ehr.edit', ['item' => __('patients.patient')]) }}
                             </flux:modal.trigger>
