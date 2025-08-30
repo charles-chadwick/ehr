@@ -88,6 +88,6 @@ new class extends Component {
         @empty
             <li class="text-center">{{ __('ehr.no_records', ['items' => __('encounters.encounters')]) }}</li>
         @endforelse
-        {{ $encounters->links() }}
+        <flux:pagination :paginator="$encounters" />
     </ul>
 </div>
